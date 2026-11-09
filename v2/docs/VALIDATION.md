@@ -1,5 +1,46 @@
 # Validation FILPRO V2
 
+## Recette du 9 novembre 2026 — 2.0.15 PROD-LIGHT, source `c87c677a`
+
+Cette recette porte sur le pack LIGHT de `c87c677ade4749bda3e4acd29aac3add604fc807`
+(ZIP `0f7072eb219c71fc6edbee2761eab8351e40186712f3edc4b40962bdd66359c2`, 278 fichiers,
+EXE `00acb615c9d27587a2621eb95b85ab8cea50f7bd9422062533889c1e5e7e2f2a`). Base de mise à
+jour : LIGHT 0.0.1 de la même source (ZIP `ca52d3fc…`, EXE `ef9a8939…`). Le run GitHub
+Windows `42673322691` compte 57 suites et 463 contrôles réussis, avec la page Evergreen
+observée. Son premier essai n’a lancé aucun job pendant une panne de GitHub Actions ; le
+second est vert.
+
+Recette VM (run `F215FIXA`) sur la fixture Windows 11 recréée de zéro (KVM, groupe de
+travail, hors réseau), compte opérateur local :
+
+- **Natif** : 17 étapes, dont 6 confirmations. Les 4 phases complémentaires sont
+  conformes.
+- **Socle** : Evergreen 140 retenu en premier ; Socle retenu sans Evergreen ; message
+  avec le lien du Socle sans l’un ni l’autre ; Socle altéré (`fr.pak`) refusé.
+- **Démarrage** : la page est observée par le collecteur Evergreen.
+- **Fichier en trop** : 278 fichiers plus `desktop.ini` ; refus nommé.
+- **Démonstration** : `filpro.demoStateIdentical` avant/après, 2 profils.
+- **Mise à jour réelle** 0.0.1 → 2.0.15 depuis un dossier local avec `SHA256SUMS` :
+  - source mémorisée, réglages relevés ensuite ;
+  - transaction `94aff50769aa4ad29a725c4f5fa81541`, d’abord `Committed` (EXE du
+    candidat en cours d’exécution), puis `RolledBack` par le retour arrière demandé dans
+    l’interface de la 2.0.15 (EXE de la base rétabli) ;
+  - confirmations natives acceptées dans la vraie fenêtre.
+- **Reprise de l’ouvrier** : état RollingBack après le déplacement final, ouvrier
+  candidat appelé deux fois, journal et inventaires conservés. La coupure de courant
+  n’est pas exercée.
+
+Les 8 groupes sont validés sans adaptation du validateur. Le reçu
+`windows-qualification.json` est émis (`passed`, PROD-LIGHT, 278 fichiers, 124 preuves)
+et reste privé. Le pack PROD-LIGHT (ZIP `4e846357e51448d4fe7b4f698fd9fe34ddaa4b7532777940ee662829efb054d3`)
+a le même contenu que le candidat recetté. Il n’est pas publié.
+
+Non rejoué dans la VM : les profils de la fixture n’ont aucun dossier AppData au nom fini
+par un point ou une espace, au nom d’appareil ou au nom non représentable. Ces cas sont
+couverts par la CI Windows (`SoftwareFileDiscoveryTests`, voir la section 2.0.14). Le cas
+Windows 10 (noms d’appareil convertis en `\\.\NUL`) n’est vérifié que par lecture : la
+CI et la fixture tournent sous Windows 11 (10.0.26100).
+
 ## Recette du 9 novembre 2026 — 2.0.14 PROD-LIGHT, source `9f8ca177`
 
 Cette recette porte sur le pack LIGHT de `9f8ca1775773342bbbcec3a20af6834f69728cd5`

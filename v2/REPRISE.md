@@ -20,6 +20,13 @@ tourne sur une base Windows 11 (10.0.26100), où ces noms ne sont plus convertis
 Sur la demande de David (« Oui, prépare-la », 9 novembre 2026), la version passe à
 2.0.15 pour la CI Windows, la recette VM et le pack ; la publication attend son accord.
 
+Préparée le 9 novembre 2026 sur `c87c677a` : CI Windows `42673322691` verte (57 suites,
+463 contrôles), recette VM `F215FIXA` validée et reçu émis, pack PROD-LIGHT
+`4e846357…` identique au candidat recetté ; le détail est dans `docs/VALIDATION.md`.
+**Non publiée** : ni tag ni release tant que David ne l’a pas demandé. Reste ouvert : un
+lien ou une jonction sous AppData dont le nom est représentable rend toujours
+l’inventaire partiel.
+
 ## 9 novembre 2026 — 2.0.14 : avertissement du dossier modifiable retiré, inventaire non bloqué
 
 Retours de David sur un poste réel (9 novembre 2026), après la 2.0.13 :
