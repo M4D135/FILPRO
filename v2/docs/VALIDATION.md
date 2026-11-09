@@ -1,5 +1,65 @@
 # Validation FILPRO V2
 
+## Recette du 9 novembre 2026 — 2.0.16 PROD-LIGHT, source `525d177a`
+
+Cette recette porte sur le candidat LIGHT de
+`525d177ab808b6de49d349b77abe9496a3fe74e3` (ZIP
+`f53972d9811e02ec6c854e4d35dadaf9b1b4d6f603e438b970ae373044f1c0c9`, 278 fichiers,
+EXE `76dd88ae0db570507bd1bb5fe4dbeea245913b231b98aafce66eb4c36a6ad9de`).
+La base jetable 0.0.1 est compilée séparément depuis `d91fdebafb767a3bc01e70d298668139ec7059e9`
+(ZIP `681fc1b459377e05e5d56eae3ed4bd61e64886c9d0e4a23ca343395f4f095f40`).
+La CI Windows `42695591772` est verte : 57 suites, 465 contrôles réussis,
+aucun ignoré, page Evergreen observée.
+
+Le run `F216FIXA` utilise une fixture Windows 11 (10.0.26100) isolée, hors réseau,
+en groupe de travail. La préparation du banc a rencontré un redémarrage Windows
+bloqué avant les tests FILPRO. Une reprise à froid du même domaine a été effectuée ;
+le volume NTFS, les identités, les marqueurs, les profils désactivés et les ruches
+déchargées ont été contrôlés ensuite. Le prévol accepté est lié au kit et à la
+session opérateur réelle. Aucun essai natif n'a été rejoué pour cet incident.
+
+- Natif : 17 étapes réussies ; annulation, chiffrement, trois politiques de
+  restauration, refus de mauvaise clé et retour à l'état initial.
+- Complément : plain, tamper, repair et rollback réussis ; prévol final conforme.
+- Socle : quatre scénarios réussis : Evergreen 140 prioritaire, Socle 156 en repli,
+  absence des deux moteurs signalée avec le lien du Socle, `fr.pak` altéré refusé ;
+  valeur de registre Evergreen rétablie et comparée.
+- Interface, Evergreen, fichier intrus : accueil WebView observé avec filiation Evergreen réelle ;
+  `desktop.ini` explicitement refusé dans une copie du pack.
+- Démonstration : sauvegarde simulée de deux profils terminée ; comparaison
+  avant/après `filpro.demoStateIdentical`, réglages, profils et ruches conservés.
+- Mise à jour réelle 0.0.1 → 2.0.16 et retour arrière : transaction `b661f54db11746d1828d26e1f393060c`,
+  confirmations Windows observées, états Committed et RolledBack vérifiés.
+- Reprise de l'ouvrier : état `RollingBack` injecté après le déplacement final,
+  véritable worker 2.0.16 exécuté deux fois, idempotence vérifiée, inventaires et
+  journal conservés ; transaction originale et réglages inchangés. La coupure de
+  courant pendant une mise à jour n'est pas exercée ; l'incident de préparation
+  du banc ne constitue pas ce test.
+
+Les huit groupes ont été validés sans modification du validateur. Le reçu privé
+`windows-qualification.json` est `passed`, PROD-LIGHT, qualification Windows complète
+dans le périmètre Windows 11 : 278 fichiers et 124 références de preuve. Son SHA-256
+est `d32532fe95310da0ef50dcf08b95559e20d134b6721d77deb44906990c4a4302`.
+Les archives de preuves brutes et les confirmations expirées restent conservées.
+Un relevé complet de l’interface redémarrée a suivi une observation trop précoce.
+Deux confirmations expirées sans effet ont été reprises avec une fenêtre fraîche.
+Les tentatives précédentes restent archivées ; aucun essai natif ni aucune
+installation de mise à jour n’a été rejoué.
+
+Le pack publié [v2.0.16](https://github.com/M4D135/FILPRO/releases/tag/v2.0.16)
+(release `439729889`, tag sur `525d177ab808b6de49d349b77abe9496a3fe74e3`)
+a exactement le même contenu que le candidat, manifeste compris : ZIP
+`888a6553e50fa9f6f434bd117430283b68be5382081c73c40287f57e64faf213`,
+53 197 160 octets. Les empreintes de l’API et d’un nouveau téléchargement sont comparées.
+
+Les cas de découverte AppData sont couverts par les 20 contrôles Windows de
+`SoftwareFileDiscoveryTests`, notamment un lien symbolique réellement créé :
+exclusion des liens génériques sans bloquer les voisins, refus maintenu pour les
+chemins explicites, mémorisés, du catalogue et les racines liées. Cette matrice
+n'est pas rejouée manuellement dans la recette VM.
+Qualification limitée à Windows 11 x64 sur décision explicite de David ;
+Windows 10 n'a pas été testé et reste non qualifié.
+
 ## Recette du 9 novembre 2026 — 2.0.15 PROD-LIGHT, source `c87c677a`
 
 Cette recette porte sur le pack LIGHT de `c87c677ade4749bda3e4acd29aac3add604fc807`

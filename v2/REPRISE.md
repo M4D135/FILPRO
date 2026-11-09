@@ -1,22 +1,39 @@
 # FILPRO V2 — état de livraison et historique
 
-## 9 novembre 2026 — finalisation 2.0.16 en cours
+## 9 novembre 2026 — 2.0.16 livrée, qualification Windows 11
 
-David demande de terminer les points restants après la 2.0.15, puis limite
-explicitement la qualification à Windows 11. Windows 10 reste non qualifié.
-Les liens et jonctions uniquement découverts au premier niveau AppData sont
-exclus sans bloquer les dossiers voisins. Ils ne sont ni interrogés, ni suivis,
-ni proposés. Les chemins du catalogue, explicites ou mémorisés restent contrôlés :
-s'ils traversent un lien, l'inventaire reste partiel et les choix sont conservés.
-Les racines liées, accès refusés, disparitions et limites de lecture restent
-bloquants. L'écran de sélection et le guide expliquent cette exclusion.
+David demande de terminer les points restants et limite explicitement la
+qualification à Windows 11. Les liens et jonctions uniquement découverts au
+premier niveau AppData sont exclus sans bloquer les dossiers voisins. Ils ne sont
+ni interrogés, ni suivis, ni proposés. Les chemins du catalogue, explicites ou
+mémorisés restent contrôlés : s’ils traversent un lien, l’inventaire reste partiel
+et les choix sont conservés. Les racines liées, accès refusés, disparitions et
+limites de lecture restent bloquants. L’écran de sélection et le guide expliquent
+cette exclusion. Le README et le guide sont remis en cohérence avec le dépôt
+actuel et le retrait du bandeau de dossier modifiable.
 
-Le README ne renvoie plus aux anciennes références V1 supprimées du dépôt public.
-Le guide ne décrit plus le bandeau de dossier modifiable retiré en 2.0.14.
-Contrôles locaux : compilation sans avertissement, 20 tests de découverte AppData
-et 25 tests web réussis, aucun ignoré. Ces contrôles macOS ne qualifient pas Windows.
-La 2.0.15 reste la dernière version publiée ; aucune qualification Windows ni
-publication de la 2.0.16 n'est encore établie.
+Source publiée : `525d177ab808b6de49d349b77abe9496a3fe74e3`. Compilation locale sans
+avertissement, 20 contrôles AppData et 25 contrôles web réussis. CI Windows
+[`42695591772`](https://github.com/M4D135/FILPRO/actions/runs/42695591772) verte :
+57 suites, 465 contrôles réussis, aucun ignoré, page Evergreen observée.
+Recette Windows 11 `F216FIXA` : 17 étapes natives, 4 phases complémentaires,
+4 scénarios Socle, isolation de la démonstration, mise à jour réelle et retour
+arrière, reprise déterministe et idempotence. Les huit groupes sont validés ;
+reçu privé sur 278 fichiers et 124 preuves. Détail dans `docs/VALIDATION.md`.
+
+Publiée sur le « go tout terminer » de David :
+[v2.0.16](https://github.com/M4D135/FILPRO/releases/tag/v2.0.16), release `439729889`,
+tag sur la source ci-dessus. ZIP PROD-LIGHT
+`888a6553e50fa9f6f434bd117430283b68be5382081c73c40287f57e64faf213` et `SHA256SUMS`
+vérifiés par l’API et un nouveau téléchargement. Les fichiers du ZIP sont
+identiques à ceux du candidat qualifié.
+
+Banc clôturé : réglages rétablis, tâches de recette retirées, connexion automatique
+désactivée, arrêt Windows normal. Le disque et les preuves sont conservés.
+Aucun point de développement ou de livraison ne reste ouvert dans ce périmètre.
+Windows 10 reste non testé et non qualifié, selon le périmètre retenu. La reprise
+après interruption est déterministe ; une coupure électrique réelle n’a pas été
+exercée. Les anciennes sections ci-dessous restent des états historiques.
 
 ## 9 novembre 2026 — 2.0.15 : noms de dossiers AppData lus avant la normalisation Windows
 
