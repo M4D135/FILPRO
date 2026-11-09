@@ -1,5 +1,7 @@
 FILPRO V2 — GUIDE UTILISATEUR
 
+Périmètre de qualification : Windows 11 x64. Windows 10 n'est pas qualifié.
+
 Démarrer
 Extraire tout le ZIP dans un nouveau dossier local. Sa racine contient FILPRO.exe
 et wad. Garder wad à côté de l'exécutable. Si Windows bloque les fichiers d'une
@@ -44,14 +46,17 @@ saisie ou une mise en veille de plus de 2 minutes, 30 minutes après son ouvertu
 refus en 10 minutes et, par défaut, dès qu'une opération est acceptée. Verrouillé,
 il suit seulement les opérations en cours : le relancer avec ses identifiants pour
 en lancer d'autres. Toujours dans ce cas, un sélecteur de fichiers oublié se ferme
-seul après 2 minutes, et un bandeau signale un dossier de FILPRO que le compte de la
-session peut modifier : placer alors FILPRO dans C:\Program Files\FILPRO. Sous le
-même compte, rien de cela ne s'applique.
+seul après 2 minutes. Sous le même compte, rien de cela ne s'applique.
 
 Sauvegarder et restaurer
 Choisir les profils, examiner les groupes de fichiers et de registre, puis lire
 le plan. Choisir le support et, si nécessaire, un fichier clé hors du magasin.
 Confirmer seulement après la revue des exclusions et de l'espace disponible.
+Les liens et jonctions découverts dans AppData ne sont ni suivis ni proposés :
+leurs cibles ne sont pas incluses par ces liens. Leur présence ne bloque pas
+les autres dossiers. En revanche, un chemin du catalogue ou déjà mémorisé qui
+traverse un lien reste refusé ; les derniers choix sont conservés jusqu'à
+résolution du problème. Une racine de profil ou AppData liée reste refusée.
 Le suivi annonce les mesures disponibles. « Arrêt demandé » attend la fin réelle
 du processus et du nettoyage. Une opération partielle conserve son reçu.
 Pour restaurer, choisir un magasin, les correspondances des comptes et les conflits.

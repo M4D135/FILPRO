@@ -1,5 +1,23 @@
 # FILPRO V2 — état de livraison et historique
 
+## 9 novembre 2026 — finalisation 2.0.16 en cours
+
+David demande de terminer les points restants après la 2.0.15, puis limite
+explicitement la qualification à Windows 11. Windows 10 reste non qualifié.
+Les liens et jonctions uniquement découverts au premier niveau AppData sont
+exclus sans bloquer les dossiers voisins. Ils ne sont ni interrogés, ni suivis,
+ni proposés. Les chemins du catalogue, explicites ou mémorisés restent contrôlés :
+s'ils traversent un lien, l'inventaire reste partiel et les choix sont conservés.
+Les racines liées, accès refusés, disparitions et limites de lecture restent
+bloquants. L'écran de sélection et le guide expliquent cette exclusion.
+
+Le README ne renvoie plus aux anciennes références V1 supprimées du dépôt public.
+Le guide ne décrit plus le bandeau de dossier modifiable retiré en 2.0.14.
+Contrôles locaux : compilation sans avertissement, 20 tests de découverte AppData
+et 25 tests web réussis, aucun ignoré. Ces contrôles macOS ne qualifient pas Windows.
+La 2.0.15 reste la dernière version publiée ; aucune qualification Windows ni
+publication de la 2.0.16 n'est encore établie.
+
 ## 9 novembre 2026 — 2.0.15 : noms de dossiers AppData lus avant la normalisation Windows
 
 Après la publication de la 2.0.14, `4b34195` ajoute le test des noms de dossiers AppData non

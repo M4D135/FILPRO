@@ -34,7 +34,7 @@ dans `wad/runtime/webview2/`. Pour PROD-LIGHT, utiliser `-Flavor PROD-LIGHT` et 
 
 ```powershell
 python v2/tools/packaging/create_pack.py --input C:\Temp\FILPRO-light-input `
-  --output C:\Temp\FILPRO-light-resultat --version 2.0.15 --flavor PROD-LIGHT `
+  --output C:\Temp\FILPRO-light-resultat --version 2.0.16 --flavor PROD-LIGHT `
   --source-commit <SHA_GIT_EXACT> --windows-qualification C:\Preuves\light\windows-qualification.json
 ```
 

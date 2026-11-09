@@ -1,5 +1,15 @@
 # FILPRO V2 — périmètre de travail
 
+## Reprise du 9 novembre 2026
+
+David demande de terminer les points restants après la publication de la 2.0.15 :
+jonctions AppData, documentation et validation. Le dépôt GitHub a été recréé le
+9 novembre ; le clone actif est `/Users/david/Projects/FILPRO`. Les références
+`v1` et `v1-final` citées ci-dessous sont historiques et n'existent plus dans le
+dépôt public. Ne jamais repousser les anciennes branches ni les anciens tags.
+Préserver les copies locales d'archives. Les règles de périmètre profils et de
+qualification des octets livrés restent applicables.
+
 ## Décision de David — 28 octobre 2026, après la release 2.0.2
 
 La V2 devient la branche `master` ; la V1 passe en historique. Elle est conservée

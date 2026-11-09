@@ -135,7 +135,7 @@ function renderSelection(host, draft) {
   if (!groups.length) { host.innerHTML = note + empty('Aucun logiciel détecté pour ce profil.'); return; }
   const unresolved = [...draft.choices.values()].some((choice) => choice === null);
   const status = draft.reading ? 'Nouvelle lecture des fichiers et du registre…' : draft.saving ? 'Enregistrement en cours pour ce profil…' : draft.error || (draft.dirty ? 'Choix modifiés : enregistrez-les pour les inclure dans le plan.' : 'Choix relus pour ce profil.');
-  host.innerHTML = note + `<p class="muted">Chaque case retient ensemble les fichiers et les clés du registre du logiciel. Les choix sont conservés séparément pour chaque profil.</p>
+  host.innerHTML = note + `<p class="muted">Chaque case retient ensemble les fichiers et les clés du registre du logiciel. Les choix sont conservés séparément pour chaque profil. Les liens et jonctions AppData sont exclus : leurs cibles ne sont pas incluses par ces liens.</p>
     <div class="stack">${groups.map((g) => `<div class="list-row">
     <input class="k-checkbox" type="checkbox" data-software-group="${esc(g.id)}" aria-label="Inclure les fichiers et les clés de ${esc(g.name)}"${draft.choices.get(g.id) === true ? ' checked' : ''}${draft.saving || !complete ? ' disabled' : ''}>
     <div class="body"><div class="title">${esc(g.name)}</div>

@@ -25,6 +25,9 @@ connexion utilise la session Windows courante et la validation UAC. La
 démonstration s’ouvre depuis les Paramètres ; elle reste isolée des données
 réelles.
 
+Le périmètre de qualification retenu est Windows 11 x64. Windows 10 reste
+non qualifié.
+
 ## Sources et documentation
 
 - [`v2/`](v2/) : sources C# .NET, interface web locale, tests et outils de
@@ -37,8 +40,7 @@ réelles.
 
 ## FILPRO 1 (historique)
 
-FILPRO 1.0 n’est plus développé. Ses sources, packs, guides et passations sont
-conservés tels quels dans la branche
-[`v1`](https://github.com/M4D135/FILPRO/tree/v1) et le tag
-[`v1-final`](https://github.com/M4D135/FILPRO/tree/v1-final), ainsi que dans
-l’historique de `master`.
+FILPRO 1.0 n’est plus développé. Le dépôt public a été recréé le 9 novembre 2026
+à partir de FILPRO 2 : les anciennes branches, les anciens tags et leur historique
+n’y sont plus disponibles. Les copies locales des sources, packs, guides et
+passations V1 sont conservées séparément.

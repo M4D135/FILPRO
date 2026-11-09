@@ -125,10 +125,9 @@ public sealed class WindowsSoftwareFileReader
                         throw new IOException("Résultat d'énumération hors du premier niveau AppData.");
                     if ((entry.Attributes & FileAttributes.ReparsePoint) != 0)
                     {
-                        // Jamais suivi ni interrogé. Les alias de compatibilité Windows (nom traduit selon la langue) sont ignorés ;
-                        // tout autre lien rend seulement cette entrée inconnue et la portée continue.
-                        if (!IsWindowsCompatibilityAlias(entry.Attributes))
-                            reasons.Add("Un dossier AppData est un lien ou une jonction non suivi ; inventaire partiel.");
+                        // Un lien générique ne peut pas être sélectionné : l'exclure sans bloquer les autres dossiers.
+                        // Ne jamais l'interroger ni le suivre. Les chemins explicites ou mémorisés et ceux du catalogue
+                        // ont déjà été contrôlés séparément par ProbeDirectory et restent bloquants s'ils sont liés.
                         continue;
                     }
                     if (ProbeDirectory(path, cancellationToken)) items.TryAdd(scope + "|" + relative, item);
@@ -153,11 +152,6 @@ public sealed class WindowsSoftwareFileReader
     }
 
     private static string BaseDirectory(string root, SoftwareScope scope) => Path.Combine(root, "AppData", scope == SoftwareScope.Roaming ? "Roaming" : "Local");
-
-    // Jonctions créées par Windows à la première ouverture de session (Application Data, History/Historique, Temporary
-    // Internet Files…) : dossier + point d'analyse + caché + système. Le nom est traduit, les attributs ne le sont pas.
-    private const FileAttributes CompatibilityAlias = FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.Hidden | FileAttributes.System;
-    private static bool IsWindowsCompatibilityAlias(FileAttributes attributes) => (attributes & CompatibilityAlias) == CompatibilityAlias;
 
     private static bool IsDescendant(string parent, string path) => path.StartsWith(parent + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
 

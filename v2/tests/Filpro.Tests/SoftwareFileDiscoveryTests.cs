@@ -55,7 +55,8 @@ internal sealed class SoftwareFileDiscoveryTests
         var unknown = At(SoftwareScope.Local, "AutreLien");
         fs.Add(unknown);
         fs.Attributes[unknown] |= FileAttributes.ReparsePoint;
-        Check.False(reader.Read(Root, [], CancellationToken.None).Complete, "un lien inconnu reste bloquant");
+        Check.True(reader.Read(Root, [], CancellationToken.None).Complete, "un lien générique inconnu est exclu sans bloquer les autres dossiers");
+        Check.False(fs.Probed.Contains(unknown), "le lien générique n'est pas interrogé");
     }
 
     [Test]
@@ -256,53 +257,88 @@ internal sealed class SoftwareFileDiscoveryTests
     }
 
     [Test]
-    public void LienUtilisateurSignaleSansInterrompreLaPorteeNiEtreSuivi()
+    public void LiensGeneriquesExclusSansBloquerLesVoisinsNiEtreSuivis()
     {
-        var fs = NewFileSystem();
-        fs.Add(At(SoftwareScope.Local, "AcmeAvant"));
-        fs.Add(At(SoftwareScope.Local, "ZoomApp"));
-        var links = new Dictionary<string, FileAttributes>
-        {
-            ["MonLien"] = FileAttributes.Directory | FileAttributes.ReparsePoint,
-            ["LienCache"] = FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.Hidden,
-            ["LienSysteme"] = FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.System,
-        };
-        foreach (var (name, attributes) in links)
-        {
-            var path = At(SoftwareScope.Local, name);
-            fs.Add(path);
-            fs.Attributes[path] = attributes;
-        }
-        var result = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
-        Check.False(result.Complete, "un lien utilisateur reste une découverte partielle");
-        Check.Contains("lien ou une jonction non suivi", result.Error, "la cause est le lien, pas une interruption");
-        Check.False(result.Error!.Contains("interrompue", StringComparison.Ordinal), "la portée n'est plus interrompue");
-        Check.True(result.Items.Any(item => item.Rel == "AcmeAvant") && result.Items.Any(item => item.Rel == "ZoomApp"), "les voisins restent découverts");
-        Check.False(result.Items.Any(item => links.ContainsKey(item.Rel)), "aucun lien proposé");
-        Check.False(fs.Probed.Any(path => links.Keys.Any(name => path.StartsWith(At(SoftwareScope.Local, name), StringComparison.OrdinalIgnoreCase))),
-            "aucun lien n'est interrogé ni suivi");
-    }
-
-    [Test]
-    public void LienSeulementCacheOuSeulementSystemeNEstPasUnAlias()
-    {
-        // Chaque lien seul dans sa lecture : la raison dédupliquée ne masque plus un saut silencieux.
-        foreach (var attributes in new[] { FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.Hidden,
-                     FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.System })
+        foreach (var scope in new[] { SoftwareScope.Local, SoftwareScope.Roaming })
         {
             var fs = NewFileSystem();
-            fs.Add(At(SoftwareScope.Local, "AcmeAvant"));
-            var link = At(SoftwareScope.Local, "Lien");
-            fs.Add(link);
-            fs.Attributes[link] = attributes;
+            fs.Add(At(scope, "AcmeAvant"));
+            fs.Add(At(scope, "ZoomApp"));
+            var links = new Dictionary<string, FileAttributes>
+            {
+                ["MonLien"] = FileAttributes.Directory | FileAttributes.ReparsePoint,
+                ["LienCache"] = FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.Hidden,
+                ["LienSysteme"] = FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.System,
+            };
+            foreach (var (name, attributes) in links)
+            {
+                var path = At(scope, name);
+                fs.Add(path);
+                fs.Attributes[path] = attributes;
+            }
             var result = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
-            Check.False(result.Complete, attributes + " : seul le couple caché + système désigne un alias Windows");
-            Check.Contains("lien ou une jonction non suivi", result.Error, attributes + " : le lien est signalé");
+            Check.True(result.Complete, "les liens génériques exclus ne bloquent pas la sélection des autres dossiers");
+            Check.Null(result.Error, "aucun motif d'incomplétude");
+            Check.True(result.Items.Any(item => item.Rel == "AcmeAvant") && result.Items.Any(item => item.Rel == "ZoomApp"), "les voisins restent découverts");
+            Check.False(result.Items.Any(item => links.ContainsKey(item.Rel)), "aucun lien proposé");
+            Check.False(fs.Probed.Any(path => links.Keys.Any(name => path.StartsWith(At(scope, name), StringComparison.OrdinalIgnoreCase))),
+                "aucun lien n'est interrogé ni suivi");
         }
     }
 
     [Test]
-    public void LienReelSignaleParLEnumerationPhysique()
+    public void LienMemoriseOuSonDescendantResteBloquant()
+    {
+        foreach (var scope in new[] { SoftwareScope.Local, SoftwareScope.Roaming })
+        foreach (var rel in new[] { "Lien", @"Lien\Preferences" })
+        {
+            var fs = NewFileSystem();
+            fs.Add(At(scope, "AcmeAvant"));
+            var link = At(scope, "Lien");
+            fs.Add(At(scope, @"Lien\Preferences"));
+            fs.Attributes[link] = FileAttributes.Directory | FileAttributes.ReparsePoint;
+            var result = new WindowsSoftwareFileReader(fs).Read(Root, [Item(scope, rel)], CancellationToken.None);
+            Check.False(result.Complete, "le choix mémorisé n'est jamais effacé par une découverte qui exclut son lien");
+            Check.Contains("sélection précédente doit être conservée", result.Error, "conservation des choix annoncée");
+            Check.True(result.Items.Any(item => item.Rel == "AcmeAvant"), "les autres dossiers sont encore découverts");
+            Check.False(result.Items.Any(item => item.Rel.StartsWith("Lien", StringComparison.Ordinal)), "ni lien ni descendant proposé");
+            Check.False(fs.Probed.Any(path => path.StartsWith(link + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)), "aucun descendant du lien interrogé");
+        }
+    }
+
+    [Test]
+    public void DossierDuCatalogueSousUneJonctionResteBloquant()
+    {
+        var fs = NewFileSystem();
+        var link = At(SoftwareScope.Local, "Google");
+        fs.Add(At(SoftwareScope.Local, @"Google\Chrome\User Data"));
+        fs.Attributes[link] = FileAttributes.Directory | FileAttributes.ReparsePoint;
+        var result = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+        Check.False(result.Complete, "le chemin Chrome du catalogue reste contrôlé même sans choix mémorisé");
+        Check.Contains("dossier explicite est illisible ou lié", result.Error, "le refus explicite reste visible");
+        Check.False(result.Items.Any(item => item.Rel.StartsWith("Google", StringComparison.Ordinal)), "aucune présence Chrome inventée");
+        Check.False(fs.Probed.Any(path => path.StartsWith(link + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)), "aucun descendant du catalogue interrogé sous le lien");
+    }
+
+    [Test]
+    public void RacinesLieesRestentBloquantesAvantTouteDescente()
+    {
+        foreach (var link in new[] { Root, Path.Combine(Root, "AppData"), AppData(SoftwareScope.Local), AppData(SoftwareScope.Roaming) })
+        {
+            var fs = NewFileSystem();
+            fs.Add(At(SoftwareScope.Local, "Acme"));
+            fs.Add(At(SoftwareScope.Roaming, "Acme"));
+            fs.Attributes[link] = FileAttributes.Directory | FileAttributes.ReparsePoint;
+            var result = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+            Check.False(result.Complete, "une racine liée ne devient jamais une exclusion générique");
+            Check.False(fs.Enumerated.Any(path => path.Equals(link, StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith(link + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)), "aucune racine liée ni descendant énuméré");
+            Check.False(fs.Probed.Any(path => path.StartsWith(link + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)), "aucun descendant interrogé");
+        }
+    }
+
+    [Test]
+    public void LienReelExcluParLEnumerationPhysiqueSansBloquerLesVoisins()
     {
         for (var parent = new DirectoryInfo(Path.GetTempPath()); parent is not null; parent = parent.Parent)
             if (parent.LinkTarget is not null) Check.Skip("Dossier temporaire sous un lien (" + parent.FullName + ") : profil réel non représentable.");
@@ -318,9 +354,8 @@ internal sealed class SoftwareFileDiscoveryTests
             catch (Exception ex) when (ex is UnauthorizedAccessException or IOException) { Check.Skip("Création de lien refusée sur cet hôte : " + ex.Message); }
             // Les attributs viennent de l'enregistrement du dossier parent : le lien n'est ni interrogé ni suivi.
             var result = new WindowsSoftwareFileReader().Read(root, [], CancellationToken.None);
-            Check.False(result.Complete, "un lien réel reste une découverte partielle");
-            Check.Contains("lien ou une jonction non suivi", result.Error, "l'énumération physique rapporte le point d'analyse");
-            Check.False(result.Error!.Contains("interrompue", StringComparison.Ordinal), "la portée n'est pas interrompue");
+            Check.True(result.Complete, "un lien réel exclu ne bloque pas les dossiers voisins");
+            Check.Null(result.Error, "la portée est complète sans suivre le lien");
             Check.True(result.Items.Any(item => item.Rel == "AcmeAvant"), "le voisin réel reste découvert");
             Check.False(result.Items.Any(item => item.Rel == "MonLien"), "aucun lien proposé");
         }
