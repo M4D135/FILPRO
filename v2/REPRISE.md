@@ -41,6 +41,12 @@ contrôles). Recette VM `F214FIXA` validée et reçu émis ; le détail est dans
 `docs/VALIDATION.md`. Reste ouvert : un lien ou une jonction sous AppData rend toujours
 l’inventaire partiel.
 
+Après la publication, `4b34195` ajoute le test des noms de dossiers AppData non
+représentables ; il échoue avec l’ancien comportement. Constat en l’écrivant, par
+lecture du code et non reproduit sur Windows : `Path.GetFullPath` retire sous Windows le
+point ou l’espace final d’un nom. Un dossier AppData nommé ainsi est donc contrôlé sous
+un autre nom, introuvable, et rend l’inventaire partiel (« devenu absent »). Non corrigé.
+
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 
 Décision de David (9 novembre 2026) : ne garder que la dernière version. M4D135/FILPRO

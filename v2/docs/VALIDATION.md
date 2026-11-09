@@ -39,8 +39,10 @@ Non rejoué dans la VM : les profils de la fixture n’ont aucun nom non représ
 le chemin vide n’a pas été essayé. Ces deux corrections sont couvertes par la CI Windows
 (`LoadedRegistryDiscoveryTests.NomGeneriqueNonRepresentableEstTaiSansRendreLInventairePartiel`,
 `UpdateSourcePreferenceTests.CheminVideRefuseSansMettreLaMiseAJourEnEchec`) et par les
-tests web. Le même traitement côté dossiers AppData (`WindowsSoftwareFileReader`) n’a
-pas de test dédié.
+tests web. Le même traitement côté dossiers AppData (`WindowsSoftwareFileReader`)
+n’avait pas de test dédié à la publication ; il est couvert depuis `4b34195`
+(`SoftwareFileDiscoveryTests.NomDeDossierNonRepresentableEstTuSansRendreLInventairePartiel`,
+CI Windows `42641217661`, 460 contrôles).
 
 ## Recette du 9 novembre 2026 — 2.0.13 PROD-LIGHT, source `36e0d035`
 
