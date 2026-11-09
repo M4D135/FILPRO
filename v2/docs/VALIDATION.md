@@ -9,6 +9,10 @@ jour : LIGHT 0.0.1 de `cf9dc42e` (ZIP `1b215132…`, EXE `272aa91d…`). Le run 
 Windows `42529299194` compte 57 suites et 460 contrôles réussis, avec la page Evergreen
 observée.
 
+Depuis la recréation du dépôt (9 novembre 2026), `36e0d035` et le run `42529299194` ne
+sont plus sur GitHub. `e66757d1`, base du dépôt recréé, a les mêmes sources à trois
+documents près (voir `REPRISE.md`).
+
 Recette VM sur une fixture Windows 11 neuve (KVM, groupe de travail, hors réseau),
 compte opérateur local :
 

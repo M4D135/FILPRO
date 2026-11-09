@@ -1,5 +1,26 @@
 # FILPRO V2 — état de livraison et historique
 
+## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
+
+Décision de David (9 novembre 2026) : ne garder que la dernière version. M4D135/FILPRO
+est recréé, public, à partir d’un seul commit, `e66757d1`. Son arbre reprend `8fe99e5f`
+avec 11 remplacements de `CNAMTS\Administrateur` par `LABO\Administrateur` : 10 dans
+`docs/VALIDATION.md` et 1 dans `docs/reprise/RECETTE-NATIVE-20261026.md`. La release
+[v2.0.13](https://github.com/M4D135/FILPRO/releases/tag/v2.0.13) est la seule :
+identifiant `438824426`, tag sur `e66757d1`, mêmes fichiers (ZIP `ad430349…` et
+`SHA256SUMS`).
+
+Les commits et les runs Actions cités dans ce document et dans `docs/` n’existent plus
+sur GitHub, y compris `36e0d035` et le run `42529299194`, ni les releases antérieures à
+la 2.0.13. Le pack 2.0.13 déclare `sourceCommit` `36e0d035`. Les sources de ce commit et
+celles de `e66757d1` ne diffèrent que par trois documents absents du pack : `REPRISE.md`,
+`docs/VALIDATION.md` et `docs/reprise/RECETTE-NATIVE-20261026.md`. Le reçu de
+qualification, le `validation.json` de la CI et les preuves de recette restent privés,
+hors du dépôt.
+
+Tout travail repart d’un clone neuf. Sur le Mac, l’URL de push de l’ancien clone est
+neutralisée. Ne jamais repousser une ancienne branche ni un ancien tag.
+
 ## 9 novembre 2026 — recette VM et publication de la 2.0.13 `36e0d035`
 
 La CI Windows du commit de version est verte (`42529299194` : 57 suites, 460/460). La
@@ -12,8 +33,9 @@ est dans `docs/VALIDATION.md`. Le validateur de recette exigeait encore la suite
 reçu de qualification PROD-LIGHT est émis pour `36e0d035`.
 
 Release publique [v2.0.13](https://github.com/M4D135/FILPRO/releases/tag/v2.0.13),
-identifiant `438821123`, tag et cible sur `36e0d035`, publiée sur décision de David
-(9 novembre 2026) :
+publiée sur décision de David (9 novembre 2026) d’abord sur `36e0d035` (identifiant
+`438821123`), puis à l’identique sur `e66757d1` (identifiant `438824426`) à la
+recréation du dépôt :
 
 - `FILPRO-2.0.13-win-x64-PROD-LIGHT.zip`, 53 202 174 octets, SHA-256
   `ad430349589b67cc75152395394cf455f0b7722c1422e1369885ec66a810c250`.
@@ -32,7 +54,8 @@ local/UNC avec `SHA256SUMS` et le ZIP manuel. Un ancien choix GitHub enregistré
 (`kind` 0, sans dossier) est relu comme un dossier à renseigner.
 
 Poussé sur master (`602d340`). La réécriture d’historique prévue pour GLPI est
-annulée (David, 8 novembre 2026) : les SHA publiés restent valables. CI Windows verte
+annulée (David, 8 novembre 2026). Le dépôt est toutefois recréé le 9 novembre (voir
+plus haut) : ces SHA ne sont plus publiés. CI Windows verte
 (`42528798328` : 57 suites, 460/460). Sur décision de David, la version passe à 2.0.13
 pour la recette VM et le pack ; la publication attend son accord.
 
