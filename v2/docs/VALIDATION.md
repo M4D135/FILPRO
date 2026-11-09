@@ -32,8 +32,8 @@ travail, hors réseau), compte opérateur local :
 
 Les 8 groupes sont validés sans adaptation du validateur. Le reçu
 `windows-qualification.json` est émis (`passed`, PROD-LIGHT, 278 fichiers, 124 preuves)
-et reste privé. Le pack PROD-LIGHT (ZIP `4e846357e51448d4fe7b4f698fd9fe34ddaa4b7532777940ee662829efb054d3`)
-a le même contenu que le candidat recetté. Il n’est pas publié.
+et reste privé. Le pack publié (ZIP `4e846357e51448d4fe7b4f698fd9fe34ddaa4b7532777940ee662829efb054d3`)
+a le même contenu que le candidat recetté.
 
 Non rejoué dans la VM : les profils de la fixture n’ont aucun dossier AppData au nom fini
 par un point ou une espace, au nom d’appareil ou au nom non représentable. Ces cas sont

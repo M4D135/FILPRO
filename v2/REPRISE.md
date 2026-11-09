@@ -23,9 +23,12 @@ Sur la demande de David (« Oui, prépare-la », 9 novembre 2026), la version pa
 Préparée le 9 novembre 2026 sur `c87c677a` : CI Windows `42673322691` verte (57 suites,
 463 contrôles), recette VM `F215FIXA` validée et reçu émis, pack PROD-LIGHT
 `4e846357…` identique au candidat recetté ; le détail est dans `docs/VALIDATION.md`.
-**Non publiée** : ni tag ni release tant que David ne l’a pas demandé. Reste ouvert : un
-lien ou une jonction sous AppData dont le nom est représentable rend toujours
-l’inventaire partiel.
+
+Publiée le 9 novembre 2026 sur l’accord de David (« Oui, publie ») :
+[v2.0.15](https://github.com/M4D135/FILPRO/releases/tag/v2.0.15) (identifiant
+`439594413`, tag sur `c87c677a`), ZIP `4e846357…` et `SHA256SUMS`, vérifiés par l’API et
+un nouveau téléchargement. Reste ouvert : un lien ou une jonction sous AppData dont le nom
+est représentable rend toujours l’inventaire partiel.
 
 ## 9 novembre 2026 — 2.0.14 : avertissement du dossier modifiable retiré, inventaire non bloqué
 
