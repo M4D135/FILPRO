@@ -93,20 +93,14 @@ public sealed class WindowsSoftwareFileReader
                         break;
                     }
                     var entry = iterator.Current;
-                    var path = Path.GetFullPath(entry.Path);
-                    if (!IsDescendant(baseDirectory, path) || !string.Equals(Path.GetDirectoryName(path), baseDirectory, StringComparison.OrdinalIgnoreCase))
+                    // Nom et premier niveau lus sur le chemin brut de l'énumération, avant GetFullPath : sous Windows, celui-ci
+                    // retire le point ou l'espace final d'un nom et, avant Windows 11, change un nom d'appareil (NUL, COM1.bak…)
+                    // en \\.\NUL. Ces noms doivent être tus, pas contrôlés sous un autre nom ni pris pour une sortie du premier niveau.
+                    var relative = Path.GetFileName(entry.Path);
+                    if (relative is "" or "." or ".." || !string.Equals(Path.GetDirectoryName(entry.Path), baseDirectory, StringComparison.OrdinalIgnoreCase))
                         throw new IOException("Résultat d'énumération hors du premier niveau AppData.");
-                    var relative = Path.GetFileName(path);
                     if (SoftwareDiscoveryCatalog.IsGenericFileExcluded(scope, relative)
                         || extra.Any(item => item.Scope == scope && SoftwareDiscoveryInputs.Overlaps(item.Rel, relative))) continue;
-                    if ((entry.Attributes & FileAttributes.ReparsePoint) != 0)
-                    {
-                        // Jamais suivi ni interrogé. Les alias de compatibilité Windows (nom traduit selon la langue) sont ignorés ;
-                        // tout autre lien rend seulement cette entrée inconnue et la portée continue.
-                        if (!IsWindowsCompatibilityAlias(entry.Attributes))
-                            reasons.Add("Un dossier AppData est un lien ou une jonction non suivi ; inventaire partiel.");
-                        continue;
-                    }
                     SoftwareItem item;
                     try
                     {
@@ -117,8 +111,24 @@ public sealed class WindowsSoftwareFileReader
                     catch (FilproOperationException)
                     {
                         // Nom qu'aucune règle USMT ne peut écrire (nom d'appareil réservé, caractère interdit, fin par une espace
-                        // ou un point) : ce dossier ne peut jamais être retenu, donc le taire ne fait rien perdre. Il ne rend
-                        // pas l'inventaire partiel, ce qui bloquerait les choix et la sauvegarde du profil.
+                        // ou un point) : ce dossier, lien compris, ne peut jamais être retenu, donc le taire ne fait rien perdre.
+                        // Il ne rend pas l'inventaire partiel, ce qui bloquerait les choix et la sauvegarde du profil.
+                        continue;
+                    }
+                    // Un nom que le codec réécrit (demi-paire UTF-16 isolée devenue U+FFFD) désignerait un autre dossier : tu de même.
+                    if (!string.Equals(item.Rel, relative, StringComparison.Ordinal)) continue;
+                    var path = Path.GetFullPath(entry.Path);
+                    // Avant Windows 11, un nom d'appareil que le codec laisse passer (« NUL .txt ») devient aussi \\.\NUL : ce
+                    // dossier n'a pas de chemin Win32 et se tait de même. Une racine déjà en \\.\ n'est pas concernée.
+                    if (path.StartsWith(@"\\.\", StringComparison.Ordinal) && !entry.Path.StartsWith(@"\\.\", StringComparison.Ordinal)) continue;
+                    if (!IsDescendant(baseDirectory, path) || !string.Equals(Path.GetDirectoryName(path), baseDirectory, StringComparison.OrdinalIgnoreCase))
+                        throw new IOException("Résultat d'énumération hors du premier niveau AppData.");
+                    if ((entry.Attributes & FileAttributes.ReparsePoint) != 0)
+                    {
+                        // Jamais suivi ni interrogé. Les alias de compatibilité Windows (nom traduit selon la langue) sont ignorés ;
+                        // tout autre lien rend seulement cette entrée inconnue et la portée continue.
+                        if (!IsWindowsCompatibilityAlias(entry.Attributes))
+                            reasons.Add("Un dossier AppData est un lien ou une jonction non suivi ; inventaire partiel.");
                         continue;
                     }
                     if (ProbeDirectory(path, cancellationToken)) items.TryAdd(scope + "|" + relative, item);

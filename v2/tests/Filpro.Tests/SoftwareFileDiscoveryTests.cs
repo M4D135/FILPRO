@@ -106,7 +106,7 @@ internal sealed class SoftwareFileDiscoveryTests
     public void NomDeDossierNonRepresentableEstTuSansRendreLInventairePartiel()
     {
         // Noms qu'aucune règle USMT ne peut écrire et que la normalisation des chemins laisse intacts sur Windows comme ailleurs.
-        string[] refused = ["Nom|alt", "Etoile*", "Question?", "Guillemet\"", "Chevron<", "Ctl\u0001"];
+        string[] refused = ["Nom|alt", "Etoile*", "Question?", "Guillemet\"", "Chevron<", "Ctl\u0001", "Demi\uD800"];
         var fs = NewFileSystem();
         foreach (var name in refused) fs.Add(At(SoftwareScope.Roaming, name));
         fs.Add(At(SoftwareScope.Roaming, "vlc"));
@@ -115,6 +115,61 @@ internal sealed class SoftwareFileDiscoveryTests
         Check.Null(reading.Error, "aucun motif d'inventaire partiel");
         Check.Equal("vlc", reading.Items.Single().Rel, "la découverte continue après les noms tus");
         Check.False(fs.Probed.Any(path => refused.Any(name => path == At(SoftwareScope.Roaming, name))), "aucun nom tu n'est interrogé");
+    }
+
+    [Test]
+    public void NomFiniParUnPointOuUneEspaceEstTuSansRendreLInventairePartiel()
+    {
+        // Sous Windows, GetFullPath retire ces fins de nom : le dossier serait contrôlé sous un autre nom, introuvable.
+        string[] refused = ["Fin.", "Espace ", "Points..", "Mixte. "];
+        if (OperatingSystem.IsWindows())
+            Check.Equal(At(SoftwareScope.Roaming, "Fin"), Path.GetFullPath(At(SoftwareScope.Roaming, "Fin.")), "le cas couvert existe bien sous Windows");
+        var fs = NewFileSystem();
+        foreach (var name in refused) fs.Add(At(SoftwareScope.Roaming, name));
+        fs.Add(At(SoftwareScope.Roaming, "vlc"));
+        var reading = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+        Check.True(reading.Complete, "un nom fini par un point ou une espace ne bloque ni les choix ni la sauvegarde");
+        Check.Null(reading.Error, "aucun motif d'inventaire partiel");
+        Check.Equal("vlc", reading.Items.Single().Rel, "la découverte continue après les noms tus");
+        Check.False(fs.Probed.Any(path => refused.Any(name => path == At(SoftwareScope.Roaming, name)
+            || path == At(SoftwareScope.Roaming, name.TrimEnd('.', ' ')))), "ni le nom tu ni sa forme tronquée ne sont interrogés");
+    }
+
+    [Test]
+    public void NomDAppareilReserveEstTuSansInterrompreLaPortee()
+    {
+        // Avant Windows 11, GetFullPath change ces noms en \\.\NUL : le nom brut doit être refusé avant, sinon toute la portée s'arrête.
+        string[] refused = ["nul", "CON", "aux.old", "COM1.bak", "LPT¹"];
+        var fs = NewFileSystem();
+        foreach (var name in refused) fs.Add(At(SoftwareScope.Roaming, name));
+        fs.Add(At(SoftwareScope.Roaming, "vlc"));
+        var reading = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+        Check.True(reading.Complete, "un nom d'appareil réservé ne bloque ni les choix ni la sauvegarde");
+        Check.Null(reading.Error, "ni interruption ni motif partiel");
+        Check.Equal("vlc", reading.Items.Single().Rel, "la portée continue après les noms tus");
+        Check.False(fs.Probed.Any(path => refused.Any(name => path == At(SoftwareScope.Roaming, name))), "aucun nom tu n'est interrogé");
+    }
+
+    [Test]
+    public void LienAuNomNonRepresentableEstTuSansRendreLInventairePartiel()
+    {
+        // « Temp. » n'est pas l'exclusion Temp : sans la règle de nom avant celle des liens, cette jonction rendrait l'inventaire partiel.
+        string[] links = ["Temp.", "Fin ", "Lien|alt", "nul", "Demi\uD800"];
+        var fs = NewFileSystem();
+        foreach (var name in links)
+        {
+            var path = At(SoftwareScope.Local, name);
+            fs.Add(path);
+            fs.Attributes[path] = FileAttributes.Directory | FileAttributes.ReparsePoint;
+        }
+        fs.Add(At(SoftwareScope.Local, "ZoomApp"));
+        var reading = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+        Check.True(reading.Complete, "un lien qu'aucune règle USMT ne peut écrire ne bloque ni les choix ni la sauvegarde");
+        Check.Null(reading.Error, "aucun motif de lien ni d'inventaire partiel");
+        Check.Equal("ZoomApp", reading.Items.Single().Rel, "le voisin reste découvert");
+        Check.False(fs.Probed.Any(path => links.Any(name => new[] { At(SoftwareScope.Local, name), At(SoftwareScope.Local, name.TrimEnd('.', ' ')) }
+            .Any(link => path.Equals(link, StringComparison.OrdinalIgnoreCase) || path.StartsWith(link + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)))),
+            "aucun lien n'est interrogé ni suivi");
     }
 
     [Test]
