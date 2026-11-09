@@ -34,6 +34,13 @@ compilation sans avertissement ; 25 tests web ; suites `SituationAdmissionTests`
 `NativeConfirmationTests`, `SessionAccessTests` et `ConfirmationBindingTests` sont les
 mêmes qu’avant, moins les deux tests retirés.
 
+Publiée le 9 novembre 2026 : [v2.0.14](https://github.com/M4D135/FILPRO/releases/tag/v2.0.14)
+(identifiant `439078646`, tag sur `9f8ca177`), ZIP `6cf2385b…` et `SHA256SUMS`, vérifiés
+par l’API et un nouveau téléchargement. CI Windows `42602008887` verte (57 suites, 459
+contrôles). Recette VM `F214FIXA` validée et reçu émis ; le détail est dans
+`docs/VALIDATION.md`. Reste ouvert : un lien ou une jonction sous AppData rend toujours
+l’inventaire partiel.
+
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 
 Décision de David (9 novembre 2026) : ne garder que la dernière version. M4D135/FILPRO

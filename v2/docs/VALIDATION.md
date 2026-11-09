@@ -1,5 +1,47 @@
 # Validation FILPRO V2
 
+## Recette du 9 novembre 2026 — 2.0.14 PROD-LIGHT, source `9f8ca177`
+
+Cette recette porte sur le pack LIGHT de `9f8ca1775773342bbbcec3a20af6834f69728cd5`
+(ZIP `831d3b6f2b161683e2163f13b29bdc7e58e96922b086864df206cfd355be9002`, 278 fichiers,
+EXE `87a141655c09ddcaa624134926fb2a59830716569e8f07013ed0fe3bd172afae`). Base de mise à
+jour : LIGHT 0.0.1 de `d1a8e3cd` (ZIP `1279a803…`, EXE `d047b16f…`). Le run GitHub
+Windows `42602008887` compte 57 suites et 459 contrôles réussis, avec la page Evergreen
+observée. Par rapport à la 2.0.13, deux tests sont partis avec l’avertissement du dossier
+modifiable et un test couvre le chemin de mise à jour vide.
+
+Recette VM (run `F214FIXA`) sur la fixture Windows 11 recréée de zéro (KVM, groupe de
+travail, hors réseau), compte opérateur local :
+
+- **Natif** : 17 étapes, dont 6 confirmations. Les 4 phases complémentaires sont
+  conformes.
+- **Socle** : Evergreen 140 retenu en premier ; Socle retenu sans Evergreen ; message
+  avec le lien du Socle sans l’un ni l’autre ; Socle altéré (`fr.pak`) refusé.
+- **Démarrage** : la page est observée par le collecteur Evergreen. Ni l’accueil ni
+  Paramètres n’affichent l’avertissement du dossier modifiable.
+- **Fichier en trop** : 278 fichiers plus `desktop.ini` ; refus nommé.
+- **Démonstration** : `filpro.demoStateIdentical` avant/après, 2 profils.
+- **Mise à jour réelle** 0.0.1 → 2.0.14 depuis un dossier local avec `SHA256SUMS` :
+  - source mémorisée du premier essai, réglages relevés ensuite ;
+  - transaction `13847e1764ba4cd595983016e26657e4`, d’abord `Committed`, puis
+    `RolledBack` par le retour arrière demandé dans l’interface de la 2.0.14 ;
+  - confirmations natives acceptées dans la vraie fenêtre.
+- **Reprise de l’ouvrier** : état RollingBack après le déplacement final, ouvrier
+  candidat appelé deux fois, journal et inventaires conservés. La coupure de courant
+  n’est pas exercée.
+
+Les 8 groupes sont validés sans adaptation du validateur. Le reçu
+`windows-qualification.json` est émis (`passed`, PROD-LIGHT, 278 fichiers, 124 preuves)
+et reste privé. Le pack publié (ZIP `6cf2385b516d49555b8e9326c255f2807457e08f0e8d2cf9f19dec61b22c4efd`)
+a le même contenu que le candidat recetté.
+
+Non rejoué dans la VM : les profils de la fixture n’ont aucun nom non représentable, et
+le chemin vide n’a pas été essayé. Ces deux corrections sont couvertes par la CI Windows
+(`LoadedRegistryDiscoveryTests.NomGeneriqueNonRepresentableEstTaiSansRendreLInventairePartiel`,
+`UpdateSourcePreferenceTests.CheminVideRefuseSansMettreLaMiseAJourEnEchec`) et par les
+tests web. Le même traitement côté dossiers AppData (`WindowsSoftwareFileReader`) n’a
+pas de test dédié.
+
 ## Recette du 9 novembre 2026 — 2.0.13 PROD-LIGHT, source `36e0d035`
 
 Cette recette porte sur le pack LIGHT de `36e0d0353ab084b83a0cf37096d0efb03618a1d2`
