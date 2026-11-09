@@ -1,5 +1,31 @@
 # FILPRO V2 — état de livraison et historique
 
+## 9 novembre 2026 — avertissement du dossier modifiable retiré, inventaire non bloqué
+
+Retours de David sur un poste réel (9 novembre 2026), après la 2.0.13 :
+
+- **Dossier de FILPRO modifiable** : le bandeau jaune « Le compte ouvert sur ce poste peut
+  modifier le dossier de FILPRO… » est retiré, à sa demande. La ligne grave correspondante
+  disparaît aussi de la fenêtre « FILPRO — Confirmation Windows ». Le contrôle des droits
+  qui l’alimentait n’existe plus : la capacité `packModifiable` et l’événement
+  `pack.exposure` sont supprimés. Le conseil de placement reste affiché seulement quand
+  l’affichage ne démarre pas.
+- **Inventaire partiel à tort** : une clé sous `HKCU\Software`, ou un dossier AppData, dont
+  le nom ne peut pas s’écrire dans une règle USMT (`[`, `]`, `/`, `*`, `?`, `"`, `<`, `>`, `|`,
+  `:`, caractère de contrôle, nom d’appareil réservé, fin par une espace ou un point)
+  rendait tout l’inventaire partiel. Les choix du profil ne pouvaient plus être
+  enregistrés, et la préparation de sa sauvegarde était refusée. Un tel élément ne peut
+  jamais être retenu, et la sauvegarde ne prend que les éléments cochés : il est
+  maintenant tu, sans bloquer le profil. Les autres motifs (accès refusé, lien non suivi,
+  bornes de nombre ou de durée, élément disparu) rendent toujours l’inventaire partiel.
+
+Commit local sur `master`, non poussé, sans changement de version. Contrôles faits sur
+le Mac : compilation sans avertissement ; 25 tests web ; suites `SituationAdmissionTests`,
+`NativeWindowPolicyTests`, `LoadedRegistryDiscoveryTests`, `SoftwareFileDiscoveryTests`,
+`ConfirmationSheetsTests` et `BridgeTests` vertes. Les échecs propres à macOS de
+`NativeConfirmationTests` et `SessionAccessTests` sont les mêmes qu’avant, moins les deux
+tests retirés. Ni CI Windows ni recette VM.
+
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 
 Décision de David (9 novembre 2026) : ne garder que la dernière version. M4D135/FILPRO

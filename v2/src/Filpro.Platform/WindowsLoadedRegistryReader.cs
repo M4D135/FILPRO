@@ -103,25 +103,29 @@ public sealed class WindowsLoadedRegistryReader
                         break;
                     }
                     var relative = "Software\\" + entry.Name;
+                    SoftwareItem item;
                     try
                     {
-                        if (entry.Name.Contains('\\') || entry.Name.Contains('/'))
-                            throw new FilproOperationException("selection.store", "Nom de clé hors du premier niveau.");
-                        var item = SoftwareDiscoveryInputs.Normalize([
+                        if (entry.Name.Contains('\\') || entry.Name.Contains('/') || entry.Name.Any(char.IsControl))
+                            throw new FilproOperationException("selection.store", "Nom de clé non représentable.");
+                        item = SoftwareDiscoveryInputs.Normalize([
                             new SoftwareItem(SoftwareScope.Hkcu, relative, entry.Name, SoftwareCategory.Autre, false, false, false, null, false, false),
                         ], files: false).Single();
-                        if (SoftwareDiscoveryCatalog.IsGenericRegistryExcluded(relative)
-                            || extra.Any(known => SoftwareDiscoveryInputs.Overlaps(known.Rel, relative))) continue;
-                        var probe = software.OpenSubKey(entry.Name);
-                        using var key = probe.Key;
-                        cancellationToken.ThrowIfCancellationRequested();
-                        if (probe.ErrorCode == 0 && key is not null) items.TryAdd(relative, item);
-                        else reasons.Add(ReadError("Une clé énumérée est devenue absente ou inaccessible", probe.ErrorCode));
                     }
                     catch (FilproOperationException)
                     {
-                        reasons.Add("Un nom de clé ne peut pas être représenté dans la sélection ; inventaire partiel.");
+                        // Nom qu'aucune règle USMT ne peut écrire ([, ], /, *, ?, ", <, >, |, :, caractère de contrôle, fin par
+                        // une espace ou un point) : cette clé ne peut jamais être retenue, donc la taire ne fait rien perdre.
+                        // Elle ne rend pas l'inventaire partiel, ce qui bloquerait les choix et la sauvegarde du profil.
+                        continue;
                     }
+                    if (SoftwareDiscoveryCatalog.IsGenericRegistryExcluded(relative)
+                        || extra.Any(known => SoftwareDiscoveryInputs.Overlaps(known.Rel, relative))) continue;
+                    var probe = software.OpenSubKey(entry.Name);
+                    using var key = probe.Key;
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (probe.ErrorCode == 0 && key is not null) items.TryAdd(relative, item);
+                    else reasons.Add(ReadError("Une clé énumérée est devenue absente ou inaccessible", probe.ErrorCode));
                 }
             }
             else if (softwareProbe.ErrorCode is not (2 or 3))

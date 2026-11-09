@@ -107,18 +107,22 @@ public sealed class WindowsSoftwareFileReader
                             reasons.Add("Un dossier AppData est un lien ou une jonction non suivi ; inventaire partiel.");
                         continue;
                     }
+                    SoftwareItem item;
                     try
                     {
-                        var item = SoftwareDiscoveryInputs.Normalize([
+                        item = SoftwareDiscoveryInputs.Normalize([
                             new SoftwareItem(scope, relative, relative, SoftwareCatalog.Classify(relative), false, false, false, null, false, false),
                         ], files: true).Single();
-                        if (ProbeDirectory(path, cancellationToken)) items.TryAdd(scope + "|" + relative, item);
-                        else reasons.Add("Un dossier énuméré est devenu absent ; inventaire partiel.");
                     }
                     catch (FilproOperationException)
                     {
-                        reasons.Add("Un nom de dossier ne peut pas être représenté dans la sélection ; inventaire partiel.");
+                        // Nom qu'aucune règle USMT ne peut écrire (nom d'appareil réservé, caractère interdit, fin par une espace
+                        // ou un point) : ce dossier ne peut jamais être retenu, donc le taire ne fait rien perdre. Il ne rend
+                        // pas l'inventaire partiel, ce qui bloquerait les choix et la sauvegarde du profil.
+                        continue;
                     }
+                    if (ProbeDirectory(path, cancellationToken)) items.TryAdd(scope + "|" + relative, item);
+                    else reasons.Add("Un dossier énuméré est devenu absent ; inventaire partiel.");
                 }
             }
             catch (Exception ex) when (SoftwareDiscoveryInputs.IsReadFailure(ex))

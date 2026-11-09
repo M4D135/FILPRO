@@ -115,13 +115,17 @@ internal sealed class LoadedRegistryDiscoveryTests
     }
 
     [Test]
-    public void NomGeneriqueNonRepresentableNeDevientPasUneExclusionConnue()
+    public void NomGeneriqueNonRepresentableEstTaiSansRendreLInventairePartiel()
     {
-        var source = new FakeRegistry { Names = ["Microsoft/Acme"] };
+        string[] refused = ["Microsoft/Acme", "Editeur [x64]", "Nom:alt", "Fin.", "Fin ", "Ctl\u007f"];
+        var source = new FakeRegistry { Names = [.. refused, "Acme"] };
+        source.Add(@"Software\Acme");
         var result = new WindowsLoadedRegistryReader(source).Read(Sid, [], CancellationToken.None);
-        Check.False(result.Complete, "le slash littéral d'un nom natif ne devient pas un séparateur de chemin");
-        Check.Contains("ne peut pas être représenté", result.Error, "défaut de forme explicite");
-        Check.False(source.PathsOpened.Contains(@"Software\Microsoft/Acme"), "aucune ouverture du nom refusé");
+        Check.True(result.Complete, "un nom qu'aucune règle USMT ne peut écrire ne bloque ni les choix ni la sauvegarde");
+        Check.Null(result.Error, "aucun motif d'inventaire partiel");
+        Check.Equal(@"Software\Acme", result.Items.Single().Rel, "la découverte continue après les noms tus");
+        Check.False(source.PathsOpened.Any(path => refused.Any(name => path.EndsWith(name, StringComparison.Ordinal))),
+            "aucune ouverture d'un nom tu ; le slash littéral ne devient pas un séparateur de chemin");
         AssertClosed(source);
     }
 
