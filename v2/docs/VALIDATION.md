@@ -42,7 +42,12 @@ le chemin vide n’a pas été essayé. Ces deux corrections sont couvertes par 
 tests web. Le même traitement côté dossiers AppData (`WindowsSoftwareFileReader`)
 n’avait pas de test dédié à la publication ; il est couvert depuis `4b34195`
 (`SoftwareFileDiscoveryTests.NomDeDossierNonRepresentableEstTuSansRendreLInventairePartiel`,
-CI Windows `42641217661`, 460 contrôles).
+CI Windows `42641217661`, 460 contrôles). Les noms finis par un point ou une espace, les
+noms d’appareil et les liens au nom non représentable sont corrigés et couverts depuis
+`30231eb` (`NomFiniParUnPointOuUneEspaceEstTuSansRendreLInventairePartiel`,
+`NomDAppareilReserveEstTuSansInterrompreLaPortee`,
+`LienAuNomNonRepresentableEstTuSansRendreLInventairePartiel` ; CI Windows `42648655102`,
+463 contrôles). Non rejoué dans la VM, ni sous Windows 10.
 
 ## Recette du 9 novembre 2026 — 2.0.13 PROD-LIGHT, source `36e0d035`
 

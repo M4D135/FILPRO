@@ -42,10 +42,19 @@ contrôles). Recette VM `F214FIXA` validée et reçu émis ; le détail est dans
 l’inventaire partiel.
 
 Après la publication, `4b34195` ajoute le test des noms de dossiers AppData non
-représentables ; il échoue avec l’ancien comportement. Constat en l’écrivant, par
-lecture du code et non reproduit sur Windows : `Path.GetFullPath` retire sous Windows le
-point ou l’espace final d’un nom. Un dossier AppData nommé ainsi est donc contrôlé sous
-un autre nom, introuvable, et rend l’inventaire partiel (« devenu absent »). Non corrigé.
+représentables ; il échoue avec l’ancien comportement.
+
+`30231eb` corrige le lecteur AppData, qui prenait le nom après `Path.GetFullPath`. Sous
+Windows, cet appel retire le point ou l’espace final d’un nom et, avant Windows 11,
+change un nom d’appareil (`nul`, `COM1.bak`) en `\\.\NUL`. Un dossier « Fin. » était
+donc contrôlé sous « Fin », introuvable, et rendait l’inventaire partiel ; un dossier
+`nul` interrompait toute la portée sous Windows 10. Le nom et le premier niveau sont
+maintenant lus sur le chemin brut de l’énumération, et un nom non représentable est
+refusé avant le contrôle des liens : une jonction « Temp. » ne rend plus l’inventaire
+partiel. Un nom que le codec réécrit (demi-paire UTF-16 isolée devenue U+FFFD) est tu
+au lieu d’être publié sous un nom qui n’existe pas. CI Windows `42648655102` verte
+(57 suites, 463 contrôles). Le cas Windows 10 n’est vérifié que par lecture : la CI
+tourne sur une base Windows 11 (10.0.26100), où ces noms ne sont plus convertis.
 
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 
