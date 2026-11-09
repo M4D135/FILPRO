@@ -1,6 +1,6 @@
 # FILPRO V2 — état de livraison et historique
 
-## 9 novembre 2026 — avertissement du dossier modifiable retiré, inventaire non bloqué
+## 9 novembre 2026 — 2.0.14 : avertissement du dossier modifiable retiré, inventaire non bloqué
 
 Retours de David sur un poste réel (9 novembre 2026), après la 2.0.13 :
 
@@ -18,13 +18,21 @@ Retours de David sur un poste réel (9 novembre 2026), après la 2.0.13 :
   jamais être retenu, et la sauvegarde ne prend que les éléments cochés : il est
   maintenant tu, sans bloquer le profil. Les autres motifs (accès refusé, lien non suivi,
   bornes de nombre ou de durée, élément disparu) rendent toujours l’inventaire partiel.
+- **Source de mise à jour vide** : « Mémoriser cette source » ou « Rechercher et vérifier
+  l’offre » avec un chemin vide faisait passer la mise à jour en échec (« Action arrêtée ;
+  consulter le journal avant de recommencer »). La page demande maintenant le chemin près
+  du champ, sans appeler l’hôte. L’hôte refuse un chemin vide avant le verrou de mise à
+  jour, et l’état de la mise à jour ne change pas.
 
-Commit local sur `master`, non poussé, sans changement de version. Contrôles faits sur
-le Mac : compilation sans avertissement ; 25 tests web ; suites `SituationAdmissionTests`,
+Poussé sur `master` (`074c503`, `c478b88`, `8654aed`). Sur la demande de David
+(« go tout terminer et tout corriger », 9 novembre 2026), la version passe à 2.0.14 pour
+la CI Windows, la recette VM, le pack et la publication. Contrôles faits sur le Mac :
+compilation sans avertissement ; 25 tests web ; suites `SituationAdmissionTests`,
 `NativeWindowPolicyTests`, `LoadedRegistryDiscoveryTests`, `SoftwareFileDiscoveryTests`,
-`ConfirmationSheetsTests` et `BridgeTests` vertes. Les échecs propres à macOS de
-`NativeConfirmationTests` et `SessionAccessTests` sont les mêmes qu’avant, moins les deux
-tests retirés. Ni CI Windows ni recette VM.
+`ConfirmationSheetsTests`, `BridgeTests`, `UpdateSourcePreferenceTests`,
+`UpdateTransactionTests` et `SimulationWorldTests` vertes. Les échecs propres à macOS de
+`NativeConfirmationTests`, `SessionAccessTests` et `ConfirmationBindingTests` sont les
+mêmes qu’avant, moins les deux tests retirés.
 
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 

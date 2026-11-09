@@ -3,7 +3,7 @@
      le nouveau processus contrôle les droits actifs avant de charger les moteurs de profils. L’écran d’entrée ne sert
      qu’à réessayer après une annulation ou une erreur. La démo reste indépendante. -->
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="2.0.13.0" name="Filpro.App" type="win32" />
+  <assemblyIdentity version="2.0.14.0" name="Filpro.App" type="win32" />
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
