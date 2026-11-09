@@ -103,6 +103,21 @@ internal sealed class SoftwareFileDiscoveryTests
     }
 
     [Test]
+    public void NomDeDossierNonRepresentableEstTuSansRendreLInventairePartiel()
+    {
+        // Noms qu'aucune règle USMT ne peut écrire et que la normalisation des chemins laisse intacts sur Windows comme ailleurs.
+        string[] refused = ["Nom|alt", "Etoile*", "Question?", "Guillemet\"", "Chevron<", "Ctl\u0001"];
+        var fs = NewFileSystem();
+        foreach (var name in refused) fs.Add(At(SoftwareScope.Roaming, name));
+        fs.Add(At(SoftwareScope.Roaming, "vlc"));
+        var reading = new WindowsSoftwareFileReader(fs).Read(Root, [], CancellationToken.None);
+        Check.True(reading.Complete, "un dossier qu'aucune règle USMT ne peut écrire ne bloque ni les choix ni la sauvegarde");
+        Check.Null(reading.Error, "aucun motif d'inventaire partiel");
+        Check.Equal("vlc", reading.Items.Single().Rel, "la découverte continue après les noms tus");
+        Check.False(fs.Probed.Any(path => refused.Any(name => path == At(SoftwareScope.Roaming, name))), "aucun nom tu n'est interrogé");
+    }
+
+    [Test]
     public void BornesDeNombreEtDeTempsConserventUnResultatPartiel()
     {
         var fs = NewFileSystem();
