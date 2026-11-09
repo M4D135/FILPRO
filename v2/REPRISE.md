@@ -1,5 +1,25 @@
 # FILPRO V2 — état de livraison et historique
 
+## 9 novembre 2026 — 2.0.15 : noms de dossiers AppData lus avant la normalisation Windows
+
+Après la publication de la 2.0.14, `4b34195` ajoute le test des noms de dossiers AppData non
+représentables ; il échoue avec l’ancien comportement.
+
+`30231eb` corrige le lecteur AppData, qui prenait le nom après `Path.GetFullPath`. Sous
+Windows, cet appel retire le point ou l’espace final d’un nom et, avant Windows 11,
+change un nom d’appareil (`nul`, `COM1.bak`) en `\\.\NUL`. Un dossier « Fin. » était
+donc contrôlé sous « Fin », introuvable, et rendait l’inventaire partiel ; un dossier
+`nul` interrompait toute la portée sous Windows 10. Le nom et le premier niveau sont
+maintenant lus sur le chemin brut de l’énumération, et un nom non représentable est
+refusé avant le contrôle des liens : une jonction « Temp. » ne rend plus l’inventaire
+partiel. Un nom que le codec réécrit (demi-paire UTF-16 isolée devenue U+FFFD) est tu
+au lieu d’être publié sous un nom qui n’existe pas. CI Windows `42648655102` verte
+(57 suites, 463 contrôles). Le cas Windows 10 n’est vérifié que par lecture : la CI
+tourne sur une base Windows 11 (10.0.26100), où ces noms ne sont plus convertis.
+
+Sur la demande de David (« Oui, prépare-la », 9 novembre 2026), la version passe à
+2.0.15 pour la CI Windows, la recette VM et le pack ; la publication attend son accord.
+
 ## 9 novembre 2026 — 2.0.14 : avertissement du dossier modifiable retiré, inventaire non bloqué
 
 Retours de David sur un poste réel (9 novembre 2026), après la 2.0.13 :
@@ -40,21 +60,6 @@ par l’API et un nouveau téléchargement. CI Windows `42602008887` verte (57 s
 contrôles). Recette VM `F214FIXA` validée et reçu émis ; le détail est dans
 `docs/VALIDATION.md`. Reste ouvert : un lien ou une jonction sous AppData rend toujours
 l’inventaire partiel.
-
-Après la publication, `4b34195` ajoute le test des noms de dossiers AppData non
-représentables ; il échoue avec l’ancien comportement.
-
-`30231eb` corrige le lecteur AppData, qui prenait le nom après `Path.GetFullPath`. Sous
-Windows, cet appel retire le point ou l’espace final d’un nom et, avant Windows 11,
-change un nom d’appareil (`nul`, `COM1.bak`) en `\\.\NUL`. Un dossier « Fin. » était
-donc contrôlé sous « Fin », introuvable, et rendait l’inventaire partiel ; un dossier
-`nul` interrompait toute la portée sous Windows 10. Le nom et le premier niveau sont
-maintenant lus sur le chemin brut de l’énumération, et un nom non représentable est
-refusé avant le contrôle des liens : une jonction « Temp. » ne rend plus l’inventaire
-partiel. Un nom que le codec réécrit (demi-paire UTF-16 isolée devenue U+FFFD) est tu
-au lieu d’être publié sous un nom qui n’existe pas. CI Windows `42648655102` verte
-(57 suites, 463 contrôles). Le cas Windows 10 n’est vérifié que par lecture : la CI
-tourne sur une base Windows 11 (10.0.26100), où ces noms ne sont plus convertis.
 
 ## 9 novembre 2026 — dépôt GitHub recréé sur un seul commit
 
