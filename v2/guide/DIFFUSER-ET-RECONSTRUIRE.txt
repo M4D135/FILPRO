@@ -1,0 +1,73 @@
+FILPRO V2 — DIFFUSION ET RECONSTRUCTION
+
+Distribution
+Un pack a exactement FILPRO.exe et wad à sa racine. L’interface, USMT x64 complet,
+les guides, les notices et les outils de support sont sous wad. Seul PROD-LIGHT
+est publié ; il ne contient aucun moteur WebView2. FILPRO utilise WebView2
+Evergreen x64 installé pour la machine, sinon le pack WebView2 du Socle Windows,
+commun à tous les outils et publié une seule fois, extrait dans wad :
+https://github.com/M4D135/socle-windows/releases/tag/webview2-156.0.4314.42
+Ne jamais ajouter wad\runtime\webview2 à un pack FILPRO ni copier ce moteur dans
+une release FILPRO. Une autre version du moteur passe par une nouvelle release du
+Socle et par l’ajout de son index dans FILPRO ; les index connus ne sont jamais
+retirés, pour qu’une mise à jour relise le Socle déjà installé.
+Les sources de chaque version sont disponibles au tag correspondant sur GitHub.
+Ne pas mélanger une nouvelle version avec les fichiers d'une ancienne extraction.
+FILPRO possède un seul lanceur ; les droits réels Windows contrôlent les opérations.
+
+Exemple de partage administré
+  \\serveur\diffusion\FILPRO\
+      FILPRO-2.0.13-win-x64-PROD-LIGHT.zip
+      SHA256SUMS
+
+Le nom exact du fichier de sommes est SHA256SUMS, sans extension. Exemple de ligne :
+  <64 caractères hexadécimaux SHA-256>  FILPRO-2.0.13-win-x64-PROD-LIGHT.zip
+Cet exemple n'est pas une empreinte utilisable. create_pack.py produit la vraie somme.
+Réserver l'écriture aux diffuseurs. Copier le ZIP sous un nom temporaire, attendre
+la fin du transfert, renommer, puis publier SHA256SUMS en dernier par remplacement
+atomique. Pour plusieurs versions, inclure une somme par ZIP. Les postes ne doivent
+avoir besoin que de lire. Une somme et un ZIP remplaçables ensemble ne prouvent pas
+l'identité de l'éditeur. GitHub doit recevoir les mêmes octets contrôlés ; aucune
+publication implicite n'est effectuée par les outils d'assemblage.
+
+Configuration distribuable
+wad\config\deployment-defaults.json contient uniquement le schéma fermé FILPRO.
+Utiliser le bouton des Paramètres, ou un export validé, sans ajouter de commandes,
+chemins, secrets ou sélections personnelles. Cette option est distincte des hashes
+des binaires ; un changement impose de régénérer l'archive et SHA256SUMS.
+Les modèles logiciels disposent d'un patch distinct : dans Paramètres, exporter
+les choix communs dans FILPRO-modeles.json. Diffuser ce fichier et son compagnon
+FILPRO-modeles.json.sha256. Copier/renommer le JSON d'abord, puis l'empreinte en
+dernier. « Chercher dans le dossier de diffusion » consulte explicitement ces deux
+fichiers dans le dossier mémorisé. L'aperçu montre ajouts, identiques et conflits.
+Les absents ne sont jamais supprimés. Les conflits gardent leurs valeurs locales,
+sauf choix explicite d'appliquer aussi les valeurs du patch. Une sauvegarde et une
+empreinte appliquée sont enregistrées atomiquement avec les choix. Rejouer le même
+patch ne réécrit rien. Les sélections personnelles des profils restent inchangées.
+Ce JSON ne contient que les chemins relatifs de logiciels et les clés HKCU, sans
+compte, SID, consentement ou option d'exécution. FILPRO n'a pas de sites/tickets.
+
+Reconstruire depuis le dépôt Git
+Prérequis disponibles localement : SDK .NET 10, PowerShell 7.2+, Python 3.11+,
+cache NuGet correspondant au SDK WebView2 1.0.4258.31 et aux runtimes Windows x64.
+L'outil ne télécharge rien par défaut. -AllowNetworkRestore est un choix explicite
+pour utiliser la source NuGet officielle configurée dans les sources.
+USMT est requis. Le moteur WebView2 n’entre pas dans le pack : il vient
+d’Evergreen ou du pack du Socle Windows.
+
+Cloner M4D135/FILPRO, choisir le tag de la version et travailler depuis ce dépôt
+propre. Pour préparer l’entrée légère, exécuter dans PowerShell :
+  pwsh -File v2\tools\packaging\Build-Input.ps1 -Flavor PROD-LIGHT -Usmt C:\Deps\USMT\amd64 -OutputDirectory C:\Travail\FILPRO-light -SourceCommit (git rev-parse HEAD)
+L’édition PROD avec moteur embarqué reste reconstructible pour les anciens tags,
+mais elle n’est plus publiée.
+
+Après qualification de l’entrée légère sur Windows :
+  python v2\tools\packaging\create_pack.py --input C:\Travail\FILPRO-light\input --output C:\Travail\FILPRO-zip-light --version <version> --source-commit <SHA exact> --flavor PROD-LIGHT --windows-qualification C:\Preuves\light\windows-qualification.json
+Chaque édition exige une version stable et --windows-qualification avec les preuves réelles
+des scénarios critiques sur exactement les fichiers assemblés. Ne pas remplir un
+reçu en succès sans exécution. Les preuves des contrats unitaires ne remplacent pas
+celles du démarrage WebView2, de l'USMT réel et des remplacements d'exécutables.
+
+Les notices incluses proviennent des packages .NET/WindowsDesktop 10.0.12 et du SDK
+WebView2 1.0.4258.31. Les conserver, ainsi que celles des distributions runtime/USMT.
+Lors d'un changement de dépendance, revoir les notices avec les octets distribués.

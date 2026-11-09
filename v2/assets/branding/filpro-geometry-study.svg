@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="FILPRO"><defs>
+  <linearGradient id="royal" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse"><stop stop-color="#066DDB"/><stop offset="1" stop-color="#6658F5"/></linearGradient>
+  <linearGradient id="paper" x1="255" y1="285" x2="760" y2="866" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset=".58" stop-color="#fbfdff"/><stop offset="1" stop-color="#e8f2ff"/></linearGradient>
+  <linearGradient id="back-paper" x1="350" y1="180" x2="840" y2="744" gradientUnits="userSpaceOnUse"><stop stop-color="#f5fbff"/><stop offset="1" stop-color="#dceaff"/></linearGradient>
+  <linearGradient id="teal" x1="635" y1="188" x2="825" y2="378" gradientUnits="userSpaceOnUse"><stop stop-color="#32d8c7"/><stop offset=".52" stop-color="#19C3B2"/><stop offset="1" stop-color="#0ca99e"/></linearGradient>
+  <filter id="lift" x="-25%" y="-25%" width="150%" height="160%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="11" stdDeviation="10" flood-color="#06367e" flood-opacity=".22"/></filter>
+  <filter id="rear-lift" x="-25%" y="-25%" width="150%" height="160%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#092a85" flood-opacity=".14"/></filter>
+</defs><rect width="1024" height="1024" fill="url(#royal)"/><g transform="rotate(6 598 468)" filter="url(#rear-lift)">
+  <rect x="350" y="180" width="496" height="576" rx="120" fill="url(#back-paper)"/>
+  <path d="M644 180h82c66.3 0 120 53.7 120 120v102l-116-32c-48.5-13.4-86-48-86-98Z" fill="url(#teal)"/>
+  <path d="M644 182h82c65.2 0 118 52.8 118 118" fill="none" stroke="#b0fff0" stroke-opacity=".55" stroke-width="2"/>
+</g>
+<g filter="url(#lift)">
+  <rect x="192" y="282" width="576" height="576" rx="132" fill="url(#paper)"/>
+  <path d="M324 284h312c71.8 0 130 58.2 130 130" fill="none" stroke="#ffffff" stroke-opacity=".9" stroke-width="3"/>
+  <circle cx="480" cy="474" r="65" fill="url(#royal)"/>
+  <path d="M318 715c0-76 65-119 162-119s162 43 162 119c0 17.5-12.5 28-30 28H348c-17.5 0-30-10.5-30-28Z" fill="url(#royal)"/>
+</g></svg>

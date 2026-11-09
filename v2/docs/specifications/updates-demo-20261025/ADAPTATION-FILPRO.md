@@ -1,0 +1,22 @@
+# FILPRO V2 — mises à jour et démonstration
+
+Le document USER-SPEC.txt joint par David le 25/10/2026 étend la cible de FILPRO V2. Lire l’intégralité du document. Les exemples GLPI/tickets/sites sont génériques, pas des fonctionnalités FILPRO constatées. Les consignes directes restent prioritaires : FULL SPARK, finir tout le développement, commit/push sources v2 par le coordinateur, puis tests/corrections, puis packs et guides validés. Aucun test, compilation ou VM pendant les lots de développement. Aucun push direct du worker.
+
+## Adaptation au produit
+- Dépôt officiel à confronter : M4D135/FILPRO sur GitHub. Cible C# .NET10 Windows x64/WebView2 et kit DOMENIA ; préserver l’architecture et les modules existants. Pas de réécriture supplémentaire.
+- Sources de mises à jour : Releases officielles, partage UNC/dossier choisi, ZIP local. GitHub sert à distribuer le programme, pas à stocker les sauvegardes utilisateur. Sauvegardes toujours locales/USB/LAN. Aucun téléchargement/install ou changement de source silencieux.
+- Ne pas inventer de chemin UNC réel, de certificat, d’identifiants ni de signature. Source non configurée = choix explicite de l’utilisateur. Droits Windows existants pour SMB. Documenter les limites d’authenticité.
+- Vérifier le ou les lanceurs réellement présents. Standard/Admin est conditionnel dans le document : ne pas inventer un second EXE ou prétendre une séparation déjà existante. Si un seul lanceur, documenter les exigences conditionnelles non applicables et contrôler les capacités du moteur.
+- Référentiels FILPRO : modèles logiciels, règles de sélection fichiers/registre, préréglages et catalogues existants. Patches versionnés sans code, identifiants stables, aperçu/conflits, sauvegarde/atomicité/idempotence. Aucun accès distant ou effacement implicite d’entrées absentes.
+- Démo : environ 60 opérations/magasins/éléments de sauvegarde fictifs liés, 6 profils/utilisateurs fictifs, 4 postes/destinations fictifs. Historiques, états actifs/terminés/en erreur, planification relative au jour et scénarios métier FILPRO. Ne pas ajouter un CRM de tickets, tournées ou calendrier général si FILPRO n’en possède pas. Cartographier chaque exigence avec équivalent ou non-applicabilité motivée.
+- Même UI et règles métier que le réel, exécuteurs/adaptateurs de démo et magasin séparés. Les actions mutent réellement les seules données fictives. Le blocage global de toute Write en démo du socle initial doit devenir un contrôle de contexte sûr permettant ces mutations isolées, sans jamais appeler un exécuteur réel.
+- Entrer/sortir/réinitialiser conserve le contexte normal et ses octets. Bloquer les bascules dangereuses, séparer caches et identifiants de génération pour réponses tardives. Simulation de mise à jour/rollback/patch entièrement fictive, aucun binaire réel remplacé. Interdire côté moteur les services/partages/bases réels en démo.
+- Packs PROD réellement exécutables et autonomes, DEV avec mêmes exécutables plus sources/reconstruction. Inventaire complet, contrôles ZIP/chemins/casse/limites et transactions de mise à jour/rollback/reprise selon le document. Ne jamais toucher aux vraies sauvegardes pour éprouver l’installation.
+
+## Exécution attendue
+La file principale continue ses micro-lots existants. Cette extension démarre après sa fin et AVANT de considérer le développement terminé ou de préparer le commit/push sources. Faire d’abord un audit ciblé du code alors disponible, produire un plan fini de micro-lots (une fonction/composant par tâche) dans UPDATES-DEMO-MICRO-PLAN.json, puis coder les manques. Les petits tests sont écrits pendant le développement mais leur exécution est reportée à la phase demandée par David. Pas de longues relectures du dépôt, pas de journaux de raisonnement.
+
+Le rapport final de l’extension doit relier chaque exigence USER-SPEC à code réel/simulé/manquant, tests écrits puis exécutés séparément, packs et guides. Aucun READY ne vaut qualification. Ne pas effacer les manques en les déclarant inapplicables sans rapport au métier.
+
+## Ajout direct utilisateur : configuration de déploiement
+Lire entièrement BOOTSTRAP-CONFIG.md dans ce même dossier et inclure ses micro-lots dans UPDATES-DEMO-MICRO-PLAN.json : export/import manuels, bootstrap automatique au premier lancement vers AppData, préservation des configurations existantes et intégration des packs. Cette extension est obligatoire avant de déclarer le développement complet.

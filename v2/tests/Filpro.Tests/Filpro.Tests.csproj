@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Lanceur de tests maison (console), sans paquet externe. Écrit dans le lot 001, exécuté sous Windows dans un lot
+       ultérieur. N'exécute rien sous Linux/Mac. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Filpro.Tests</RootNamespace>
+    <!-- Les classes de test sont instanciées par le lanceur maison via réflexion. -->
+    <NoWarn>$(NoWarn);CA1812</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/Filpro.App/WebViewRuntimePolicy.cs" Link="WebViewRuntimePolicy.cs" />
+    <Compile Include="../../src/Filpro.App/StartupPolicy.cs" Link="StartupPolicy.cs" />
+    <Compile Include="../../src/Filpro.App/UserDataLocation.cs" Link="UserDataLocation.cs" />
+    <Compile Include="../../src/Filpro.App/WebViewDataLocation.cs" Link="WebViewDataLocation.cs" />
+    <Compile Include="../../src/Filpro.App/SessionAccess.cs" Link="SessionAccess.cs" />
+    <Compile Include="../../src/Filpro.App/NativeWindowPolicy.cs" Link="NativeWindowPolicy.cs" />
+    <Compile Include="../../src/Filpro.App/ConfirmationTheme.cs" Link="ConfirmationTheme.cs" />
+    <Compile Include="../../src/Filpro.App/EnvironmentGuard.cs" Link="EnvironmentGuard.cs" />
+    <ProjectReference Include="../../src/Filpro.Core/Filpro.Core.csproj" />
+    <ProjectReference Include="../../src/Filpro.Bridge/Filpro.Bridge.csproj" />
+    <ProjectReference Include="../../src/Filpro.Simulation/Filpro.Simulation.csproj" />
+    <ProjectReference Include="../../src/Filpro.Platform/Filpro.Platform.csproj" />
+  </ItemGroup>
+</Project>

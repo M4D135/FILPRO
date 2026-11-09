@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+
+# Fichiers locaux macOS et dépendances des outils de développement.
+.DS_Store
+._*
+node_modules/

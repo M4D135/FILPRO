@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Hôte WinForms minimal : fenêtre, WebView2 verrouillé sur le nom virtuel filpro.local, pont fermé, cycle de vie,
+       repli d'erreur. Réutilise les réglages de DOMENIA.App (référence lecture seule) : .NET 10 autonome win-x64, même
+       version WebView2 (1.0.4258.31), aucune dépendance ajoutée, aucun runtime système copié. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>FILPRO</AssemblyName>
+    <RootNamespace>Filpro.App</RootNamespace>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>embedded</DebugType>
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/filpro.ico</ApplicationIcon>
+    <!-- DOTNET_STARTUP_HOOKS, posable dans HKCU\Environment par tout programme de la session, chargerait du code dans le
+         processus élevé : les crochets de démarrage sont désactivés dans la configuration d'exécution. -->
+    <StartupHookSupport>false</StartupHookSupport>
+    <!-- Le paquet WebView2 référence aussi son contrôle WPF ; l'hôte n'utilise que WinForms, l'avis de version WindowsBase est inoffensif. -->
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/filpro.ico" LogicalName="Filpro.App.Assets.filpro.ico" />
+    <ProjectReference Include="../Filpro.Core/Filpro.Core.csproj" />
+    <ProjectReference Include="../Filpro.Bridge/Filpro.Bridge.csproj" />
+    <ProjectReference Include="../Filpro.Simulation/Filpro.Simulation.csproj" />
+    <ProjectReference Include="../Filpro.Platform/Filpro.Platform.csproj" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="../../web/**/*" LinkBase="wad/web" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../support/*" LinkBase="wad/support" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../guide/*" LinkBase="wad/guide" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../notices/*" LinkBase="wad/licences" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

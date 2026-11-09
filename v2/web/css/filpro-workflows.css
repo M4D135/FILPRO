@@ -1,0 +1,102 @@
+/* Écrans FILPRO construits avec les composants DOMENIA conservés. */
+.workflow-page { display: flex; flex-direction: column; gap: var(--s5); }
+.workflow-page .page-header { margin-bottom: 0; }
+/* Zones de message vides : elles restent dans la page (annonces role=status) sans ajouter chacune un espacement. */
+.workflow-page > :is([data-feedback], [data-capability-notices]):empty { margin-top: calc(-1 * var(--s5)); }
+.workflow-columns { display: grid; grid-template-columns: minmax(260px, .9fr) minmax(360px, 1.6fr); gap: var(--s5); align-items: start; }
+.workflow-stack { display: flex; flex-direction: column; gap: var(--s4); }
+.workflow-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+.workflow-form label, .workflow-search { display: flex; flex-direction: column; gap: var(--s2); font-weight: 600; }
+.workflow-form .wide { grid-column: 1 / -1; }
+.workflow-form .input { width: 100%; min-width: 0; }
+.workflow-form .check-row { flex-direction: row; align-items: center; }
+.workflow-search { margin-bottom: var(--s5); }
+.workflow-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); margin: var(--s5) 0; }
+.workflow-facts dt { color: var(--text-muted); font-size: var(--fs-small); }
+.workflow-facts dd { margin: var(--s1) 0 0; overflow-wrap: anywhere; font-weight: 600; }
+.workflow-result { display: flex; flex-direction: column; gap: var(--s2); padding: var(--s4); border: 1px solid var(--border); border-radius: var(--r); margin: var(--s4) 0; overflow-wrap: anywhere; }
+.workflow-page .callout { margin: var(--s3) 0; }
+.workflow-page .card-head h2 { font-size: var(--fs-subtitle); }
+.workflow-page .actions-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.operation-list { display: flex; flex-direction: column; gap: var(--s2); max-height: 65vh; overflow-y: auto; }
+.operation-row { display: flex; width: 100%; gap: var(--s3); align-items: center; text-align: left; border: 1px solid transparent; border-radius: var(--r); padding: var(--s3); color: var(--text); background: transparent; cursor: pointer; }
+.operation-row > span:first-child { flex: 1; min-width: 0; }
+.operation-row strong, .operation-row small { display: block; }
+.operation-row small { color: var(--text-muted); margin-top: var(--s1); }
+.operation-row:hover { background: var(--bg-hover); }
+.operation-row.is-active { background: var(--accent-soft); border-color: var(--accent); }
+.operation-action { margin: var(--s6) 0 var(--s4); }
+.operation-action h3 { margin-top: var(--s2); font-size: var(--fs-subtitle); }
+.operation-progress { width: 100%; height: 10px; border: 0; border-radius: 8px; overflow: hidden; accent-color: var(--accent); }
+.operation-progress::-webkit-progress-bar { background: var(--bg-hover); border-radius: 8px; }
+.operation-progress::-webkit-progress-value { background: var(--brand-gradient); border-radius: 8px; transition: width var(--t-slow) var(--ease-out); }
+.operation-progress:not([value]) { opacity: .65; }
+.operation-metrics { display: flex; justify-content: space-between; gap: var(--s3); color: var(--text-muted); font-size: var(--fs-small); margin-top: var(--s2); }
+.operation-strip { grid-area: request; display: flex; align-items: center; gap: var(--s4); padding: var(--s3) var(--s6); border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+.operation-strip[hidden] { display: none; }
+.operation-strip > div { flex: 1; min-width: 0; }
+.operation-strip strong, .operation-strip small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.operation-strip small { color: var(--text-muted); }
+.operation-strip progress { width: 140px; }
+.filpro-shell .brand:hover .brand-mark { transform: none; }
+.workflow-table { width: 100%; border-collapse: collapse; }
+.workflow-table th, .workflow-table td { padding: var(--s3); text-align: left; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.workflow-table th { color: var(--text-muted); font-size: var(--fs-small); font-weight: 600; }
+.workflow-table-wrap { overflow-x: auto; }
+.workflow-table .block { display: block; }
+.filpro-shell .analyser > [data-repair-card] { margin-top: var(--s5); }
+/* Les textes de politiques et SID ne doivent pas imposer leur largeur intrinsèque à toute la grille d'onglets. */
+.filpro-shell .sauvegarder .k-tabs { grid-template-columns: minmax(0, 1fr); }
+.filpro-shell .sauvegarder .k-tabpanel { min-width: 0; }
+.filpro-shell .sauvegarder [data-list="profiles"] { grid-template-columns: minmax(0, 1fr); }
+.filpro-shell .sauvegarder [data-list="profiles"] .list-row { min-width: 0; }
+.filpro-shell .sauvegarder pre.plan { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.filpro-shell .sauvegarder .list-row .sub { overflow-wrap: anywhere; }
+.filpro-shell .sauvegarder .actions-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+@media (max-width: 1100px) { .workflow-columns { grid-template-columns: minmax(220px, .8fr) minmax(300px, 1.2fr); } .filpro-demo-control span { max-width: 140px; overflow: hidden; text-overflow: ellipsis; } }
+@media (max-width: 900px) {
+  /* Avec le menu déplié, garder l'identité sur une ligne complète et les commandes juste en dessous. */
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-list="profiles"] .list-row {
+    display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; row-gap: var(--s2);
+  }
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-include-sid] { grid-column: 1; grid-row: 1; }
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-list="profiles"] .avatar { grid-column: 2; grid-row: 1; }
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-list="profiles"] .body { grid-column: 3 / -1; grid-row: 1; }
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-list="profiles"] .k-pill { grid-column: 3; grid-row: 2; justify-self: start; }
+  .filpro-shell:not(.nav-collapsed) .sauvegarder [data-review-sid] { grid-column: 4; grid-row: 2; }
+}
+@media (max-width: 800px) { .workflow-columns, .workflow-form { grid-template-columns: 1fr; } .operation-list { max-height: 35vh; } .operation-strip { padding: var(--s3); } .operation-strip progress { display: none; } .filpro-demo-control span { display: none; } }
+:root[data-motion="reduced"] .operation-progress::-webkit-progress-value { transition: none; }
+@media (prefers-reduced-motion: reduce) { :root[data-motion="system"] .operation-progress::-webkit-progress-value { transition: none; } }
+.filpro-shell #main [hidden] { display: none !important; }
+
+/* Profils d'Analyser : sur une carte étroite, les pastilles d'état passent sous l'identité au lieu de déborder
+   sur la carte voisine ; le SID et le chemin se coupent n'importe où. */
+.filpro-shell .analyser .list-row:has(> .row-pills) { flex-wrap: wrap; row-gap: var(--s2); }
+.filpro-shell .analyser .list-row > .body { flex: 1 1 14rem; }
+.filpro-shell .analyser .list-row .sub { overflow-wrap: anywhere; }
+.filpro-shell .analyser .row-pills {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--s1);
+  flex: 0 1 auto; min-width: 0; margin-left: auto;
+}
+
+/* Encadrés d'information des écrans et des boîtes de dialogue FILPRO (ces dernières sont hors du shell) : teinte selon
+   le ton ; quand l'encadré commence par une icône, elle reste à gauche du texte, jamais seule sur sa ligne. */
+:is(.filpro-shell, .k-dlg-layer) .callout {
+  padding: var(--s2) var(--s3); border-radius: var(--r);
+  background: var(--info-soft); color: var(--text); font-size: var(--fs-small); line-height: 1.45; overflow-wrap: anywhere;
+}
+:is(.filpro-shell, .k-dlg-layer) .callout:has(> svg:first-child) { display: flex; align-items: flex-start; gap: var(--s2); }
+:is(.filpro-shell, .k-dlg-layer) .callout > svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--info); }
+:is(.filpro-shell, .k-dlg-layer) .callout > div { flex: 1; min-width: 0; }
+:is(.filpro-shell, .k-dlg-layer) .callout p { margin: 0; }
+:is(.filpro-shell, .k-dlg-layer) .callout > * + :not(div) { margin-top: var(--s2); }
+:is(.filpro-shell, .k-dlg-layer) .callout:has(> svg:first-child) > * + * { margin-top: 0; }
+:is(.filpro-shell, .k-dlg-layer) .callout p + p { margin-top: var(--s1); }
+:is(.filpro-shell, .k-dlg-layer) .callout.warn { background: var(--warn-soft); }
+:is(.filpro-shell, .k-dlg-layer) .callout.warn > svg { color: var(--warn); }
+:is(.filpro-shell, .k-dlg-layer) .callout.alert { background: var(--alert-soft); }
+:is(.filpro-shell, .k-dlg-layer) .callout.alert > svg { color: var(--alert); }
+:is(.filpro-shell, .k-dlg-layer) .callout.off { background: var(--off-soft); }
+:is(.filpro-shell, .k-dlg-layer) .callout.off > svg { color: var(--off); }
+:is(.filpro-shell, .k-dlg-layer) .callout:not(:last-child) { margin-bottom: var(--s3); }

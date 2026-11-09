@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Lecteurs natifs Windows en lecture seule (profils, SID, sessions WTS, dossiers AppData). P/Invoke borné vers
+       advapi32/wtsapi32/kernel32 et System.Security.Principal.Windows (framework partagé) : aucune dépendance ajoutée,
+       aucun montage de ruche, aucune écriture. Référence Core seule. -->
+  <PropertyGroup><RootNamespace>Filpro.Platform</RootNamespace></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Filpro.Core/Filpro.Core.csproj" />
+    <!-- Index du moteur WebView2 fixe du Socle Windows commun, reconnu à côté d'un pack LIGHT (voir WebViewSocle). -->
+    <EmbeddedResource Include="Updates/Socle/*.files.json" LogicalName="Filpro.Platform.Socle.%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

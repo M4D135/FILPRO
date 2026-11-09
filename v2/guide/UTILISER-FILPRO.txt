@@ -1,0 +1,119 @@
+FILPRO V2 — GUIDE UTILISATEUR
+
+Démarrer
+Extraire tout le ZIP dans un nouveau dossier local. Sa racine contient FILPRO.exe
+et wad. Garder wad à côté de l'exécutable. Si Windows bloque les fichiers d'une
+distribution de confiance, lancer wad\support\DEBLOQUER_TOUT.cmd, puis FILPRO.exe.
+Le déblocage ne vérifie pas la provenance. Le manifeste SHA-256 vérifie les octets,
+sans signature cryptographique de l'éditeur.
+
+FILPRO est publié en un seul pack, PROD-LIGHT, qui ne contient aucun moteur
+WebView2. Il utilise d’abord le runtime Microsoft Edge WebView2 Evergreen x64
+installé pour la machine. Sans Evergreen, extraire le pack WebView2 du Socle
+Windows dans le dossier wad de FILPRO, ce qui crée wad\runtime\webview2 :
+https://github.com/M4D135/socle-windows/releases/tag/webview2-156.0.4314.42
+Ce dossier est vérifié fichier par fichier à chaque démarrage. Un fichier
+modifié, manquant ou en trop est nommé et refusé.
+
+L'écran Connexion présente le compte Windows courant. « Ouvrir FILPRO » demande
+l'autorisation UAC de Windows. FILPRO ne demande ni ne conserve de mot de passe.
+Si les droits administrateur sont déjà actifs, le bouton ouvre directement
+l'application. Une annulation UAC laisse l'écran ouvert pour réessayer ou fermer.
+Les opérations réelles demandent Windows x64, une extraction complète et ces droits
+administrateur actifs. Les autres profils doivent être déconnectés pour
+les opérations qui les modifient. Une session inconnue n'est jamais supposée vide.
+Les réglages, journaux et reçus privés restent sous %LOCALAPPDATA%\FILPRO.
+Ne pas supprimer Operations : il contient les bilans, sauvegardes et reçus utiles
+à une reprise. À 1 000 bilans, archiver manuellement History avant un nouveau travail.
+
+Confirmation Windows
+Chaque opération qui écrit (sauvegarde, restauration, réparation, catalogue,
+récupération, réglages par défaut du pack, mise à jour) se décide dans une fenêtre
+Windows séparée, « FILPRO — Confirmation Windows », aux couleurs du thème choisi
+dans FILPRO (couleurs système en contraste élevé de Windows). Dans la page, le
+bouton devient « Continuer ». Lire la fenêtre : comptes élevé et d'affichage,
+informations et leur origine, points d'attention en rouge. Seule cette fenêtre
+autorise l'opération et elle ne demande jamais de mot de passe. Annuler, Échap ou
+deux minutes sans réponse : rien n'est lancé. Avant de quitter le poste, fermer
+FILPRO.
+Si FILPRO a été ouvert avec un autre compte administrateur que celui de la session,
+ou si ce compte est indéterminé : les mises à jour ne sont pas proposées, les faire
+depuis une session administrateur. Dans ce cas seulement, FILPRO se verrouille quand
+la session est verrouillée (Win+L), déconnectée ou fermée, après 15 minutes sans
+saisie ou une mise en veille de plus de 2 minutes, 30 minutes après son ouverture, 3
+refus en 10 minutes et, par défaut, dès qu'une opération est acceptée. Verrouillé,
+il suit seulement les opérations en cours : le relancer avec ses identifiants pour
+en lancer d'autres. Toujours dans ce cas, un sélecteur de fichiers oublié se ferme
+seul après 2 minutes, et un bandeau signale un dossier de FILPRO que le compte de la
+session peut modifier : placer alors FILPRO dans C:\Program Files\FILPRO. Sous le
+même compte, rien de cela ne s'applique.
+
+Sauvegarder et restaurer
+Choisir les profils, examiner les groupes de fichiers et de registre, puis lire
+le plan. Choisir le support et, si nécessaire, un fichier clé hors du magasin.
+Confirmer seulement après la revue des exclusions et de l'espace disponible.
+Le suivi annonce les mesures disponibles. « Arrêt demandé » attend la fin réelle
+du processus et du nettoyage. Une opération partielle conserve son reçu.
+Pour restaurer, choisir un magasin, les correspondances des comptes et les conflits.
+La sauvegarde préalable doit être complète avant les premières écritures.
+La réparation conserve l'ancien profil ; une connexion volontaire et la restauration
+sont des étapes distinctes. Ne pas reconnecter le compte pendant l'opération.
+
+Limites visibles
+La restauration native des magasins V1 est bloquée : les composants Windows capturés
+ne sont pas prouvés exhaustivement. Les magasins contenant MigApp sont également
+bloqués pour LoadState, car le préalable ne couvre pas les paramètres machine.
+Le parcours Récupérer permet une récupération indépendante des fichiers, après
+catalogage confirmé. Les applications doivent être réinstallées séparément.
+Un catalogue partiel reste explicitement partiel. Ne pas confondre intégrité
+du magasin, exhaustivité du catalogue et authenticité de sa provenance.
+
+Configuration
+Les commandes de démonstration et le réglage des animations sont dans Paramètres.
+La barre supérieure conserve les thèmes. Le mode démonstration reste signalé
+pendant toute son utilisation ; aucune étiquette de mode n'encombre l'usage normal.
+Les défauts distribués s'appliquent au premier lancement. Si des réglages existent,
+l'aperçu permet de garder les siens ou d'appliquer ceux du pack après sauvegarde.
+Une configuration fournie invalide est ignorée et signalée. Les binaires restent
+vérifiés. L'export/import partage uniquement les préférences autorisées : aucun
+chemin, compte, sélection personnelle, jeton ou historique.
+« Définir comme configuration par défaut » concerne les deux éditions de production. Après
+modification, le diffuseur doit régénérer le ZIP et sa somme SHA-256.
+Les modèles de logiciels se partagent séparément par « Exporter le modèle » et
+« Importer un patch ». Le JSON et son fichier .sha256 doivent rester ensemble.
+L'aperçu conserve les entrées absentes et propose un choix explicite pour les
+conflits. L'application du patch ne déclenche aucune opération sur les profils.
+
+Mise à jour
+Dans Paramètres, choisir un dossier local/UNC ou un ZIP manuel. FILPRO ne cherche
+aucune mise à jour sur Internet : déposer le ZIP et son fichier SHA256SUMS dans le
+dossier de diffusion. Un ancien choix « GitHub officiel » devient un dossier à
+renseigner. « Mémoriser cette source » conserve le choix sur ce poste sans
+connexion. Aucun mot de passe SMB n'est enregistré. La configuration partageable
+n'inclut pas le dossier de diffusion.
+Un poste PROD-LIGHT reçoit les mises à jour PROD-LIGHT. Le moteur du Socle déjà
+extrait est recopié et vérifié dans la nouvelle version. Les packs PROD ne sont
+plus publiés : un poste PROD passe à PROD-LIGHT en extrayant le nouveau ZIP dans
+un nouveau dossier. Rechercher l’offre et contrôler version, taille et source. Préparer
+une copie locale vérifiée, puis confirmer l'installation. FILPRO ferme proprement
+ses travaux ; l'assistant attend les autres instances sans les tuer.
+La nouvelle version doit confirmer son démarrage. Sinon le retour arrière tente
+de remettre l'ancienne copie. Le bilan et « Revenir à la version précédente » sont
+dans Paramètres. Après interruption, conserver toutes les copies et les journaux,
+puis reprendre l'action proposée. Le retour arrière des binaires ne restaure pas
+les profils ni les données métier.
+
+Présentation de cinq minutes
+1. Dans Paramètres, ouvrir la démonstration ; vérifier le bandeau « données fictives ».
+2. Parcourir Accueil et Analyser ; sélectionner un profil fictif et ses logiciels.
+3. Préparer une sauvegarde fictive, suivre sa progression, puis consulter son bilan.
+4. Dans Paramètres, choisir une issue partielle ou un échec pour l'opération suivante.
+   Essayer aussi l'annulation depuis Suivi et la récupération d'un fichier fictif.
+5. Simuler une mise à jour et son retour arrière. Réinitialiser la démonstration,
+   puis la quitter : les préférences et données réelles doivent rester préservées.
+La démo n'ouvre aucun profil réel, partage, fichier clé ou service GitHub. Ses données
+sont recréées en mémoire et datées relativement au jour d'ouverture.
+
+Qualification
+Consulter les preuves de la version et de l’édition choisies pour connaître
+les scénarios vérifiés sur les fichiers distribués.

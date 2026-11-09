@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Fournisseur de démonstration en mémoire : aucun accès réseau, disque, registre ni WMI. Référence Core seule,
+       comme le Domenia.Simulation de la référence. -->
+  <PropertyGroup><RootNamespace>Filpro.Simulation</RootNamespace></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Filpro.Core/Filpro.Core.csproj" /></ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Contrat fermé du pont page ↔ moteur : messages, schémas d'arguments, registre des opérations admises, garde
+       d'admission par mode. Repris de DOMENIA.Bridge (référence lecture seule), adapté à FILPRO. Référence Core seule. -->
+  <PropertyGroup><RootNamespace>Filpro.Bridge</RootNamespace></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Filpro.Core/Filpro.Core.csproj" /></ItemGroup>
+</Project>

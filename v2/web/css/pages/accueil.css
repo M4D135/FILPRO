@@ -1,0 +1,24 @@
+/* Composition propre à FILPRO. Les couleurs, composants et animations viennent du kit DOMENIA conservé. */
+.accueil { display: flex; flex-direction: column; gap: var(--s6); }
+.accueil > .page-header { margin-bottom: 0; }
+.accueil .hero h2 { max-width: 24ch; font-size: clamp(1.75rem, 3vw, var(--fs-display)); line-height: 1.12; letter-spacing: -.03em; }
+.accueil .hero .lead { max-width: 65ch; }
+.accueil .home-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s3); }
+.accueil .home-actions a:hover { text-decoration: none; }
+.accueil .home-actions + .hero-row { margin-top: var(--s4); gap: var(--s2); }
+.accueil .home-kpis { row-gap: var(--s4); }
+.accueil .kpi { min-width: 0; min-height: 132px; align-content: space-between; gap: var(--s3); }
+.accueil .kpi .label { flex-wrap: wrap; }
+.accueil .kpi .label svg { flex: none; }
+.accueil .kpi .foot { display: block; overflow-wrap: anywhere; }
+.accueil .list-row .body { min-width: 0; }
+.accueil .list-row .sub { overflow-wrap: anywhere; }
+.accueil .card-head { flex-wrap: wrap; }
+.accueil .error-card .home-actions { justify-content: center; }
+/* Quatre indicateurs lisibles sur un poste classique, deux par ligne dans une fenêtre plus étroite. */
+@media (min-width: 1180px) { .accueil .home-kpis > .kpi { grid-column: span 3; } }
+@media (min-width: 760px) and (max-width: 1179px) { .accueil .home-kpis > .kpi { grid-column: span 6; } }
+@media (max-width: 759px) { .accueil .home-kpis > .kpi { grid-column: span 12; } }
+:root[data-low] .accueil { gap: var(--s4); }
+:root[data-low] .accueil .hero { padding: var(--s5); }
+:root[data-low] .accueil .kpi { min-height: 120px; }

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr" data-motion="system">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Connexion · FILPRO</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <main class="entry">
+    <section class="entry-story" aria-label="FILPRO">
+      <div class="entry-brand"><span class="entry-mark" data-icon="filpro"></span><span>FILPRO<small>Profils Windows</small></span></div>
+      <div class="entry-illustration" aria-hidden="true"><div class="entry-orbit"></div><div class="entry-file entry-file-back"><span data-icon="folder"></span><i></i><i></i></div><div class="entry-file entry-file-front"><span class="entry-file-symbol" data-icon="user"></span><div><b>Profils &amp; données</b><i></i><i></i></div><span class="entry-file-seal" data-icon="shield"></span></div></div>
+    </section>
+    <section class="entry-access" aria-labelledby="entry-title">
+      <div class="entry-access-inner">
+        <h1 id="entry-title">Connexion</h1>
+        <p class="entry-intro">Session Windows courante</p>
+        <div class="entry-account"><span class="entry-avatar" data-icon="user"></span><div><span class="entry-account-label">Compte actuel</span><strong data-account>Lecture de la session…</strong><span class="entry-account-detail" data-access>Vérification de l’accès</span></div></div>
+        <button class="entry-open" type="button" data-open disabled><span data-icon="shield"></span><span data-open-label>Ouvrir FILPRO</span><span class="entry-arrow" data-icon="chevronRight"></span></button>
+        <p class="entry-explanation" data-explanation>Windows vous demandera l’autorisation administrateur pour gérer les profils de ce poste.</p>
+        <div class="entry-message" role="status" aria-live="polite" data-message></div>
+        <button class="entry-close" type="button" data-close>Fermer</button>
+      </div>
+      <footer class="entry-access-footer"><span class="entry-small-lock" data-icon="lock"></span><span>Authentification gérée par Windows</span><span class="entry-version" data-version>FILPRO</span></footer>
+    </section>
+  </main>
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

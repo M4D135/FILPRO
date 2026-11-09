@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "product": "FILPRO",
+  "created": "2026-10-28",
+  "authorship": "Original vector geometry study and wordmark; approved color bitmap refined with builtin image_gen, not represented as an exact vector source.",
+  "family": "White profile cards, subtle relief and turquoise accent on an opaque pastel-blue square.",
+  "referencePalette": {
+    "pastelStart": "#B9DDF2",
+    "pastelEnd": "#93B6E6",
+    "royalSilhouette": "#066DDB",
+    "accent": "#19C3B2",
+    "symbol": "#FFFFFF"
+  },
+  "paletteMeaning": "Family design reference; generated pixels are not claimed to equal these flat colors.",
+  "generationRecord": "generation.json",
+  "masterSha256": "81926a45cf9207cd2c00616604d12247448daeec09c6351d546bdad99aa6bb7f",
+  "iconSizes": [
+    16,
+    20,
+    24,
+    32,
+    40,
+    48,
+    64,
+    128,
+    256
+  ],
+  "allIconPixelsOpaque": true,
+  "renderer": {
+    "sharp": "0.35.5",
+    "vips": "8.18.7",
+    "rsvg": "2.63.2"
+  },
+  "files": [
+    {
+      "path": "assets/branding/final-brand-master.png",
+      "bytes": 1467282,
+      "sha256": "81926a45cf9207cd2c00616604d12247448daeec09c6351d546bdad99aa6bb7f"
+    },
+    {
+      "path": "assets/branding/generation.json",
+      "bytes": 2532,
+      "sha256": "c3c6cd01684d7ee0e6efca46c7b0512d20a87e30c3cda147b8b622d5d211c05d"
+    },
+    {
+      "path": "assets/branding/imagegen-prompt.txt",
+      "bytes": 1258,
+      "sha256": "b62c03fc7a98552cd5fad52bc913bd17f4fb36fb0c02f35901632626c0a777b3"
+    },
+    {
+      "path": "assets/branding/imagegen-pastel-prompt.txt",
+      "bytes": 918,
+      "sha256": "f175d1828d492b1e8cb4d28e2510a20dc6a6b5715b0a0eccc295a1db972ab96a"
+    },
+    {
+      "path": "assets/branding/filpro-geometry-study.svg",
+      "bytes": 2181,
+      "sha256": "78bfae24653447edabafe1ee868ed24c82adb18cb0edf34c14790c37d7ecae91"
+    },
+    {
+      "path": "assets/branding/filpro-wordmark.svg",
+      "bytes": 445,
+      "sha256": "6eab438db014f3907a58ce92f979f35f9814406276caf1b204db510c3a37f510"
+    },
+    {
+      "path": "assets/branding/filpro-wordmark-on-dark.svg",
+      "bytes": 445,
+      "sha256": "5efb94e4c386967d9d48ed133baef2e6511567ac8e66d58fd9da6ef92f02f2f3"
+    },
+    {
+      "path": "assets/branding/filpro-monochrome.svg",
+      "bytes": 496,
+      "sha256": "73bc4a87fc7f1ae6a41475e3369a52acd30a9fd17246e652f0e951c02ba3a11a"
+    },
+    {
+      "path": "assets/branding/filpro-icon-body.txt",
+      "bytes": 376,
+      "sha256": "c21d7bd934a081a19a12aae45e45adf6fd9b5a63be258dea4fd6dbb9dfabf9a7"
+    },
+    {
+      "path": "assets/branding/png/filpro-16.png",
+      "bytes": 785,
+      "sha256": "697cf3c1c33a3cc82fff51a034e124ed5f7426488653fa1df1781fb4a93b5a3e"
+    },
+    {
+      "path": "assets/branding/png/filpro-20.png",
+      "bytes": 1085,
+      "sha256": "fae6ef9b566057187fb08f0adbf2f15d8c9cc2c1f7612f88a47f96c58566720c"
+    },
+    {
+      "path": "assets/branding/png/filpro-24.png",
+      "bytes": 1444,
+      "sha256": "0db03f0e1514ccbe3236caa5d47a1c2e8846543374d15820e5d55f14bc793cd8"
+    },
+    {
+      "path": "assets/branding/png/filpro-32.png",
+      "bytes": 2286,
+      "sha256": "2f698ea61e1889b5afb360789806a6f2f5485c1340c639801c733027de7ec969"
+    },
+    {
+      "path": "assets/branding/png/filpro-40.png",
+      "bytes": 3203,
+      "sha256": "8d12a68fbf13e1bcd30b1af7cc1d85ae79babe806cc2ffecc0e8a46e5d514952"
+    },
+    {
+      "path": "assets/branding/png/filpro-48.png",
+      "bytes": 4422,
+      "sha256": "15fe526be096a045f05606edab696a5cdd188f2a8d08f3a9f63acdd67cd2feb8"
+    },
+    {
+      "path": "assets/branding/png/filpro-64.png",
+      "bytes": 7173,
+      "sha256": "0e00a40e63317f8dbb6ccbc24789a8ca873a23b6d42d722c1c5413da017df8a2"
+    },
+    {
+      "path": "assets/branding/png/filpro-128.png",
+      "bytes": 23850,
+      "sha256": "cd057a03422771e5d76588aabf2ba88e63f0d35edd5bd29586cfa50fede16733"
+    },
+    {
+      "path": "assets/branding/png/filpro-256.png",
+      "bytes": 81941,
+      "sha256": "1bdd439690c756cfab64a5f8d3c0bfc4c0eec18d57f33da5ab8b974f80fd4dff"
+    },
+    {
+      "path": "assets/branding/png/filpro-1024.png",
+      "bytes": 1189199,
+      "sha256": "4ecd06f2b382f4b8e903d72ea329f190e49023fe373b52007d64295e973fa96a"
+    },
+    {
+      "path": "src/Filpro.App/Assets/filpro.ico",
+      "bytes": 192603,
+      "sha256": "2b11e35e02be52af522da315ee928ef2a3f051fe14548187329f6f0c98f58eb6"
+    },
+    {
+      "path": "assets/branding/png/filpro-logo.png",
+      "bytes": 96272,
+      "sha256": "3e675eaea20a0177c1415f2d4dea67c441481139eb8a9a9ff76ff91a4dcd9c89"
+    },
+    {
+      "path": "assets/branding/png/filpro-logo-on-dark.png",
+      "bytes": 95480,
+      "sha256": "ff1716cfefa66a27703f87d07053509bbcfa6d9fb998d17cb3949ef0d79dab86"
+    }
+  ]
+}

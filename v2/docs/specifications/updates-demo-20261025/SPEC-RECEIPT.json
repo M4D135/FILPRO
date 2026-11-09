@@ -1,0 +1,7 @@
+{
+  "userFile": "/Users/david/Documents/Codex/2026-10-25/files-pasted-by-the-user-tu/outputs/Prompt-mises-a-jour-et-demo.txt",
+  "sha256": "9caeddfdf7c0773b9c57df894d3bf5b11f3df2d3cdfdd3826d10f156c79d635a",
+  "target": "FILPRO V2",
+  "worker": "spark-local",
+  "developmentBeforeTests": true
+}

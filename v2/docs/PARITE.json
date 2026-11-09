@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 2,
+  "product": "FILPRO",
+  "version": "2.0.0",
+  "reviewedAt": "2026-10-26",
+  "scope": "Candidat 2.0.0 : scénarios Windows critiques qualifiés sur les octets de 0191733 ; parité V1 complète et Release finale non déclarées.",
+  "readiness": {
+    "nativeExecutionCodePresent": true,
+    "nativeExecutionAdmission": "Écran de connexion avec session Windows et UAC avant composition métier ; Windows administrateur actif, pack/USMT vérifiés, verrou machine exclusif, aucun montage FILPRO résiduel ni nettoyage non confirmé.",
+    "portableChecksExecuted": true,
+    "windowsQualified": true,
+    "releaseReady": false,
+    "qualifiedProdPack": true,
+    "fullV1Parity": false,
+    "windowsQualificationScope": "Scénarios critiques, correspondance exacte des assemblages natifs et des 533 fichiers PROD. Consentement/refus UAC natif non exercé : session de test déjà élevée."
+  },
+  "reference": {
+    "v1Root": "wad/",
+    "v1Entry": "wad/FILPRO.ps1",
+    "v1RecipesSourceCommit": "63b89fe704aed7a363cce42fcdfc5d9112f94807",
+    "sparkGitHubBaseline": "5818fd17d1fab5b63868d3ecc7a4c4893bbc115b",
+    "integrationBase": "716812cd30939da569f04cb5e2d7c731a5fa1e55",
+    "privateSparkSources": "Seules les sources Spark jusqu'au lot 004A ont été transférées au commit indiqué. Aucun travail privé ultérieur n'est présenté comme récupéré ; les ajouts suivants sont des développements de reprise coordonnés.",
+    "domeniaRepository": "https://github.com/M4D135/domenia-d120",
+    "domeniaBranch": "v2",
+    "domeniaReviewedCommit": "9b1c0333c34020ad88c1448874b91eff884d5406",
+    "domeniaImportedKitCommit": "77805257d2868b34aac9c97b0d523f50e8b1e3f8",
+    "kitProvenance": "docs/reprise/KIT-PROVENANCE.md",
+    "integrationReport": "docs/reprise/INTEGRATION-MOTEURS-20261026.md",
+    "configurationAndUpdates": "docs/CONFIGURATION-UPDATES.md",
+    "latestPublishedSourceCommit": "01917331d49b3e728cef121b406d2661b5653e5c",
+    "previousPublishedSourceCommits": [
+      "00039d6",
+      "984f937",
+      "564f86c"
+    ],
+    "finalizationReport": "docs/reprise/FINALISATION-SOURCES-20261026.md",
+    "rollbackRecoveryReport": "docs/reprise/REPRISE-ROLLBACK-20261026.md",
+    "candidateReport": "docs/reprise/FINALISATION-CANDIDATE-20261026.md",
+    "startupReport": "docs/reprise/ENTREE-WINDOWS-20261026.md",
+    "nativeQualificationReport": "docs/reprise/RECETTE-NATIVE-20261026.md"
+  },
+  "statusLegend": {
+    "implemente": "Code raccordé au pont et à l'interface pour le périmètre décrit ; ce statut ne signifie ni parité V1 complète ni qualification Windows.",
+    "partiel": "Parcours raccordé, avec des limites fonctionnelles explicites.",
+    "bloque": "Chemin reconnu ou prévu mais exécution refusée dans le code actuel."
+  },
+  "verification": {
+    "implementation": "Constat des sources, contrats, gardes et branchements.",
+    "portable": "Historique et tests ciblés détaillés dans RECETTE-NATIVE-20261026.md ; 16 contrôles de connexion et 13 de Paramètres pour le lot final.",
+    "exactEvidence": "docs/VALIDATION.md et docs/reprise/FINALISATION-SOURCES-20261026.md rattachent les preuves actuelles à leur instantané ; docs/reprise/INTEGRATION-MOTEURS-20261026.md conserve un état historique. Aucun résultat n'est automatiquement transférable à des sources ultérieures.",
+    "windows": {
+      "status": "scénarios critiques qualifiés ; limites explicites dans le rapport",
+      "actionsStatus": "Run 40360487062 bloqué avant toute étape : facturation/plafond GitHub.",
+      "run": "https://github.com/M4D135/FILPRO/actions/runs/40360487062",
+      "job": "https://github.com/M4D135/FILPRO/actions/runs/40360487062/job/121704276967",
+      "stepsExecuted": false,
+      "note": "Moteurs natifs identiques à ceux exercés sur 58f2267 ; hôte 0191733 validé par connexion, démo et redémarrage après mise à jour. Interruption réelle du worker puis rollback réussis, copies et réglages vérifiés. Session Windows déjà élevée ; refus UAC natif non exercé. Aucun succès CI ni parité V1 complète annoncé."
+    },
+    "currentLot": {
+      "finalPortableBuild": {
+        "report": "/tmp/filpro-integration-20261026/final-build-03.log",
+        "platform": "Linux",
+        "projects": 6,
+        "warnings": 0,
+        "errors": 0,
+        "windowsQualified": false
+      },
+      "finalTargetedCSharpChecks": {
+        "passedDistinct": 79,
+        "remainingFailures": 0,
+        "remainingSkipped": 0,
+        "platform": "Linux",
+        "windowsQualified": false,
+        "reports": [
+          "/tmp/filpro-integration-20261026/final-targeted-01/report.json",
+          "/tmp/filpro-integration-20261026/final-targeted-02/report.json",
+          "/tmp/filpro-integration-20261026/final-targeted-03/report.json"
+        ],
+        "aggregation": "Dix suites réussies en 01 : 70 contrôles ; LegacyExecutionTests corrigée, six réussites en 03 ; ExecutionCleanupTests, trois réussites en 02. Les échecs Legacy intermédiaires 01 et 02 restent consignés, sans additionner les répétitions.",
+        "scope": "Dernières passes utiles de la sélection ciblée, pas une passe unique ni la recette Windows complète."
+      },
+      "catalogAndReceiptUi": {
+        "report": "/tmp/filpro-integration-20261026/ui-catalog-receipt-03/report.json",
+        "checksPassed": 19,
+        "uncaughtJavaScriptErrors": 0,
+        "environment": "Chromium 153.0.8010.12 sous Linux, vrai pont C# et SimulationWorld via harnais externe.",
+        "scope": "Confirmation du catalogage, suivi/relecture backend, reprise par reçu fictif et refus natifs en démonstration. Troisième passe sur les DLL recompilées et la règle finale hidden ; exécutants Windows Platform absents du harnais.",
+        "windowsQualified": false
+      },
+      "frozenSourceGuard": "Résultat et compteurs associés au SHA exact dans le reçu externe ; aucune qualification Windows.",
+      "commitReference": "Commit contenant ce document ; SHA exact et inventaire dans le reçu externe de la garde d’origine."
+    },
+    "rollbackRecoveryLot": {
+      "baseCommit": "9e790cd163e7d320449123067661856d19c11eed",
+      "report": "docs/reprise/REPRISE-ROLLBACK-20261026.md",
+      "crossBuild": {
+        "host": "macOS ARM64",
+        "target": "Windows x64",
+        "projects": 6,
+        "warnings": 0,
+        "errors": 0
+      },
+      "macTransactionTests": {
+        "passed": 15,
+        "failed": 0,
+        "skipped": 0
+      },
+      "windowsTargetedTests": {
+        "platform": "Windows x64 10.0.26200.0",
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0,
+        "suites": [
+          "UpdateTransactionTests",
+          "PackIntegrityTests",
+          "StorageFileIdentityWindowsTests"
+        ],
+        "scope": "Dossiers temporaires et packs fictifs ; seul le lanceur de tests autonome est exécuté. Aucun EXE fictif ni worker réel de remplacement lancé."
+      },
+      "fullWindowsQualification": false
+    },
+    "finalizationInProgress": {
+      "baseLocalCommit": "46a3999fdcd812295775ab168113d3b905a0b039",
+      "testsExecuted": false,
+      "order": "Tout coder, vérifications et GitHub ensuite, scénarios VM critiques à la fin.",
+      "features": [
+        "Journal privé persistant",
+        "Démarrage avec défauts invalides et avertissements visibles",
+        "Verrou machine et détection des ruches résiduelles",
+        "Source de mise à jour mémorisée localement",
+        "Patches de modèles avec aperçu/conflits/sauvegarde/idempotence",
+        "Guides, support de déblocage, licences, assemblage DEV/PROD et reconstruction"
+      ]
+    }
+  },
+  "routes": [
+    {
+      "id": "accueil",
+      "label": "Accueil",
+      "section": "Pilotage",
+      "status": "partiel",
+      "v1Modules": [
+        "FILPRO.Experience.ps1",
+        "FILPRO.Insight.ps1",
+        "FILPRO.Workspace.ps1"
+      ],
+      "sources": [
+        "web/js/pages/accueil.js",
+        "src/Filpro.Bridge/Operations/AccueilModule.cs"
+      ],
+      "implemented": "Profils et sessions du fournisseur courant, tâches et journal local persistant, raccourcis vers les parcours disponibles.",
+      "limits": [
+        "Pas d'index global des magasins natifs : sauvegardes non inventoriées, jamais un total zéro présenté comme preuve d'absence.",
+        "Les lectures inconnues ou incomplètes restent explicites ; elles ne deviennent pas un total zéro présenté comme certain."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "analyser",
+      "label": "Analyser / réparer",
+      "section": "Opérations",
+      "status": "partiel",
+      "v1Modules": [
+        "FILPRO.Profiles.ps1",
+        "FILPRO.Insight.ps1",
+        "FILPRO.Selections.ps1",
+        "FILPRO.Catalogue.ps1",
+        "FILPRO.Maintenance.ps1"
+      ],
+      "sources": [
+        "web/js/pages/analyser.js",
+        "src/Filpro.Bridge/Operations/AnalyserModule.cs",
+        "src/Filpro.Bridge/Operations/RepairOperationsModule.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.Repair.cs"
+      ],
+      "implemented": "Inventaire fichiers et registre ; préparation de réparation avec sauvegarde préalable vérifiée et conservation de l'ancien dossier. Reprise depuis un reçu choisi explicitement, confirmé puis relu/authentifié par le moteur ; réconciliation des étapes possibles et préservation des données.",
+      "limits": [
+        "La réparation prépare la recréation du profil ; la connexion volontaire de l'utilisateur et la restauration demeurent des étapes distinctes.",
+        "Profil courant, session active ou déconnectée, session inconnue et ruche chargée empêchent la mutation.",
+        "Le reçu natif doit provenir du dossier privé des opérations FILPRO ; sa clé locale et les sauvegardes liées doivent rester disponibles. La démonstration propose seulement ses reçus connus en mémoire.",
+        "La qualification des recettes et de la réparation Windows reste à faire."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "sauvegarder",
+      "label": "Sauvegarder / restaurer",
+      "section": "Opérations",
+      "status": "partiel",
+      "v1Modules": [
+        "FILPRO.FileVault.ps1",
+        "FILPRO.FileApply.ps1",
+        "FILPRO.Planning.ps1",
+        "FILPRO.Destination.ps1",
+        "FILPRO.RestorePolicy.ps1",
+        "FILPRO.Usmt.ps1",
+        "FILPRO.Safeguards.ps1"
+      ],
+      "sources": [
+        "web/js/pages/sauvegarder.js",
+        "web/js/restore-panel.js",
+        "src/Filpro.Bridge/Operations/SauvegarderModule.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.BackupRestore.cs",
+        "src/Filpro.Platform/Execution/WindowsBackupStoreReader.cs",
+        "src/Filpro.Platform/Execution/PlainStoreVerifier.cs"
+      ],
+      "implemented": "Sélection multi-profils avec brouillons et mémoire par SID, groupes fichiers et registre cohérents, choix communs, recommandations, capture limitée aux profils (MigApp général refusé), inspection du magasin, correspondances multiples, conflits, plans côté serveur et exécutant USMT V2. Magasins V2 non compressés liés à un index SHA-256 contrôlé.",
+      "invariants": [
+        "Confirmation avant préparation longue.",
+        "Découverte incomplète : enregistrement et plan amputé refusés, choix existants conservés.",
+        "Plans expirables et à consommation unique ; vérification des sources et cibles au démarrage.",
+        "Sauvegarde préalable vérifiée avant LoadState.",
+        "Échec après écriture possible : reçu partiel et sauvegarde préalable conservés, pas de retour arrière intégral prétendu.",
+        "Clé de chiffrement hors du magasin ; aucune commande libre ou shell fourni par le navigateur.",
+        "La restauration V1 reste refusée même après catalogage et contrôle des règles/configuration/source/version USMT : aucune référence exhaustive vérifiable des composants Windows capturés.",
+        "Un magasin contenant MigApp ne peut pas déclencher la restauration native ; le préalable des profils ne couvre pas ses éventuels paramètres machine."
+      ],
+      "limits": [
+        "Restauration native V1 bloquée systématiquement ; la récupération indépendante de fichiers après catalogage est un autre parcours.",
+        "Non compressé : au plus 100 000 fichiers, 16 384 dossiers et profondeur 128 par arborescence USMT vérifiée ; index de 128 Mio maximum. Dépassement refusé, pas de contrôle d'intégrité tronqué présenté comme réussi.",
+        "Chiffrement, VSS, génération native de configuration, intégrité des données, conflits, non-compression et LoadState restent non qualifiés sur Windows.",
+        "Décision David du 26 octobre : profils uniquement. Option MigApp générale retirée ; capture refusée par le plan et le moteur. Les anciens magasins restent accessibles pour la récupération indépendante.",
+        "V2 admise pour les magasins réellement produits par FILPRO et conservés intacts. Les hashes lient les octets ; ils ne prouvent pas l'authenticité d'un manifeste et d'un magasin entièrement forgés. Aucun protocole de signature entre machines."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "suivi",
+      "label": "Suivi en direct",
+      "section": "Pilotage",
+      "status": "implemente",
+      "v1Modules": [
+        "FILPRO.Jobs.ps1",
+        "FILPRO.Progress.ps1",
+        "FILPRO.Worker.ps1",
+        "FILPRO.Scheduling.ps1"
+      ],
+      "sources": [
+        "web/js/pages/suivi.js",
+        "web/js/operations.js",
+        "src/Filpro.Core/Execution/ExecutionJobCoordinator.cs"
+      ],
+      "implemented": "Travail asynchrone, action en cours, progression et durée restantes lorsqu'elles sont connues, sélection de la tâche courante, notification dans l'interface, annulation et états finaux distincts. Les travaux Catalog terminés renvoient vers Récupérer par identifiant d'opération ; la page relit l'opération et le magasin auprès du moteur.",
+      "limits": [
+        "L'annulation demandée attend le nettoyage avant de devenir un état final.",
+        "Une mesure absente reste inconnue ; aucune durée native n'est inventée.",
+        "Historique persistant des bilans natifs ; pas de planificateur V1 complet ni de notification externe Windows qualifiée."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "recuperer",
+      "label": "Récupérer des fichiers",
+      "section": "Opérations",
+      "status": "partiel",
+      "v1Modules": [
+        "FILPRO.Recovery.ps1",
+        "FILPRO.Recovery.Plan.ps1",
+        "FILPRO.FileVault.ps1"
+      ],
+      "sources": [
+        "web/js/pages/recuperer.js",
+        "src/Filpro.Bridge/Operations/RecoveryModule.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.Recovery.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.Catalog.cs",
+        "src/Filpro.Core/Execution/PlainStoreIndexCodec.cs",
+        "src/Filpro.Platform/Execution/PlainStoreVerifier.cs"
+      ],
+      "implemented": "Inspection courte puis, si le catalogue manque, confirmation distincte de sa préparation longue : USMT /verify:all ou indexation/vérification SHA-256. Suivi puis relecture du résultat côté moteur. Sélection d'entrées V2 ou V1 préparées, extraction ou copie vérifiée dans un nouveau dossier, reçu et conservation du résultat partiel.",
+      "limits": [
+        "Aucune restauration de compte, de registre ou d'application par cette route ; les refus V1/MigApp de LoadState restent en vigueur.",
+        "Le catalogue préparé n'est publié qu'après le travail confirmé ; échec ou annulation ne publient pas de nouveau catalogue. Un catalogue borné peut rester partiel.",
+        "L'empreinte V1 lie le plan à l'état mesuré lors de la préparation, pas à une authenticité historique de capture ; une inspection courte n'affirme pas que le contenu est toujours vérifié.",
+        "Un hash mesuré après extraction USMT ne prouve pas le hash individuel du fichier d'origine. Les fichiers non compressés sont comparés à l'index avant et après copie.",
+        "V1, non compressé, extraction réelle USMT et garanties de handles Windows non qualifiés."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "journal",
+      "label": "Journal",
+      "section": "Pilotage",
+      "status": "implemente",
+      "v1Modules": [
+        "FILPRO.Reports.ps1",
+        "FILPRO.Support.ps1",
+        "FILPRO.Reviews.ps1"
+      ],
+      "sources": [
+        "web/js/pages/journal.js",
+        "src/Filpro.Bridge/Operations/OperationsModule.cs",
+        "src/Filpro.Platform/Execution/ExecutionHistoryStore.cs"
+      ],
+      "implemented": "Bilans locaux persistants, recherche et accès au suivi. État initial écrit avant le moteur, bilan final après nettoyage ; issue non confirmée si le bilan final manque. Aucun état fictif persisté.",
+      "limits": [
+        "Au plus 1 000 bilans ; l’archivage reste explicite, sans suppression automatique. Rafraîchissement inter-instance sous cinq secondes.",
+        "Aucune adoption automatique d’un travail d’une autre session ni import des anciens rapports V1.",
+        "Code du lot en attente de vérification ; pas de qualification Windows annoncée."
+      ],
+      "windowsQualified": false
+    },
+    {
+      "id": "parametres",
+      "label": "Paramètres",
+      "section": null,
+      "status": "implemente",
+      "v1Modules": [
+        "FILPRO.Configuration.ps1",
+        "FILPRO.Policy.ps1",
+        "FILPRO.RestorePolicy.ps1",
+        "FILPRO.Theme.ps1"
+      ],
+      "sources": [
+        "web/js/pages/parametres.js",
+        "web/js/configuration-ui.js",
+        "src/Filpro.Platform/Configuration/",
+        "src/Filpro.Platform/Updates/"
+      ],
+      "implemented": "Réglages partagés, export/import manuels avec aperçu, bootstrap et choix garder/appliquer, défauts dans le pack PROD, effacement des choix communs, mises à jour explicites depuis un dossier local/UNC ou un ZIP manuel et scénarios de démonstration. Aucun secret enregistré ou exporté.",
+      "limits": [
+        "Aucune source de mise à jour en ligne depuis le retrait de GitHub Releases après la 2.0.12 : le ZIP et SHA256SUMS sont déposés dans un dossier ou choisis à la main.",
+        "Le remplacement réel de l'EXE, le démarrage WebView2, les verrous Windows et le retour arrière sur installation réelle ne sont pas qualifiés."
+      ],
+      "windowsQualified": false
+    }
+  ],
+  "families": [
+    {
+      "name": "Profils et sessions",
+      "status": "implemente",
+      "sources": [
+        "src/Filpro.Platform/WindowsPosteSource.cs"
+      ],
+      "implemented": "ProfileList/SID, compte courant, sessions WTS, états inconnus explicites et relecture avant mutation.",
+      "verification": "Façades et gardes contrôlées en portable ; API WTS/ProfileList non qualifiées sur Windows."
+    },
+    {
+      "name": "Logiciels, fichiers, registre et choix communs",
+      "status": "partiel",
+      "sources": [
+        "src/Filpro.Core/Software/SoftwareDiscoveryCatalog.cs",
+        "src/Filpro.Core/Poste/ConfiguredPosteSource.cs",
+        "src/Filpro.Platform/WindowsSoftwareFileReader.cs",
+        "src/Filpro.Platform/WindowsLoadedRegistryReader.cs",
+        "src/Filpro.Platform/LocalCommonSelectionService.cs"
+      ],
+      "implemented": "Recettes V1 conservées avec catégorie source et RequiresQualification séparés du type de données ; découverte bornée, fichiers et clés regroupés, choix par profil puis choix communs puis recommandations.",
+      "limits": [
+        "RequiresQualification et Recommend=false restent explicites pour les recettes V1 non qualifiées ; leur présence ne valide pas une sauvegarde.",
+        "Le regroupement Office hérité peut entraîner la sélection d'une recette non recommandée indépendamment ; aucune qualification supplémentaire n'est affirmée.",
+        "Les modèles communs ne migrent pas automatiquement tous les modèles personnalisés V1 et ne sont pas exportés avec les réglages partageables."
+      ],
+      "verification": "Catalogue, filtres et doubles de lecteurs contrôlés ; portée métier réelle et droits Windows à qualifier."
+    },
+    {
+      "name": "Ruches utilisateur et nettoyage",
+      "status": "implemente",
+      "sources": [
+        "src/Filpro.Platform/Execution/OfflineUserHiveManager.cs",
+        "src/Filpro.Platform/Execution/OwnedCopiedHiveMounts.cs",
+        "src/Filpro.Platform/Execution/WindowsCopiedHiveMountBackend.cs"
+      ],
+      "implemented": "Lecture d'une ruche déjà chargée par handles propres. Hors ligne : copie privée de NTUSER.DAT et journaux présents, RegLoadAppKey en lecture, repli possédé RegLoadKey, fermeture des handles et déchargement du seul montage FILPRO.",
+      "limits": [
+        "Aucun montage de NTUSER.DAT original pour écrire ; un nettoyage non confirmé laisse un reçu et bloque les mutations natives suivantes.",
+        "La fermeture/décharge effective Win32 après annulation, exception et défaillance doit encore être prouvée sur Windows."
+      ],
+      "verification": "Contrôles portables sur façades et cycle de propriété ; aucune garantie physique déduite des doubles."
+    },
+    {
+      "name": "Magasins V1 et non compressés",
+      "status": "partiel",
+      "sources": [
+        "src/Filpro.Platform/Execution/WindowsBackupStoreReader.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.Catalog.cs",
+        "src/Filpro.Platform/Execution/WindowsFilproExecutionService.Recovery.cs",
+        "src/Filpro.Core/Execution/PlainStoreIndexCodec.cs",
+        "src/Filpro.Platform/Execution/PlainStoreVerifier.cs"
+      ],
+      "implemented": "Lecture stricte des métadonnées et règles V1, catalogage explicite confirmé sans modifier l'ancien magasin, empreinte actuelle liée au plan et récupération indépendante. V2 non compressée : index fermé, ensemble exact des fichiers et SHA-256 vérifiés, entrées tenues pendant leur usage.",
+      "blocked": "LoadState V1 reste fermé, même avec configuration hashée et catalogue complet, faute de référence exhaustive des composants Windows capturés. Les contrôles des règles/configuration/source/version USMT ne remplacent pas cette preuve.",
+      "limits": [
+        "100 000 fichiers, 16 384 dossiers, profondeur 128 par arborescence USMT ; index SHA-256 de 128 Mio maximum.",
+        "Aucun SID ni chemin source manquant n'est emprunté à la cible ; aucune empreinte historique absente n'est inventée.",
+        "La compatibilité et la parité V1 complètes ne sont pas acquises. Aucune qualification des exécutants Windows ni des magasins réels."
+      ],
+      "verification": "Gardes et codecs contrôlés dans les suites portables ciblées rattachées à VALIDATION ; le parcours UI confirmé utilise le service fictif C#, sans lancement USMT ni qualification Windows."
+    },
+    {
+      "name": "Configuration partageable",
+      "status": "implemente",
+      "sources": [
+        "src/Filpro.Core/Configuration/",
+        "src/Filpro.Platform/Configuration/"
+      ],
+      "implemented": "Codec fermé sans secrets ni identités ni chemins personnels ; sauvegarde préalable, révision attendue, aperçu expirant, remplacement atomique, initialisation locale et choix du nouveau pack mémorisé.",
+      "integrity": "Définir comme configuration par défaut modifie wad/config/deployment-defaults.json après confirmation. Ce seul fichier mutable est validé séparément des binaires hashés ; refus honnête si pack non inscriptible.",
+      "verification": "Codec et transactions sur fichiers temporaires contrôlés ; File.Replace/verrous/UNC Windows à qualifier."
+    },
+    {
+      "name": "Mises à jour",
+      "status": "partiel",
+      "sources": [
+        "src/Filpro.Core/Updates/",
+        "src/Filpro.Platform/Updates/",
+        "src/Filpro.App/Program.cs"
+      ],
+      "implemented": "Inspection explicite d'un dossier local/UNC ou d'un ZIP manuel, sans source en ligne ; empreinte attendue, manifeste fermé, copie préparée, installation transactionnelle confirmée, santé après rendu UI, journal et rollback. Reprise après dernier déplacement de retour arrière : action proposée même sans previous, finalisation sous verrou après contrôle de la version, des octets et des défauts ; réessai idempotent.",
+      "limits": [
+        "Pas d'installation silencieuse ni de consultation réseau au simple démarrage.",
+        "Source GitHub Releases et jeton de session retirés après la 2.0.12 ; un ancien choix GitHub enregistré est relu comme un dossier à renseigner.",
+        "Installation en cours depuis UNC non remplaçable sur place.",
+        "SHA256 prouve la concordance avec la référence fournie, pas une signature d'éditeur.",
+        "Worker réel, coexistence d'instances, incident électrique et reprise Windows non qualifiés."
+      ],
+      "verification": "24 contrôles ciblés transactions/intégrité/handles exécutés sur Windows x64, dont 15 tests de transaction aussi exécutés sur macOS. Packs fictifs, santé/lanceur substitués. Aucune mise à jour réelle ni qualification complète."
+    },
+    {
+      "name": "Démonstration",
+      "status": "implemente",
+      "sources": [
+        "src/Filpro.Simulation/SimulationWorld.cs",
+        "src/Filpro.Simulation/SimulationConfigurationService.cs",
+        "src/Filpro.Simulation/SimulationUpdateService.cs",
+        "src/Filpro.Bridge/Operations/DemonstrationModule.cs"
+      ],
+      "implemented": "Monde C# fictif en mémoire, parcours multi-profils et scénarios réussite/partiel/échec/annulation, catalogage différé et relecture, réparation/rollback depuis reçu connu, récupération, configuration et update/rollback. Entrée/sortie/reset confirmés recréent toute la session.",
+      "isolation": "Composition séparée, aucun service d'exécution natif construit pour la démo ; toutes les routes Write natives refusées même avec arguments forgés. Routes demonstration dédiées, génération de session et fichiers/caches WebView2 séparés.",
+      "verification": "Parcours Chromium/Linux reliés au vrai pont C# contrôlés, dont catalogage/reprise par reçu sur l'instantané indiqué. Les résultats fictifs, le mock JavaScript et les contrôles du pont ne qualifient ni l'exécutant natif ni Windows."
+    },
+    {
+      "name": "Distribution",
+      "status": "partiel",
+      "sources": [
+        "src/Filpro.App/Filpro.App.csproj",
+        "tools/packaging/create_pack.py",
+        "tools/packaging/README.md"
+      ],
+      "implemented": "Distribution classique FILPRO.exe + dossier wad ; ressources web, runtime WebView2 fixe, USMT et configuration. ZIP standard éventuel pour transfert, aucun format WAD custom.",
+      "limits": [
+        "Version source encore 2.0.0-dev ; aucun pack PROD qualifié ni Release V2 finale.",
+        "Générateur PROD fermé sans preuve Windows complète liée à la version, au commit et aux octets exacts.",
+        "Packs V1 et gardes de publication conservés."
+      ]
+    }
+  ],
+  "remainingGates": [
+    "Restauration de profils V1 : refus inconditionnel maintenu tant qu'une référence exhaustive vérifiable des composants Windows capturés manque. Qualifier sous Windows les chemins présents de catalogage/récupération V1 et de magasins V2 non compressés ; ne pas assimiler leur code à une parité complète.",
+    "Périmètre profils confirmé : aucune extension machine. Conserver le refus natif des anciens magasins MigApp et la récupération indépendante ; ne pas prévoir de sauvegarde système pour lever ce refus.",
+    "Parcours GitHub privé abandonné : la source GitHub Releases est retirée de FILPRO après la 2.0.12 ; les mises à jour intégrées passent par un dossier local/UNC ou un ZIP manuel.",
+    "Décision David du 26 octobre : poursuivre sans GitHub Actions. Utiliser la validation Windows locale autorisée ; le run bloqué n'a exécuté aucune étape.",
+    "Exercer seulement les scénarios Windows/VM critiques de docs/VALIDATION.md : démarrage, multi-profils fichiers et registre, conflits/intégrité, déchargement, annulation/échec, chiffrement, isolation démo et update/rollback/reprise ; intégrer le catalogage V1, le non-compressé et la reprise par reçu aux parcours concernés.",
+    "Construire et qualifier les packs PROD/DEV sur leurs octets réels avant toute publication ; ne jamais remplacer les packs V1 par cette V2 non qualifiée."
+  ]
+}

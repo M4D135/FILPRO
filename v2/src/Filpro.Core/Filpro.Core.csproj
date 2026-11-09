@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Cœur pur : modèles, règles et contrat du fournisseur de simulation, sans E/S, sans WebView2, sans WinForms.
+       Réutilise les patterns de DOMENIA.Core (référence lecture seule) ; aucune dépendance ajoutée. -->
+  <PropertyGroup><RootNamespace>Filpro.Core</RootNamespace></PropertyGroup>
+</Project>

@@ -1,0 +1,64 @@
+/* Raccordements FILPRO au shell DOMENIA ; les sept feuilles du kit d'origine restent inchangées.
+   Provenance et limites : docs/reprise/GUI-DOMENIA-20261025.md. */
+.filpro-shell .topbar { gap: var(--s3); }
+.filpro-flytip { max-width: min(360px, calc(100vw - 16px)); overflow-wrap: anywhere; }
+
+/* Flux verticaux des écrans FILPRO : ne pas ajouter de marges aux éléments de la grille du kit. */
+.filpro-shell .page.analyser > .hero + .grid,
+.filpro-shell .page.sauvegarder > .hero + [data-tabs] { margin-top: var(--s6); }
+.filpro-shell .todo-page > section + section,
+.filpro-shell .sauvegarder .k-tabpanel > section + section { margin-top: var(--s5); }
+.filpro-shell .analyser .card.nested + .card.nested { margin-top: var(--s4); }
+
+/* Garder les commandes lisibles dans une fenêtre basse ; le rail reste défilable. */
+.filpro-shell .nav-item, .filpro-shell .brand, .filpro-shell .nav-section { flex-shrink: 0; }
+:root[data-low] .filpro-shell .nav { padding-top: var(--s2); padding-bottom: var(--s2); gap: 2px; }
+:root[data-low] .filpro-shell .brand { margin-bottom: var(--s2); }
+:root[data-low] .filpro-shell .nav-section { margin-top: var(--s3); }
+:root[data-tiny] .filpro-shell .nav-item { height: 36px; }
+:root[data-tiny] .filpro-shell .brand { height: 36px; }
+:root[data-tiny] .filpro-shell .nav-section { margin-top: var(--s1); margin-bottom: 0; }
+:root[data-tiny] .filpro-shell .nav-spacer { min-height: var(--s2); }
+
+/* Le rail DOMENIA reste le défaut étroit ; FILPRO conserve une vraie commande de dépliage en bas. */
+@media (max-width: 900px) {
+  .filpro-shell .nav-toggle { display: flex; }
+  .filpro-shell:not(.nav-collapsed) { grid-template-columns: min(var(--nav-w), 42vw) minmax(0, 1fr); }
+  .filpro-shell:not(.nav-collapsed) .nav-label,
+  .filpro-shell:not(.nav-collapsed) .nav-section { display: block; }
+  .filpro-shell:not(.nav-collapsed) .brand-name { display: grid; }
+  .filpro-shell:not(.nav-collapsed) .nav-item { justify-content: flex-start; padding: 0 var(--s3); }
+  .filpro-shell:not(.nav-collapsed) .brand { justify-content: flex-start; padding: 0 var(--s2); }
+}
+
+/* Repli du menu tout en bas du rail et toujours visible (pied collant) : menu déplié, une ligne de navigation avec
+   icône et libellé « Replier le menu » ; menu replié, l'icône seule centrée. Les entrées défilent sous le pied au lieu
+   d'être écrasées. Règle commune décidée par David le 29/10/2026 pour DOMENIA, PESTO, GLPI et FILPRO. */
+.filpro-shell .nav-foot {
+  position: sticky; bottom: calc(-1 * var(--s4)); z-index: 2; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  margin: var(--s2) calc(-1 * var(--s3)) calc(-1 * var(--s4)); padding: var(--s2) var(--s3) var(--s4);
+}
+:root[data-low] .filpro-shell .nav-foot { bottom: calc(-1 * var(--s2)); margin-bottom: calc(-1 * var(--s2)); padding-bottom: var(--s2); }
+.filpro-shell .nav.nav-scrolls .nav-foot {
+  background: color-mix(in srgb, var(--nav-bg) 94%, transparent); backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 -1px 0 color-mix(in srgb, var(--border) 70%, transparent);
+}
+.filpro-shell .nav .nav-foot .nav-toggle { margin-top: 0; }
+/* Le focus clavier ne finit jamais caché sous le pied collant (idée PESTO). */
+.filpro-shell .nav { scroll-padding-bottom: calc(40px + var(--s2) + var(--s4)); }
+
+/* Bandeaux de l'hôte (confirmation Windows en attente, FILPRO verrouillé, dossier de FILPRO modifiable) : empilés dans
+   la rangée du bandeau avec l'apparence du bandeau de démonstration (.shell > .sim-banner), et absents ensemble quand
+   aucun n'est affiché. Ils n'apparaissent qu'en Poste, jamais avec le bandeau de démonstration. */
+.shell > .host-banners { grid-area: banner; z-index: 4; min-width: 0; display: flex; flex-direction: column; }
+.shell > .host-banners:not(:has(> .sim-banner:not([hidden]))) { display: none; }
+/* Même spécificité que .shell > .sim-banner : les variantes de fenêtre (:root[data-low] .card…) l'emportent comme avant. */
+.host-banners > .sim-banner {
+  min-width: 0; margin: 0; border-radius: 0; border-width: 0 0 1px;
+  padding: 7px var(--s6); font-size: var(--fs-caption);
+  backdrop-filter: blur(14px) saturate(160%);
+}
+.host-banners > .sim-banner[hidden] { display: none; }
+.shell.main-narrow > .host-banners > .sim-banner, :root[data-short] .shell > .host-banners > .sim-banner { flex-wrap: nowrap; }
+.shell.has-help > .host-banners > .sim-banner { padding-right: calc(var(--help-w) + var(--s4)); }

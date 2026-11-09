@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "46a3999fdcd812295775ab168113d3b905a0b039",
+  "order": [
+    "code complet",
+    "contrôles ciblés et garde source",
+    "GitHub",
+    "scénarios VM critiques",
+    "packs qualifiés si les preuves sont complètes"
+  ],
+  "items": [
+    {
+      "id": "journal",
+      "title": "Journal durable et fermeture indépendante de son état",
+      "code": "présent",
+      "tests": "ExecutionHistoryTests 4 ; partage atomique Windows vérifié",
+      "windowsQualified": false
+    },
+    {
+      "id": "startup",
+      "title": "Configuration optionnelle invalide et interface réactive",
+      "code": "présent",
+      "tests": "PackIntegrityTests 9 ; ConfigurationStoreTests 10",
+      "windowsQualified": false
+    },
+    {
+      "id": "machine",
+      "title": "Sérialisation entre administrateurs et ruches résiduelles",
+      "code": "présent",
+      "tests": "contrôles de contrats ; scénario multi-session et ruches résiduelles à qualifier en VM",
+      "windowsQualified": false
+    },
+    {
+      "id": "sources",
+      "title": "Mémorisation privée de la source de diffusion",
+      "code": "présent",
+      "tests": "UpdateSourcePreferenceTests 2 ; parcours interface mémorisation",
+      "windowsQualified": false
+    },
+    {
+      "id": "patches",
+      "title": "Diffusion explicite des modèles logiciels",
+      "code": "présent",
+      "tests": "CommonPatchTests 4 ; CommonSelectionTests 4 ; parcours interface import/rejeu",
+      "windowsQualified": false
+    },
+    {
+      "id": "delivery",
+      "title": "Assemblage, reconstruction, déblocage, guides et notices",
+      "code": "présent",
+      "tests": "7 tests assemblage ; préassemblage réel 335 fichiers ; syntaxe PowerShell Windows",
+      "windowsQualified": false
+    }
+  ]
+}

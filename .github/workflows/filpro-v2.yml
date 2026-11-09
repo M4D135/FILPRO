@@ -1,0 +1,56 @@
+# Validation Windows ciblée de V2 : aucun pack ni publication de Release.
+name: FILPRO V2 Windows contracts
+
+on:
+  push:
+    branches: [master]
+    paths: ['v2/**', '.github/workflows/filpro-v2.yml']
+  pull_request:
+    branches: [master]
+    paths: ['v2/**', '.github/workflows/filpro-v2.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: filpro-v2-contracts-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows-contracts:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: v2
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /v2/
+            /.github/workflows/filpro-v2.yml
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        with:
+          global-json-file: v2/global.json
+      - name: Build Release and targeted contracts on Windows
+        run: |
+          & ./tools/ci/Validate-Windows.ps1 -AllowNetworkRestore -OutputDirectory (Join-Path $env:RUNNER_TEMP 'filpro-v2-validation')
+          exit $LASTEXITCODE
+      - name: Observe FILPRO starting with installed Evergreen on Windows
+        shell: powershell
+        timeout-minutes: 3
+        run: |
+          & ./tools/ci/Test-EvergreenStartup.ps1 -Application ./src/Filpro.App/bin/Release/net10.0-windows/win-x64/FILPRO.exe -Report (Join-Path $env:RUNNER_TEMP 'filpro-v2-validation/evergreen-startup.json')
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: FILPRO-V2-Windows-contracts-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/filpro-v2-validation
+          if-no-files-found: warn
+          retention-days: 14

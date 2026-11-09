@@ -1,0 +1,71 @@
+{
+  "tool": "builtin image_gen.imagegen",
+  "transparent_background": false,
+  "prompt": "imagegen-pastel-prompt.txt",
+  "promptSha256": "f175d1828d492b1e8cb4d28e2510a20dc6a6b5715b0a0eccc295a1db972ab96a",
+  "referencedImages": [
+    {
+      "order": 1,
+      "role": "previous-approved-master-background-edit",
+      "sourceCommit": "49c984ebc20cb667ccec96d518b965eca34637b4",
+      "path": "final-brand-master.png",
+      "sha256": "b4dfbce60fb6afa2b0ef8d9d96f393a0a131f7f6ba7d8e2bb5c2c4d6cee46d9c",
+      "bytes": 1375939,
+      "width": 1254,
+      "height": 1254
+    }
+  ],
+  "output": {
+    "path": "final-brand-master.png",
+    "sha256": "81926a45cf9207cd2c00616604d12247448daeec09c6351d546bdad99aa6bb7f",
+    "bytes": 1467282,
+    "width": 1254,
+    "height": 1254
+  },
+  "note": "Background-only pastel-blue edit requested by David, using the previously approved color master as the sole reference. The result is a generated bitmap; no claim of exact unchanged foreground pixels or vector equivalence.",
+  "historySourceCommits": [
+    "49c984ebc20cb667ccec96d518b965eca34637b4"
+  ],
+  "history": [
+    {
+      "tool": "builtin image_gen.imagegen",
+      "transparent_background": false,
+      "prompt": "imagegen-prompt.txt",
+      "promptSha256": "b62c03fc7a98552cd5fad52bc913bd17f4fb36fb0c02f35901632626c0a777b3",
+      "referencedImages": [
+        {
+          "order": 1,
+          "role": "geometry-target",
+          "sha256": "4f1cfe264a893ce0790001fd3571f3af36e3cac29bba431b07a7a1fb656dd5ab",
+          "bytes": 89360,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "order": 2,
+          "role": "GLPI-style-reference",
+          "sha256": "f7df161ed2be86f41ca4a139157534d9d37096e37a2dcd05bbe89c1b12830132",
+          "bytes": 1406380,
+          "width": 1254,
+          "height": 1254
+        },
+        {
+          "order": 3,
+          "role": "DOMENIA-style-reference",
+          "sha256": "0e7abb450adcc242f6cbe0e1752534bf53f8b3ba10bb6185b9b2e6f4d328c1a6",
+          "bytes": 1371044,
+          "width": 1254,
+          "height": 1254
+        }
+      ],
+      "output": {
+        "path": "final-brand-master.png",
+        "sha256": "b4dfbce60fb6afa2b0ef8d9d96f393a0a131f7f6ba7d8e2bb5c2c4d6cee46d9c",
+        "bytes": 1375939,
+        "width": 1254,
+        "height": 1254
+      },
+      "note": "Original FILPRO vector study refined by image generation using GLPI and DOMENIA as style references. Final color master is a generated bitmap, not a vector rendering."
+    }
+  ]
+}

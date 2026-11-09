@@ -1,0 +1,14 @@
+<Solution>
+  <!-- Solution FILPRO V2 (format slnx). La compilation et la publication se font sous Windows (lot suivant) ; ce lot
+       écrit le code, il ne compile ni ne teste sous Linux/Mac. -->
+  <Folder Name="/src/">
+    <Project Path="src/Filpro.Core/Filpro.Core.csproj" />
+    <Project Path="src/Filpro.Bridge/Filpro.Bridge.csproj" />
+    <Project Path="src/Filpro.Simulation/Filpro.Simulation.csproj" />
+    <Project Path="src/Filpro.Platform/Filpro.Platform.csproj" />
+    <Project Path="src/Filpro.App/Filpro.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Filpro.Tests/Filpro.Tests.csproj" />
+  </Folder>
+</Solution>

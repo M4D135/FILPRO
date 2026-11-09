@@ -1,0 +1,26 @@
+<Project>
+  <!-- Réglages communs repris de DOMENIA V2 (référence _reference/domenia/v2/Directory.Build.props, commit 77805257).
+       .NET 10 autonome Windows x64, nullable, avertissements traités comme erreurs, analyseurs .NET, français par défaut.
+       Aucune dépendance ajoutée par rapport au kit DOMENIA. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <Deterministic>true</Deterministic>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SatelliteResourceLanguages>fr</SatelliteResourceLanguages>
+    <!-- Seuls les frameworks réellement utilisés (NETCore, WindowsDesktop) sont restaurés ; ASP.NET n'est jamais téléchargé. -->
+    <DisableTransitiveFrameworkReferenceDownloads>true</DisableTransitiveFrameworkReferenceDownloads>
+    <Company>FILPRO</Company>
+    <Product>FILPRO</Product>
+    <Version>2.0.13</Version>
+    <NeutralLanguage>fr-FR</NeutralLanguage>
+  </PropertyGroup>
+</Project>
