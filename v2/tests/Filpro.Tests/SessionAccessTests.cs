@@ -79,57 +79,6 @@ internal sealed class SessionAccessTests
     }
 
     [Test]
-    public void DossierDeFilproModifiableParLaSessionNomme()
-    {
-        using var identity = WindowsIdentity.GetCurrent();
-        var me = identity.User!.Value;
-        if (MachineSid() is not { } machine) { Check.Skip("Domaine des comptes locaux illisible."); return; }
-        var guest = new SecurityIdentifier(WellKnownSidType.AccountGuestSid, machine).Value;
-        var root = NewRoot();
-        try
-        {
-            // Dossier parent « Outils » sous la racine de test : les deux niveaux comptent pour remplacer FILPRO.
-            var parent = Directory.CreateDirectory(Path.Combine(root, "Outils")).FullName;
-            var pack = Directory.CreateDirectory(Path.Combine(parent, "FILPRO")).FullName;
-            var exe = Path.Combine(pack, "FILPRO.exe");
-            File.WriteAllText(exe, "x");
-            var wad = Directory.CreateDirectory(Path.Combine(pack, "wad")).FullName;
-            const FileSystemRights read = FileSystemRights.ReadAndExecute;
-            SetDirectoryAcl(root, (me, FileSystemRights.FullControl));
-            SetDirectoryAcl(parent, (me, FileSystemRights.FullControl));
-            SetDirectoryAcl(pack, (me, FileSystemRights.FullControl), (Guests, read));
-            SetDirectoryAcl(wad, (me, FileSystemRights.FullControl), (Guests, read));
-            SetAcl(exe, (me, FileSystemRights.FullControl, AccessControlType.Allow), (Guests, read, AccessControlType.Allow));
-            var readOnly = SessionAccess.ModifiablePackItem(guest, pack);
-            if (!readOnly.Determined) Check.Skip("Compte Invité non évaluable par Authz sur ce poste.");
-            Check.Null(readOnly.Path, "lecture et exécution seulement : rien de modifiable");
-            SetAcl(exe, (me, FileSystemRights.FullControl, AccessControlType.Allow), (Guests, FileSystemRights.Modify, AccessControlType.Allow));
-            Check.Equal(exe, SessionAccess.ModifiablePackItem(guest, pack + Path.DirectorySeparatorChar).Path, "FILPRO.exe modifiable par le groupe Invités");
-            SetAcl(exe, (me, FileSystemRights.FullControl, AccessControlType.Allow), (Guests, read, AccessControlType.Allow));
-            SetDirectoryAcl(wad, (me, FileSystemRights.FullControl), (Guests, read | FileSystemRights.CreateFiles));
-            Check.Equal(wad, SessionAccess.ModifiablePackItem(guest, pack).Path, "un fichier peut être ajouté dans wad");
-            SetDirectoryAcl(wad, (me, FileSystemRights.FullControl), (Guests, read));
-            SetDirectoryAcl(parent, (me, FileSystemRights.FullControl), (Guests, read | FileSystemRights.DeleteSubdirectoriesAndFiles));
-            Check.Equal(parent, SessionAccess.ModifiablePackItem(guest, pack).Path, "le dossier de FILPRO peut être supprimé depuis son parent");
-            SetDirectoryAcl(parent, (me, FileSystemRights.FullControl), (Guests, FileSystemRights.Modify));
-            Check.Equal(parent, SessionAccess.ModifiablePackItem(guest, pack).Path, "le parent peut être renommé (Modifier, sans suppression d'élément)");
-            SetDirectoryAcl(parent, (me, FileSystemRights.FullControl), (Guests, read | FileSystemRights.ChangePermissions));
-            Check.Equal(parent, SessionAccess.ModifiablePackItem(guest, pack).Path, "les droits du parent peuvent être changés");
-            SetDirectoryAcl(parent, (me, FileSystemRights.FullControl));
-            SetDirectoryAcl(root, (me, FileSystemRights.FullControl), (Guests, FileSystemRights.Modify));
-            Check.Equal(root, SessionAccess.ModifiablePackItem(guest, pack).Path, "un dossier plus haut peut être renommé : vérifié jusqu'à la racine");
-            SetDirectoryAcl(root, (me, FileSystemRights.FullControl));
-            Check.Null(SessionAccess.ModifiablePackItem(guest, pack).Path, "retour à la lecture seule");
-            Check.Equal(SessionAccess.RootRights, SessionAccess.RightsOnAncestor(Path.GetPathRoot(root)!), "racine du volume : jamais renommée");
-            Check.Equal(SessionAccess.AncestorRights, SessionAccess.RightsOnAncestor(root), "dossier parent : renommer ou supprimer compte");
-            Check.Equal(0u, SessionAccess.RootRights & 0x10000u, "aucun DELETE exigé sur la racine");
-            var share = SessionAccess.ModifiablePackItem(guest, @"\\serveur\partage\FILPRO");
-            Check.True(share.Path is null && !share.Determined, "partage réseau : rien n'est établi");
-        }
-        finally { Cleanup(root); }
-    }
-
-    [Test]
     public void MoteurIllisiblePourLaSessionNomme()
     {
         using var identity = WindowsIdentity.GetCurrent();

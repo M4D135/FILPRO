@@ -54,19 +54,10 @@ public static class NativeConfirmation
 
     /// <summary>
     /// Fiche complétée par l'hôte : case « Verrouiller FILPRO après le lancement » pour une opération sur le poste dans
-    /// une session d'un autre compte, et ligne grave quand le compte de la session peut modifier le dossier de FILPRO.
+    /// une session d'un autre compte.
     /// </summary>
-    internal static ConfirmationSheet Complete(EngineContext context, ConfirmationSheet sheet, bool acrossAccounts)
-    {
-        var offerLock = acrossAccounts && PrivilegePolicy.TierOf(sheet.Operation) == PrivilegeTier.System;
-        var exposure = context.Service<PackExposure>();
-        if (!offerLock && exposure is null) return sheet;
-        return sheet with
-        {
-            OfferLockAfterStart = offerLock,
-            Attention = exposure is null ? sheet.Attention : [.. sheet.Attention, new ConfirmationAttention(exposure.Attention, Severe: true)],
-        };
-    }
+    internal static ConfirmationSheet Complete(ConfirmationSheet sheet, bool acrossAccounts) =>
+        acrossAccounts && PrivilegePolicy.TierOf(sheet.Operation) == PrivilegeTier.System ? sheet with { OfferLockAfterStart = true } : sheet;
 }
 
 /// <summary>
@@ -102,7 +93,7 @@ public sealed class NativeConfirmationTurn : IDisposable
         if (context is null || confirmer is null) return await start().ConfigureAwait(false);
         ObjectDisposedException.ThrowIf(Volatile.Read(ref slot) is null, this);
         var acrossAccounts = NativeConfirmation.AcrossAccounts(context);
-        var built = NativeConfirmation.Complete(context, Build(context, sheet), acrossAccounts);
+        var built = NativeConfirmation.Complete(Build(context, sheet), acrossAccounts);
         var presence = acrossAccounts ? context.Service<IOperatorPresence>() : null;
         // Verrouillé entre l'admission et la fenêtre : rien n'est montré ni lancé.
         if (acrossAccounts && NativeConfirmation.Locked(context))

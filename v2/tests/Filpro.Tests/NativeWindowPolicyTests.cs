@@ -91,14 +91,8 @@ internal sealed class NativeWindowPolicyTests
     }
 
     [Test]
-    public void CompteDeLaSessionEtMotifsDuVerrou()
+    public void MotifsDuVerrou()
     {
-        Check.Equal(Session, NativeWindowPolicy.SessionSid(Host, Session, null), "moteur d'affichage sous un autre compte");
-        Check.Equal(Session, NativeWindowPolicy.SessionSid(Host, Session, Host), "le moteur fait foi");
-        Check.Equal(Session, NativeWindowPolicy.SessionSid(Host, Host, Session), "désaccord : compte retenu pour le profil d'affichage");
-        Check.Equal(Session, NativeWindowPolicy.SessionSid(Host, null, Session), "moteur illisible : compte du profil d'affichage");
-        Check.Null(NativeWindowPolicy.SessionSid(Host, Host.ToLowerInvariant(), null), "même compte, casse comprise");
-        Check.Null(NativeWindowPolicy.SessionSid(Host, null, null), "aucun compte connu");
         Check.Equal<PresenceReason?>(PresenceReason.SessionLocked, NativeWindowPolicy.PresenceReasonFor(7), "WTS_SESSION_LOCK");
         Check.Equal<PresenceReason?>(PresenceReason.SessionDisconnected, NativeWindowPolicy.PresenceReasonFor(2), "WTS_CONSOLE_DISCONNECT");
         Check.Equal<PresenceReason?>(PresenceReason.SessionDisconnected, NativeWindowPolicy.PresenceReasonFor(4), "WTS_REMOTE_DISCONNECT");

@@ -7,25 +7,15 @@ namespace Filpro.App;
 /// <summary>
 /// Droits qu'un compte obtiendrait sur un fichier ou un dossier, évalués par Windows (Authz) à partir de son SID, comme
 /// l'onglet « Accès effectif » des propriétés de sécurité, avec les groupes d'une ouverture de session interactive. Ne sert
-/// qu'à expliquer un affichage qui ne démarre pas, et à avertir d'un dossier de FILPRO modifiable, quand FILPRO est élevé
-/// avec un autre compte que celui de la session : un résultat indéterminable (API indisponible, compte de domaine
-/// injoignable, partage réseau) n'explique rien et n'empêche jamais le démarrage.
+/// qu'à expliquer un affichage qui ne démarre pas, quand FILPRO est élevé avec un autre compte que celui de la session :
+/// un résultat indéterminable (API indisponible, compte de domaine injoignable, partage réseau) n'explique rien et
+/// n'empêche jamais le démarrage.
 /// </summary>
 internal static class SessionAccess
 {
     // FILE_READ_DATA (FILE_LIST_DIRECTORY pour un dossier) et FILE_EXECUTE (FILE_TRAVERSE pour un dossier).
     internal const uint ReadData = 0x1;
     internal const uint Execute = 0x20;
-    // Écrire ou ajouter (fichier ou dossier), supprimer un élément du dossier, supprimer, changer l'accès ou le propriétaire.
-    internal const uint ModifyRights = 0x2 | 0x4 | DeleteChild | 0x10000 | 0x40000 | 0x80000;
-    internal const uint DeleteChild = 0x40;
-    // Dossier parent : le renommer ou le supprimer, supprimer un élément qu'il contient, changer ses droits ou son propriétaire.
-    internal const uint AncestorRights = DeleteChild | 0x10000 | 0x40000 | 0x80000;
-    // Racine du volume : jamais renommée ni supprimée ; seuls ses éléments, ses droits et son propriétaire comptent.
-    internal const uint RootRights = DeleteChild | 0x40000 | 0x80000;
-
-    /// <summary>Droits qui permettraient de remplacer FILPRO depuis ce dossier parent ; la racine d'un volume n'a pas de DELETE utile.</summary>
-    internal static uint RightsOnAncestor(string ancestor) => string.IsNullOrEmpty(Path.GetDirectoryName(ancestor)) ? RootRights : AncestorRights;
     private const uint MaximumAllowed = 0x02000000;
     private const int AccessDenied = 5;
     // Groupes d'une session ouverte, absents d'un contexte construit depuis le seul SID. Tout le monde, INTERACTIVE et les
@@ -84,36 +74,6 @@ internal static class SessionAccess
     }
 
     private static bool Pending(Task start, CancellationToken token) => !start.IsCompleted && !token.IsCancellationRequested;
-
-    /// <summary>
-    /// Premier élément du dossier de FILPRO que le compte de la session pourrait modifier, remplacer ou supprimer :
-    /// FILPRO.exe, le dossier lui-même, wad, puis chaque dossier parent jusqu'à la racine du volume (renommer ou supprimer
-    /// ce dossier ou un élément qu'il contient, changer ses droits ou son propriétaire). Un volume sans sécurité (FAT,
-    /// exFAT) est modifiable par tous. Partage réseau ou évaluation impossible : rien n'est établi (<c>Determined</c>
-    /// faux). Sert à avertir, jamais à refuser.
-    /// </summary>
-    internal static (string? Path, bool Determined) ModifiablePackItem(string sessionSid, string appDirectory)
-    {
-        var directory = Path.TrimEndingDirectorySeparator(Path.GetFullPath(appDirectory));
-        if (IsNetworkPath(directory)) return (null, false);
-        if (WithoutSecurity(directory)) return (directory, true);
-        var targets = new List<(string Path, uint Rights)>
-        {
-            (Path.Combine(directory, "FILPRO.exe"), ModifyRights),
-            (directory, ModifyRights),
-            (Path.Combine(directory, "wad"), ModifyRights),
-        };
-        for (var ancestor = Path.GetDirectoryName(directory); !string.IsNullOrEmpty(ancestor); ancestor = Path.GetDirectoryName(ancestor))
-            targets.Add((ancestor, RightsOnAncestor(ancestor)));
-        var granted = Granted(sessionSid, targets.Select(t => t.Path).ToArray());
-        var determined = true;
-        for (var i = 0; i < targets.Count; i++)
-        {
-            if (granted[i] is not { } rights) determined = false;
-            else if ((rights & targets[i].Rights) != 0) return (targets[i].Path, true);
-        }
-        return (null, determined);
-    }
 
     /// <summary>Masque des droits que Windows accorderait au compte sur cet objet (0 sans aucun droit) ; nul si indéterminable.</summary>
     internal static uint? Granted(string sid, string path) => Granted(sid, [path])[0];
@@ -206,12 +166,6 @@ internal static class SessionAccess
         var bytes = new byte[sid.BinaryLength];
         sid.GetBinaryForm(bytes, 0);
         return bytes;
-    }
-
-    private static bool WithoutSecurity(string path)
-    {
-        try { return Path.GetPathRoot(path) is { Length: > 0 } root && new DriveInfo(root).DriveFormat is "FAT" or "FAT32" or "exFAT"; }
-        catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { return false; }
     }
 
     private static bool IsNetworkPath(string path)

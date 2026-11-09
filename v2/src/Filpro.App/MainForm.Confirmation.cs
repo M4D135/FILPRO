@@ -223,35 +223,6 @@ internal sealed partial class MainForm : IOperatorConfirmation
         // session reçu pendant le démarrage s'applique à l'armement ; l'état courant de la session est relu aussitôt.
         presence.Arm();
         CheckSessionState();
-        if (NativeWindowPolicy.SessionSid(hostSid, browserSid, shellSid) is { } sessionSid) _ = CheckPackExposureAsync(sessionSid);
-    }
-
-    /// <summary>
-    /// Avertit, sans jamais refuser, quand le compte de la session pourrait modifier le dossier de FILPRO : FILPRO.exe a pu
-    /// être remplacé avant l'élévation. Évalué hors du fil de l'interface (un compte de domaine peut tarder à se résoudre).
-    /// </summary>
-    private async Task CheckPackExposureAsync(string sessionSid)
-    {
-        try
-        {
-            var (path, determined) = await Task.Run(() => SessionAccess.ModifiablePackItem(sessionSid, AppPaths.AppDirectory), lifetime.Token).ConfigureAwait(true);
-            if (IsDisposed || lifetime.IsCancellationRequested) return;
-            var account = WebViewDataLocation.AccountName(sessionSid);
-            if (path is null)
-            {
-                if (!determined) TechnicalLog.Instance.Info("Droits du compte de la session " + account + " sur le dossier de FILPRO indéterminés.");
-                return;
-            }
-            composition.Context.Register(new PackExposure(account, path));
-            TechnicalLog.Instance.Warning("Le compte de la session " + account + " peut modifier " + path
-                + " : FILPRO.exe a pu être remplacé avant l’élévation ; " + PlacementAdvice);
-            PostEvent("pack.exposure", new { Modifiable = true });
-        }
-        catch (OperationCanceledException) { /* Fermeture en cours. */ }
-        catch (Exception ex) when (ex is not OutOfMemoryException)
-        {
-            TechnicalLog.Instance.Warning("Droits du compte de la session sur le dossier de FILPRO non évalués : " + ex.GetType().Name + ".");
-        }
     }
 
     private static class Native

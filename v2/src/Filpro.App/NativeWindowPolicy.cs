@@ -80,16 +80,6 @@ internal static class NativeWindowPolicy
             + " : " + verdict + (situation.Kind == SessionSituation.SameAccount ? "." : " ; mises à jour indisponibles, verrouillage de présence actif.");
     }
 
-    /// <summary>
-    /// Compte de la session dont les droits sur le dossier de FILPRO comptent : le propriétaire du moteur d'affichage s'il
-    /// diffère du compte élevé, sinon le compte retenu pour le profil d'affichage s'il en diffère ; nul sinon.
-    /// </summary>
-    internal static string? SessionSid(string hostSid, string? browserSid, string? shellSid)
-    {
-        if (!string.IsNullOrEmpty(browserSid) && !SameSid(browserSid, hostSid)) return browserSid;
-        return !string.IsNullOrEmpty(shellSid) && !SameSid(shellSid, hostSid) ? shellSid : null;
-    }
-
     /// <summary>Motif de verrouillage d'une notification de session Windows (WM_WTSSESSION_CHANGE) ; nul pour les autres.</summary>
     internal static PresenceReason? PresenceReasonFor(int sessionChange) => sessionChange switch
     {

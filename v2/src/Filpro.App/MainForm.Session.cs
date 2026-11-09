@@ -39,12 +39,8 @@ internal sealed partial class MainForm
     {
         if (generation != composition.Context.Generation) throw new FilproOperationException("session.stale", "Page d’une autre session.");
         await pageLoaded.Task.WaitAsync(cancellationToken).ConfigureAwait(false);
-        // La page vient de s'abonner : l'état de l'hôte annoncé avant ce moment (verrou, dossier modifiable) lui est redit.
-        if (composition.Decision.Mode == AppMode.Poste)
-        {
-            if (presence.Latched) PostEvent("presence.changed", new { Locked = true });
-            if (composition.Context.Service<PackExposure>() is not null) PostEvent("pack.exposure", new { Modifiable = true });
-        }
+        // La page vient de s'abonner : un verrou de présence posé avant ce moment lui est redit.
+        if (composition.Decision.Mode == AppMode.Poste && presence.Latched) PostEvent("presence.changed", new { Locked = true });
         if (!startupArguments.Contains("--filpro-update-health", StringComparer.Ordinal)) return;
         if (composition.Decision.Mode != AppMode.Poste || !composition.PackVerified || !pageAvailable)
             throw new FilproOperationException("update.health", "Le démarrage du pack natif n’est pas confirmé.");

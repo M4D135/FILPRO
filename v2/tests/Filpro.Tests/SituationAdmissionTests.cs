@@ -140,7 +140,7 @@ internal sealed class SituationAdmissionTests
         Check.False(same["crossAccount"], "même compte");
         Check.True(same["codeUpdates"], "mises à jour proposées");
         Check.False(same["presenceLocked"], "jamais verrouillé");
-        Check.False(same["packModifiable"], "aucun avertissement");
+        Check.False(same.ContainsKey("packModifiable"), "aucun avertissement de dossier modifiable");
         var presence = Presence(armed: true, latched: false);
         var across = Poste(TestSituations.CrossAccount, presence);
         var free = await Capabilities(across);
@@ -148,10 +148,8 @@ internal sealed class SituationAdmissionTests
         Check.False(free["codeUpdates"], "mises à jour indisponibles");
         Check.False(free["presenceLocked"], "présence armée et libre");
         presence.Latch(PresenceReason.Idle);
-        across.Register(new PackExposure(@"POSTE-01\Utilisateur", @"D:\FILPRO"));
         var locked = await Capabilities(across);
         Check.True(locked["presenceLocked"], "verrouillé");
-        Check.True(locked["packModifiable"], "dossier modifiable signalé");
         var demo = new EngineContext(ModeResolver.Resolve(["--simulation"], null), null, null, TimeProvider.System, SilentTechnicalJournal.Instance);
         demo.Register(TestSituations.CrossAccount);
         var simulated = await Capabilities(demo);

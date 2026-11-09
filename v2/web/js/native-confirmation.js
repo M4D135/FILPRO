@@ -11,7 +11,6 @@ export const PENDING_TEXT = `Confirmation Windows en attente : répondez dans la
 // Textes fixes de l'hôte (2.0.9), quand l'affichage tourne sous un autre compte que FILPRO élevé.
 export const PRESENCE_LOCKED_TEXT = 'FILPRO est verrouillé dans cette session : les opérations en cours continuent. Fermez puis relancez FILPRO avec vos identifiants pour en lancer d’autres.';
 export const CROSS_ACCOUNT_UPDATES_TEXT = 'Les mises à jour de FILPRO ne sont pas proposées quand FILPRO est élevé avec un autre compte que celui de la session. Mettez FILPRO à jour depuis une session du compte administrateur.';
-export const PACK_MODIFIABLE_TEXT = 'Le compte ouvert sur ce poste peut modifier le dossier de FILPRO : le programme a pu être remplacé avant son lancement. Placez FILPRO dans un dossier que ce compte peut lire sans pouvoir le modifier, par exemple C:\\Program Files\\FILPRO.';
 
 // Capacité annoncée par l'hôte dans session.info ; absente ou fausse en démonstration et dans la prévisualisation.
 export function nativeConfirmation(session) {
@@ -38,10 +37,6 @@ export function presenceLocked(session) {
   return session?.demonstration === false && session?.capabilities?.presenceLocked === true;
 }
 
-export function packModifiable(session) {
-  return session?.demonstration === false && session?.capabilities?.packModifiable === true;
-}
-
 // Mises à jour du code de FILPRO : seulement quand l'hôte ne les déclare pas indisponibles.
 export function codeUpdates(session) {
   return session?.capabilities?.codeUpdates !== false;
@@ -54,15 +49,6 @@ export function bindPresenceBanner(banner, subscribe, session) {
   const show = () => { banner.innerHTML = locked ? `${icon('lock')}<span>${PRESENCE_LOCKED_TEXT}</span>` : ''; banner.hidden = !locked; };
   locked = presenceLocked(session); show();
   return subscribe('presence.changed', (data) => { if (session?.demonstration === false && data?.locked === true) { locked = true; show(); } });
-}
-
-// Bandeau permanent, en Poste seulement : dossier de FILPRO modifiable par le compte de la session (avertissement,
-// jamais un refus), connu à l'ouverture ou annoncé ensuite par l'hôte.
-export function bindPackBanner(banner, subscribe, session) {
-  let exposed = false;
-  const show = () => { banner.innerHTML = exposed ? `${icon('alert')}<span>${PACK_MODIFIABLE_TEXT}</span>` : ''; banner.hidden = !exposed; };
-  exposed = packModifiable(session); show();
-  return subscribe('pack.exposure', (data) => { if (session?.demonstration === false && data?.modifiable === true) { exposed = true; show(); } });
 }
 
 // Bandeau non bloquant, sans détail ni autorité : il signale seulement qu'une fenêtre Windows attend une réponse.

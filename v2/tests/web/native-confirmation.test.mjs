@@ -6,9 +6,9 @@ import { mockCall } from '../../web/js/mock.js';
 import { acceptSession, sessionInfo } from '../../web/js/session-state.js';
 import {
   nativeConfirmation, primaryLabel, decisionLine, confirmUnlessNative, bindConfirmationBanner, DECISION_LINE, PENDING_TEXT,
-  presenceLocked, packModifiable, codeUpdates, bindPresenceBanner, bindPackBanner, PRESENCE_LOCKED_TEXT, PACK_MODIFIABLE_TEXT,
-  CROSS_ACCOUNT_UPDATES_TEXT,
+  presenceLocked, codeUpdates, bindPresenceBanner, PRESENCE_LOCKED_TEXT, CROSS_ACCOUNT_UPDATES_TEXT,
 } from '../../web/js/native-confirmation.js';
+import * as nativeConfirmationModule from '../../web/js/native-confirmation.js';
 
 // Canal WebView2 simulé : l'hôte répond avec la forme de BridgeResponse (id, kind, op, data, error) en camelCase.
 let receive = null;
@@ -105,7 +105,7 @@ test('Six dialogues mènent à « Continuer », quatre reformulations sont saut�
     'configuration-ui.js': { primaryLabel: 1, decisionLine: 1 },
     'pages/parametres.js': { confirmUnlessNative: 2 },
     'pages/suivi.js': { confirmUnlessNative: 1 },
-    'app.js': { bindConfirmationBanner: 1, bindPresenceBanner: 1, bindPackBanner: 1 },
+    'app.js': { bindConfirmationBanner: 1, bindPresenceBanner: 1 },
   };
   for (const [file, calls] of Object.entries(uses)) {
     const source = await readFile(new URL(`../../web/js/${file}`, import.meta.url), 'utf8');
@@ -113,22 +113,20 @@ test('Six dialogues mènent à « Continuer », quatre reformulations sont saut�
   }
 });
 
-test('Autre compte : verrou, dossier modifiable et mises à jour suivent les capacités de l’hôte, jamais la démonstration', async () => {
-  const across = { generation: 'poste-x', demonstration: false, capabilities: { crossAccount: true, codeUpdates: false, presenceLocked: true, packModifiable: true } };
+test('Autre compte : verrou et mises à jour suivent les capacités de l’hôte, jamais la démonstration', async () => {
+  const across = { generation: 'poste-x', demonstration: false, capabilities: { crossAccount: true, codeUpdates: false, presenceLocked: true } };
   assert.equal(presenceLocked(across), true);
-  assert.equal(packModifiable(across), true);
   assert.equal(codeUpdates(across), false);
-  const forged = { generation: 'demo-x', demonstration: true, capabilities: { presenceLocked: true, packModifiable: true, codeUpdates: true } };
+  const forged = { generation: 'demo-x', demonstration: true, capabilities: { presenceLocked: true, codeUpdates: true } };
   assert.equal(presenceLocked(forged), false);
-  assert.equal(packModifiable(forged), false);
   for (const session of [undefined, {}, { capabilities: {} }, { capabilities: { codeUpdates: 'false' } }, await mockCall('session.info')]) {
     assert.equal(codeUpdates(session), true);
     assert.equal(presenceLocked(session), false);
-    assert.equal(packModifiable(session), false);
   }
   const mock = await mockCall('session.info');
-  assert.deepEqual([mock.capabilities.crossAccount, mock.capabilities.codeUpdates, mock.capabilities.presenceLocked, mock.capabilities.packModifiable],
-    [false, true, false, false]);
+  assert.deepEqual([mock.capabilities.crossAccount, mock.capabilities.codeUpdates, mock.capabilities.presenceLocked],
+    [false, true, false]);
+  assert.equal('packModifiable' in mock.capabilities, false, 'aucun avertissement de dossier modifiable');
   assert.ok(CROSS_ACCOUNT_UPDATES_TEXT.startsWith('Les mises à jour de FILPRO ne sont pas proposées'));
 });
 
@@ -154,26 +152,18 @@ test('Le bandeau de verrou part de session.info, suit presence.changed et ne se 
   stopDemo();
 });
 
-test('Le bandeau du dossier modifiable part de session.info ou de pack.exposure', () => {
-  const banner = { hidden: true, innerHTML: '' };
-  const stop = bindPackBanner(banner, onEvent, { demonstration: false, capabilities: {} });
-  assert.equal(banner.hidden, true);
-  hostEvent('pack.exposure', { modifiable: true });
-  assert.equal(banner.hidden, false);
-  assert.ok(banner.innerHTML.includes(PACK_MODIFIABLE_TEXT));
-  assert.ok(PACK_MODIFIABLE_TEXT.includes('C:\\Program Files\\FILPRO'));
-  stop();
-  const demo = { hidden: true, innerHTML: '' };
-  const stopDemo = bindPackBanner(demo, onEvent, { demonstration: true, capabilities: { packModifiable: true } });
-  hostEvent('pack.exposure', { modifiable: true });
-  assert.equal(demo.hidden, true, 'jamais dans la démonstration');
-  stopDemo();
+test('Le dossier de FILPRO modifiable n’est plus signalé dans la page', async () => {
+  assert.equal('bindPackBanner' in nativeConfirmationModule, false);
+  assert.equal('PACK_MODIFIABLE_TEXT' in nativeConfirmationModule, false);
+  const app = await readFile(new URL('../../web/js/app.js', import.meta.url), 'utf8');
+  assert.equal(app.includes('data-pack-banner'), false);
+  assert.equal(app.includes('pack.exposure'), false);
 });
 
-test('Les trois bandeaux de l’hôte sont empilés dans un conteneur FILPRO, jamais superposés', async () => {
+test('Les bandeaux de l’hôte sont empilés dans un conteneur FILPRO, jamais superposés', async () => {
   const app = await readFile(new URL('../../web/js/app.js', import.meta.url), 'utf8');
   const wrapper = app.slice(app.indexOf('<div class="host-banners">'), app.indexOf('</div>\n    </div>', app.indexOf('<div class="host-banners">')));
-  for (const banner of ['data-confirmation-banner', 'data-presence-banner', 'data-pack-banner']) assert.ok(wrapper.includes(banner), banner);
+  for (const banner of ['data-confirmation-banner', 'data-presence-banner']) assert.ok(wrapper.includes(banner), banner);
   const css = await readFile(new URL('../../web/css/filpro-shell.css', import.meta.url), 'utf8');
   assert.ok(css.includes('.shell > .host-banners { grid-area: banner; z-index: 4; min-width: 0; display: flex; flex-direction: column; }'));
   assert.ok(css.includes('.shell > .host-banners:not(:has(> .sim-banner:not([hidden]))) { display: none; }'));

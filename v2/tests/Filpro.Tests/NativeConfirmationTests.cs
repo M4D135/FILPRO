@@ -720,19 +720,6 @@ internal sealed class NativeConfirmationTests
     }
 
     [Test]
-    public async Task UnDossierModifiableAjouteUnPointGrave()
-    {
-        var exposure = new PackExposure(@"POSTE-01\Utilisateur", @"D:\FILPRO");
-        var harness = new Harness(situation: TestSituations.CrossAccount, presence: ArmedPresence());
-        harness.Context.Register(exposure);
-        await harness.Call("sauvegarder.confirmPlan", BackupArgs(harness, out _));
-        var attention = harness.Confirmer!.Sheets.Single().Attention;
-        Check.Equal(1, attention.Count(item => item.Severe && item.Text == exposure.Attention), "point grave ajouté par l'hôte");
-        Check.True(exposure.Attention.Contains(@"POSTE-01\Utilisateur", StringComparison.Ordinal) && exposure.Attention.Contains(@"D:\FILPRO", StringComparison.Ordinal),
-            "compte et dossier nommés");
-    }
-
-    [Test]
     public async Task VerrouilleAucuneFenetreNEstOuverte()
     {
         var presence = ArmedPresence();

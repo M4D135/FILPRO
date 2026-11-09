@@ -35,7 +35,6 @@ public sealed class SessionModule : IOperationModule
                     ["crossAccount"] = context.Mode == AppMode.Poste && NativeConfirmation.AcrossAccounts(context),
                     ["codeUpdates"] = context.Mode != AppMode.Poste || !NativeConfirmation.AcrossAccounts(context),
                     ["presenceLocked"] = context.Mode == AppMode.Poste && NativeConfirmation.AcrossAccounts(context) && NativeConfirmation.Locked(context),
-                    ["packModifiable"] = context.Mode == AppMode.Poste && context.Service<PackExposure>() is not null,
                 }, capabilities?.UnavailableReasons ?? (context.Mode == AppMode.Poste
                     ? ["Les opérations natives nécessitent le pack complet avec son manifeste d’intégrité et les outils USMT vérifiés."] : [])));
         }, "Mode, génération et capacités effectives de cette session.");

@@ -57,14 +57,3 @@ public enum SessionSituation { SameAccount, CrossAccount, Unknown }
 /// traitée comme <see cref="SessionSituation.Unknown"/>.
 /// </summary>
 public sealed record HostSituation(SessionSituation Kind, string HostSid, string HostAccount, string? DisplaySid, string? DisplayAccount);
-
-/// <summary>
-/// Dossier de FILPRO que le compte de la session pourrait modifier, établi par l'hôte quand l'affichage tourne sous un autre
-/// compte : FILPRO.exe a pu être remplacé avant l'élévation. Avertissement seulement, jamais un refus.
-/// </summary>
-public sealed record PackExposure(string Account, string Path)
-{
-    /// <summary>Point d'attention ajouté à chaque fenêtre de confirmation Windows.</summary>
-    public string Attention => "Le compte de la session (" + Account + ") peut modifier le dossier de FILPRO (" + Path
-        + ") : ce programme a pu être remplacé avant son lancement.";
-}

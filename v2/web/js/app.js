@@ -10,7 +10,7 @@ import { menuOpen, openMenu, setLayoutStore, confirmDialog } from './kit/index.j
 import { sessionInfo, acceptSession, invalidateSession } from './session-state.js';
 import { decideBootstrap, configurationChanged } from './configuration-ui.js';
 import { startOperationEvents, refreshOperations, observeOperations, isTerminal, jobState } from './operations.js';
-import { bindConfirmationBanner, bindPresenceBanner, bindPackBanner } from './native-confirmation.js';
+import { bindConfirmationBanner, bindPresenceBanner } from './native-confirmation.js';
 import { isTextEntry, modalOpen } from './kit/util.js';
 import {
   PAGES, THEMES, MOTIONS, loadPrefs, savePrefs, resolvedTheme, navMarkup, topbarMarkup,
@@ -84,7 +84,6 @@ function shellMarkup() {
     <div class="host-banners">
       <div class="card sim-banner" data-confirmation-banner data-tone="warn" role="status" hidden></div>
       <div class="card sim-banner" data-presence-banner data-tone="warn" role="status" hidden></div>
-      <div class="card sim-banner" data-pack-banner data-tone="warn" role="status" hidden></div>
     </div>
     <div class="operation-strip" hidden><span aria-hidden="true">${icon('activity')}</span><div><strong data-operation-title></strong><small data-operation-action></small></div><progress class="operation-progress" max="100" aria-label="Opération courante"></progress><button class="btn sm" type="button" data-open-operation>Voir le suivi</button></div>
     <main class="main" id="main" tabindex="-1"></main>
@@ -319,9 +318,8 @@ async function boot() {
   installOperations();
   // Même rangée que le bandeau de démonstration : la fenêtre Windows n'existe qu'en Poste, jamais en démonstration.
   bindConfirmationBanner(document.querySelector('[data-confirmation-banner]'), onEvent);
-  // Autre compte : FILPRO verrouillé, dossier de FILPRO modifiable par le compte de la session.
+  // Autre compte : FILPRO verrouillé.
   bindPresenceBanner(document.querySelector('[data-presence-banner]'), onEvent, sessionInfo());
-  bindPackBanner(document.querySelector('[data-pack-banner]'), onEvent, sessionInfo());
   notifyReady();
   router.start();
   if (configuration?.bootstrap) {
