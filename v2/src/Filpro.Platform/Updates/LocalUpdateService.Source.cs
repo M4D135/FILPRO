@@ -23,15 +23,20 @@ public sealed partial class LocalUpdateService
         return Task.FromResult(ValidateSource((UpdateSourceKind)kind, folder));
     }, cancellationToken);
 
-    public Task<UpdateSourcePreference> SaveSourceAsync(UpdateSourceKind kind, string? folder, CancellationToken cancellationToken) => LockedAsync(() =>
+    public async Task<UpdateSourcePreference> SaveSourceAsync(UpdateSourceKind kind, string? folder, CancellationToken cancellationToken)
     {
+        // Saisie refusée avant le verrou : une saisie vide ou invalide n'est pas un échec de mise à jour et ne change pas son état.
+        if (kind == UpdateSourceKind.Folder && string.IsNullOrWhiteSpace(folder)) throw MissingSourcePath();
         var preference = ValidateSource(kind, folder);
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(new { schemaVersion = 1, application = "FILPRO", kind = (int)preference.Kind, folder = preference.Folder });
-        ConfigurationFileIO.NoLinks(SourcePreferencePath);
-        var before = File.Exists(SourcePreferencePath) ? ConfigurationFileIO.Hash(ConfigurationFileIO.Read(SourcePreferencePath, 16 * 1024)) : null;
-        _ = ConfigurationFileIO.AtomicWrite(SourcePreferencePath, bytes, Path.Combine(_dataRoot, "update-source-backups"), before, before is null);
-        return Task.FromResult(preference);
-    }, cancellationToken);
+        return await LockedAsync(() =>
+        {
+            var bytes = JsonSerializer.SerializeToUtf8Bytes(new { schemaVersion = 1, application = "FILPRO", kind = (int)preference.Kind, folder = preference.Folder });
+            ConfigurationFileIO.NoLinks(SourcePreferencePath);
+            var before = File.Exists(SourcePreferencePath) ? ConfigurationFileIO.Hash(ConfigurationFileIO.Read(SourcePreferencePath, 16 * 1024)) : null;
+            _ = ConfigurationFileIO.AtomicWrite(SourcePreferencePath, bytes, Path.Combine(_dataRoot, "update-source-backups"), before, before is null);
+            return Task.FromResult(preference);
+        }, cancellationToken).ConfigureAwait(false);
+    }
 
     private const int RetiredGitHubReleases = 0;
     private static readonly UpdateSourcePreference NoFolder = new(false, UpdateSourceKind.Folder, null);
@@ -47,5 +52,6 @@ public sealed partial class LocalUpdateService
         }
         return new(false, kind, folder);
     }
+    private static FilproOperationException MissingSourcePath() => new("update.source", "Indiquer d'abord le dossier qui contient le ZIP PROD-LIGHT et son SHA256SUMS, ou le ZIP choisi.");
     private static FilproOperationException InvalidSourcePreference() => new("update.source", "Préférence de mise à jour invalide. Choisir un dossier local/UNC ou un ZIP manuel ; aucun identifiant réseau n'est conservé.");
 }

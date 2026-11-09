@@ -28,6 +28,25 @@ internal static class UpdateSourcePreferenceTests
         Check.True((await reopened.ReadSourceAsync(default)).Folder is null, "ZIP manuel sans chemin mémorisé");
     }
 
+    [Test] public static async Task CheminVideRefuseSansMettreLaMiseAJourEnEchec()
+    {
+        using var fixture = new PackTestFixture(); var pack = fixture.CreatePack("pack");
+        using var service = new LocalUpdateService(pack, fixture.Data, () => true);
+        var before = await service.ReadAsync(default);
+        foreach (var empty in new[] { null, "", "   " })
+        {
+            var saved = await Check.ThrowsAsync<FilproOperationException>(() => service.SaveSourceAsync(UpdateSourceKind.Folder, empty, default), "dossier vide refusé");
+            Check.Contains("Indiquer d'abord le dossier", saved.Message, "saisie à compléter, pas un échec");
+            foreach (var kind in new[] { UpdateSourceKind.Folder, UpdateSourceKind.ManualZip })
+                Check.Equal("update.source", (await Check.ThrowsAsync<FilproOperationException>(() => service.InspectAsync(new(kind, empty), default),
+                    "recherche sans chemin refusée")).Code, "refus de saisie");
+        }
+        var after = await service.ReadAsync(default);
+        Check.Equal(before.Stage, after.Stage, "état de la mise à jour inchangé");
+        Check.Null(after.Error, "aucune erreur de mise à jour enregistrée");
+        Check.False(File.Exists(Path.Combine(fixture.Data, "update-source.json")), "rien n'est mémorisé");
+    }
+
     [Test] public static async Task AncienChoixGitHubDevientUnDossierARenseigner()
     {
         using var fixture = new PackTestFixture(); var pack = fixture.CreatePack("pack");

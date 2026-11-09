@@ -158,13 +158,23 @@ export function render(main, ctx) {
   const saveSource = async () => {
     sourcePreference = await call('updates.saveSource', { kind: source.value, folder: source.value === 'folder' ? main.querySelector('[data-update-path]').value.trim() : null });
   };
+  // Chemin vide : une indication près du champ, sans appel à l'hôte ni état d'échec.
+  const pathMissing = (needed) => {
+    const input = main.querySelector('[data-update-path]');
+    if (!needed || input.value.trim()) return false;
+    feedback(source.value === 'folder' ? 'Indiquez d’abord le dossier qui contient le ZIP PROD-LIGHT et son SHA256SUMS.' : 'Choisissez d’abord le ZIP de mise à jour.');
+    input.focus();
+    return true;
+  };
   main.querySelector('[data-save-source]').addEventListener('click', () => run(async () => {
+    if (pathMissing(source.value === 'folder')) return;
     await saveSource(); feedback(demo ? 'Choix fictif mémorisé dans cette démonstration.' : 'Source mémorisée sur ce poste. Aucune recherche ni connexion effectuée.');
   }));
   main.querySelector('[data-update-path]').addEventListener('input', invalidateOffer);
   main.querySelector('[data-update-hash]').addEventListener('input', invalidateOffer);
   main.querySelector('[data-browse]').addEventListener('click', () => run(async () => { const path = await choose(source.value === 'folder' ? 'folder' : 'updateZip', source.value === 'folder' ? 'updateFolderPath' : 'updateZipPath'); if (path && active) { main.querySelector('[data-update-path]').value = path; invalidateOffer(); } }));
   main.querySelector('[data-inspect]').addEventListener('click', () => run(async () => {
+    if (pathMissing(true)) return;
     const args = { kind: source.value, path: main.querySelector('[data-update-path]').value.trim() };
     if (source.value === 'manualZip') args.sha256 = main.querySelector('[data-update-hash]').value.trim() || null;
     await saveSource();

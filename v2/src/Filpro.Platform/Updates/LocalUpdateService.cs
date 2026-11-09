@@ -42,7 +42,16 @@ public sealed partial class LocalUpdateService : IFilproUpdateService, IDisposab
         return Task.FromResult(_status);
     }, cancellationToken);
 
-    public Task<UpdateOffer> InspectAsync(UpdateSourceRequest request, CancellationToken cancellationToken) => LockedAsync(() =>
+    public Task<UpdateOffer> InspectAsync(UpdateSourceRequest request, CancellationToken cancellationToken)
+    {
+        // Chemin vide : rien n'est lu, et l'état de la mise à jour ne passe pas en échec.
+        ArgumentNullException.ThrowIfNull(request);
+        if (request.Kind is UpdateSourceKind.Folder or UpdateSourceKind.ManualZip && string.IsNullOrWhiteSpace(request.Path))
+            return Task.FromException<UpdateOffer>(MissingSourcePath());
+        return InspectLockedAsync(request, cancellationToken);
+    }
+
+    private Task<UpdateOffer> InspectLockedAsync(UpdateSourceRequest request, CancellationToken cancellationToken) => LockedAsync(() =>
     {
         RequireNoPendingTransaction();
         Publish(_status with { Stage = UpdateStage.Inspecting, Action = "Lecture explicite de la source de mise à jour", ProgressPercent = null, Error = null });
