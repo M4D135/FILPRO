@@ -1,6 +1,6 @@
 # FILPRO V2 — état de livraison et historique
 
-## 10 novembre 2026 — sélection et aperçu de restauration repliables
+## 10 novembre 2026 — 2.0.17 portable livrée, sections repliables
 
 À la demande de David, les blocs « Sélection fichiers + registre » et « En cas
 de doublon à la restauration » sont repliables et fermés à l'ouverture.
@@ -23,9 +23,29 @@ pas une nouvelle qualification Windows. Le correctif `54233e2` passe aussi la CI
 Windows `42771259859` (57 suites, 465 contrôles, aucun ignoré, Evergreen observé).
 
 David demande ensuite une nouvelle livraison et précise que FILPRO reste portable :
-un ZIP à extraire, sans installateur. La version passe à 2.0.17 pour sa CI Windows,
-sa recette et son propre reçu de qualification. La 2.0.16 reste publiée tant que
-ces étapes ne sont pas terminées ; son ZIP et ses preuves restent inchangés.
+un ZIP à extraire, sans installateur. La 2.0.17 est publiée sur la source
+`8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1`, après sa propre CI Windows
+[`42775193124`](https://github.com/M4D135/FILPRO/actions/runs/42775193124)
+(57 suites, 465 contrôles réussis, aucun ignoré, Evergreen observé).
+
+La recette Windows 11 `F217FIXA` valide les huit groupes : 17 étapes natives,
+4 phases complémentaires, 4 scénarios Socle, isolation de la démonstration,
+mise à jour réelle, retour arrière et reprise déterministe idempotente. Huit
+observations supplémentaires dans l'application Windows vérifient les blocs
+repliables, leurs résumés et la conservation des choix non enregistrés.
+Reçu privé sur 278 fichiers et 124 références ; détail dans `docs/VALIDATION.md`.
+
+Livraison : [v2.0.17](https://github.com/M4D135/FILPRO/releases/tag/v2.0.17),
+release `440148999`, tag sur la source ci-dessus. ZIP portable PROD-LIGHT
+`9112d269e53dfda8c6ba4b57f55bfcb897032ea31352426ded0b8cf85ae3b901`,
+53 198 757 octets. Les 279 entrées sont identiques au candidat qualifié, manifeste
+compris. L'API, un nouveau téléchargement et `SHA256SUMS` confirment l'empreinte.
+
+Banc clôturé : réglages rétablis, dix tâches de recette retirées, connexion
+automatique désactivée, arrêt Windows normal. Disques et preuves conservés.
+Aucun point de développement ou de livraison ne reste ouvert dans ce périmètre.
+Windows 10 reste non qualifié ; aucune coupure électrique réelle n'a été exercée.
+La 2.0.16 et ses preuves restent conservées.
 
 ## 9 novembre 2026 — 2.0.16 livrée, qualification Windows 11
 

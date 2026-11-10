@@ -1,5 +1,69 @@
 # Validation FILPRO V2
 
+## Recette du 10 novembre 2026 — 2.0.17 portable PROD-LIGHT, source `8fdadaa1`
+
+Le candidat provient de `8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1` : ZIP
+`4c5f32b83e15dba0a425538a5a7caf387d57e5768ee13c6064150ab046d22b9e`, 278 fichiers,
+EXE `36bd266f7415f21dd7aac8bb0eb3efa8a36e7a040d185437ce608c7afe60b344`.
+La base jetable 0.0.1 est compilée séparément depuis
+`388c4fce0ffe3b6f6e408d7c777aa63315dafb24` ; elle reste privée (ZIP
+`2db1f2c496de95feacfacd8b4c6b8506e1ff484eb5e66f05bc0bedd616776db7`).
+CI Windows [`42775193124`](https://github.com/M4D135/FILPRO/actions/runs/42775193124)
+verte : 57 suites, 465 contrôles réussis, aucun ignoré, page Evergreen observée.
+
+Le run `F217FIXA` utilise une nouvelle fixture Windows 11 Pro (10.0.26100),
+isolée sans carte réseau, en groupe de travail. Son identité, ses comptes et
+sa session opérateur sont liés au prévol réellement observé. Le disque et les
+preuves de la recette précédente restent conservés. La préparation a effectué
+un redémarrage Windows normal. Un ReTrim du volume de test a terminé avec code 0 ;
+son observation a été reprise après expiration du délai du contrôleur, sans
+relancer l'opération.
+
+- Natif : 17 étapes réussies ; annulation, chiffrement, trois politiques de
+  restauration, refus de mauvaise clé et retour à l'état initial.
+- Complément : plain, tamper, repair et rollback réussis ; prévol final conforme.
+- Socle : Evergreen 140 prioritaire, Socle 156 en repli, absence des deux moteurs
+  clairement signalée avec le lien du Socle, `fr.pak` altéré refusé. La valeur de
+  registre Evergreen est rétablie et comparée.
+- Interface : accueil WebView et filiation Evergreen réelle observés ;
+  `desktop.ini` explicitement refusé dans la copie contenant cet intrus.
+- Nouvelle interface : huit observations dans l'application Windows réelle
+  vérifient les deux blocs fermés initialement, le compteur visible, l'ouverture
+  du bon profil par « Voir les logiciels », le choix supplémentaire et son état
+  non enregistré, la conservation de ces informations au repli, l'ouverture
+  indépendante des doublons, leur explication et la conservation du choix au
+  dépliage. Cinq captures UIA brutes et six images sont conservées séparément.
+- Démonstration : sauvegarde simulée de deux profils terminée ; comparaison
+  `filpro.demoStateIdentical` avant/après, réglages, profils et ruches conservés.
+- Mise à jour réelle 0.0.1 → 2.0.17 puis retour arrière : transaction
+  `c315cdc25b1840fa9e04ea130d750986`, trois confirmations Windows observées,
+  états Committed et RolledBack vérifiés, accueils redémarrés observés et réglages
+  inchangés. Le premier dialogue de préparation a expiré sans effet ; l'absence
+  de transaction a été vérifiée avant une nouvelle confirmation. Les traces
+  restent conservées ; la mise à jour n'a été exécutée qu'une fois.
+- Reprise : état `RollingBack` injecté après le déplacement final dans une copie
+  dédiée, véritable worker 2.0.17 exécuté deux fois avec code 0. Journal,
+  inventaires, réglages et transaction originale inchangés. Ce test déterministe
+  n'est pas une coupure électrique réelle.
+
+Les huit groupes passent le validateur sans assouplissement. Le reçu privé
+`windows-qualification.json` est `passed`, PROD-LIGHT, qualification complète dans
+le périmètre Windows 11 : 278 fichiers et 124 références de preuve. SHA-256 :
+`f248ba0435abf30aa2bc30b8bba775c03e15d14e20530076749639d83e9c67e6`.
+Les preuves brutes, journaux privés et captures supplémentaires restent au banc.
+
+Le ZIP portable publié [v2.0.17](https://github.com/M4D135/FILPRO/releases/tag/v2.0.17)
+(release `440148999`, tag sur `8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1`)
+a exactement les mêmes 279 entrées que le candidat, manifeste compris :
+`9112d269e53dfda8c6ba4b57f55bfcb897032ea31352426ded0b8cf85ae3b901`,
+53 198 757 octets. L'API, `SHA256SUMS` et un nouveau téléchargement sont vérifiés.
+Il s'agit d'une archive à extraire, sans installateur.
+
+Le banc est clôturé : réglages d'origine rétablis, dix tâches propres à cette
+recette retirées, connexion automatique désactivée, arrêt Windows normal observé.
+Disques et preuves conservés. Qualification limitée à Windows 11 x64 sur décision
+de David ; Windows 10 reste non testé et non qualifié.
+
 ## Recette du 9 novembre 2026 — 2.0.16 PROD-LIGHT, source `525d177a`
 
 Cette recette porte sur le candidat LIGHT de

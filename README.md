@@ -19,6 +19,8 @@ Pour télécharger les sources d’une version, ouvrir son tag dans la release o
 
 ## Utiliser FILPRO
 
+FILPRO est portable : aucun installateur.
+
 Extraire toute l’archive choisie dans un dossier vide, garder **`FILPRO.exe` et le dossier `wad`
 ensemble**, puis ouvrir `FILPRO.exe` sur le poste Windows x64 concerné. La
 connexion utilise la session Windows courante et la validation UAC. La
