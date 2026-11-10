@@ -5,7 +5,7 @@ import { openDialog } from './kit/index.js';
 import { followOperation } from './operations.js';
 import { primaryLabel, decisionLine } from './native-confirmation.js';
 
-const policies = [['keepBoth','Coexistence — préserver les deux versions'],['keepCurrent','Garder l’actuel'],['useSaved','Rétablir le sauvegardé']];
+const policies = [['keepBoth','Conserver les deux fichiers · registre actuel'],['keepCurrent','Garder l’actuel'],['useSaved','Rétablir le sauvegardé']];
 const eligible = (profile) => profile.loaded === false && profile.migrationSupported !== false && profile.session?.state === 'none' && profile.session?.count === 0 && profile.session?.readStatus === 'complete';
 
 export function mountRestore(main, ctx) {
@@ -14,7 +14,7 @@ export function mountRestore(main, ctx) {
     <div class="workflow-form"><label class="wide">${demo ? 'Magasin fictif' : 'Dossier du magasin'}${demo ? '<select class="input" data-bundle></select>' : '<div class="actions-row"><input class="input mono" type="text" data-bundle autocomplete="off" spellcheck="false"><button class="btn" type="button" data-pick>Parcourir</button></div>'}</label></div>
     <div class="actions-row"><button class="btn" type="button" data-inspect>Lire le manifeste</button></div><div data-store-info role="status"></div></section>
     <section class="card"><div class="card-head"><span class="card-icon">${icon('users')}</span><h2>Correspondances de profils</h2></div><p>Chaque source sélectionnée est associée explicitement à son profil cible. Les profils chargés, courants ou non pris en charge sont refusés.</p><div data-mappings><p class="muted">Lisez d’abord un magasin.</p></div></section>
-    <section class="card"><div class="card-head"><span class="card-icon">${icon('shield')}</span><h2>Réglages et sauvegarde préalable</h2></div><div data-policies></div>
+    <section class="card"><div class="card-head"><span class="card-icon">${icon('shield')}</span><h2>Réglages et sauvegarde préalable</h2></div><p>Si un fichier ou un réglage existe déjà sur le profil cible, choisissez quelle version conserver. « Conserver les deux fichiers » garde les deux versions des fichiers et les valeurs actuelles du registre.</p><div data-policies></div>
     <div class="workflow-form"><label class="wide">Dossier de sauvegarde préalable<input class="input mono" data-prior type="text" autocomplete="off" spellcheck="false"></label><label class="wide">Clé indépendante de la sauvegarde préalable${demo ? ' (fictive, facultative)' : ''}<input class="input mono" data-prior-key type="text" autocomplete="off" spellcheck="false"></label>
     <label class="wide" data-source-key-row hidden>Clé du magasin source<input class="input mono" data-source-key type="text" autocomplete="off" spellcheck="false"></label>
     <label class="check-row wide" data-partial-row hidden><input type="checkbox" class="k-checkbox" data-partial-ack><span>J’ai examiné les omissions annoncées du magasin partiel.</span></label><label class="check-row wide" data-legacy-row hidden><input type="checkbox" class="k-checkbox" data-legacy-ack><span>J’ai examiné les limites du magasin ancien.</span></label></div></section>

@@ -1,5 +1,27 @@
 # FILPRO V2 — état de livraison et historique
 
+## 10 novembre 2026 — sélection et aperçu de restauration repliables
+
+À la demande de David, les blocs « Sélection fichiers + registre » et « En cas
+de doublon à la restauration » sont repliables et fermés à l'ouverture.
+« Voir les logiciels » ouvre la sélection du profil choisi. Le résumé conserve
+le nombre de logiciels inclus et signale les choix partiels, modifications non
+enregistrées, lectures incomplètes ou erreurs même quand le bloc est replié.
+Replier le bloc conserve les choix en cours.
+
+L'ancien titre « Politiques de conflit (aperçu) » est remplacé et expliqué : ce
+sont les décisions prises à la restauration quand une donnée existe déjà sur
+la cible. L'aperçu de l'écran Sauvegarder est indicatif et ne modifie rien.
+Conserver les deux versions concerne les fichiers ; le registre garde les
+valeurs actuelles. Les libellés de Restaurer, Paramètres et de l'aperçu de
+configuration disent la même chose. Les règles du moteur restent inchangées.
+
+Contrôles locaux : 25 tests web réussis ; parcours dans Chromium avec ouverture,
+repli, conservation des brouillons par profil, enregistrement et lecture des
+résumés, aux largeurs 1366 et 800 px. Ces vérifications d'interface ne constituent
+pas une nouvelle qualification Windows. La 2.0.16 reste la version publiée ;
+ce correctif n'est pas ajouté au ZIP déjà diffusé.
+
 ## 9 novembre 2026 — 2.0.16 livrée, qualification Windows 11
 
 David demande de terminer les points restants et limite explicitement la

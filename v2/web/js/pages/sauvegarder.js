@@ -19,7 +19,7 @@ const INVARIANTS = [
 ];
 
 const POLICY_LABEL = {
-  keepBoth: { tone: 'info', label: 'Coexistence (défaut)' },
+  keepBoth: { tone: 'info', label: 'Deux fichiers · registre actuel' },
   keepCurrent: { tone: 'off', label: 'Garder l’actuel' },
   useSaved: { tone: 'ok', label: 'Rétablir le sauvegardé' },
 };
@@ -90,14 +90,17 @@ function backupLayout() {
     <p class="muted">Cochez chaque profil à inclure. « Voir les logiciels » affiche ses choix sans modifier les autres profils.</p>
     <div class="list" data-list="profiles"></div>
   </section>
-  <section class="card reveal spot">
-    <div class="card-head"><span class="card-icon">${icon('object')}</span><h3>Sélection fichiers + registre</h3><span class="meta" data-meta="selection">—</span></div>
+  <details class="card reveal spot backup-disclosure" data-section="selection">
+    <summary class="card-head"><span class="card-icon">${icon('object')}</span><span class="disclosure-title"><strong class="disclosure-heading">Sélection fichiers + registre</strong><span class="muted" data-selection-summary>Lecture des choix…</span></span><span class="meta" data-meta="selection">—</span>${icon('chevronRight', 'disclosure-chevron')}</summary>
     <div data-selection></div>
-  </section>
-  <section class="card reveal spot">
-    <div class="card-head"><span class="card-icon">${icon('shield')}</span><h3>Politiques de conflit (aperçu)</h3><span class="meta">coexistence par défaut</span></div>
+  </details>
+  <details class="card reveal spot backup-disclosure" data-section="conflict">
+    <summary class="card-head"><span class="card-icon">${icon('shield')}</span><span class="disclosure-title"><strong class="disclosure-heading">En cas de doublon à la restauration</strong><span class="muted">Aperçu indicatif · aucun effet sur la sauvegarde</span></span>${icon('chevronRight', 'disclosure-chevron')}</summary>
+    <p>Un conflit apparaît lorsqu’un fichier ou un réglage sauvegardé existe déjà dans le profil cible. Les décisions se prennent dans l’onglet <strong>Restaurer</strong>, après le choix du magasin.</p>
+    <ul class="conflict-help"><li><strong>Conserver les deux fichiers</strong> : garder les deux versions des fichiers ; pour le registre, garder les valeurs actuelles.</li><li><strong>Garder l’actuel</strong> : en cas de doublon, conserver le fichier ou le réglage déjà présent sur le profil cible.</li><li><strong>Rétablir le sauvegardé</strong> : en cas de doublon, reprendre la version de la sauvegarde.</li></ul>
+    <p class="muted">L’aperçu ci-dessous illustre le premier choix pour les logiciels détectés. Il ne signale pas des conflits déjà trouvés et ne définit pas votre futur plan de restauration.</p>
     <div data-conflict></div>
-  </section>
+  </details>
   ${optionsCard()}
   <p class="callout warn" data-plan-status role="status" hidden></p><div class="actions-row"><button class="btn primary" type="button" data-act="plan">${icon('disk')}Préparer une sauvegarde</button></div>`;
 }
@@ -171,6 +174,15 @@ function updateBackupState(panel, state) {
   panel.querySelectorAll('[data-review-sid]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.reviewSid === state.sid)));
   const profile = state.profiles.find((p) => p.sid === state.sid);
   panel.querySelector('[data-meta="selection"]').textContent = profile?.account || 'Aucun profil affiché';
+  const draft = state.drafts.get(state.sid);
+  const summary = panel.querySelector('[data-selection-summary]');
+  const included = draft ? [...draft.choices.values()].filter((value) => value === true).length : 0;
+  const partial = draft ? [...draft.choices.values()].filter((value) => value === null).length : 0;
+  summary.textContent = !profile ? 'Aucun profil affiché' : !draft ? 'Choix non disponibles — déplier pour voir l’état de la lecture' :
+    `${formatNumber(included)} logiciel(s) inclus sur ${formatNumber(draft.choices.size)}` +
+    (partial ? ` · ${formatNumber(partial)} choix partiel(s) à préciser` : '') +
+    (draft.reading ? ' · Lecture en cours…' : draft.saving ? ' · Enregistrement en cours…' : draft.error ? ` · ${draft.error}` :
+      !selectionComplete(draft.inventory) ? ' · Inventaire incomplet' : draft.dirty ? ' · Modifications non enregistrées' : ' · Choix relus');
 }
 
 async function saveSelection(panel, ctx, state) {
@@ -236,8 +248,7 @@ function renderConflict(host, preview) {
       <div class="sub mono">${formatNumber((g.files ?? []).length)} fichier(s) · ${formatNumber((g.registry ?? []).length)} clé(s)</div></div>
       ${pill(s.tone, s.label, { size: 'sm' })}</div>`;
   }).join('');
-  host.innerHTML = `<div class="callout info">${icon('shield')}<div><pre class="plan">${esc(preview.summary ?? '')}</pre></div></div>
-    <div class="list">${rows || empty('Aucun réglage spécifique.')}</div>`;
+  host.innerHTML = `<div class="list">${rows || empty('Aucun réglage spécifique.')}</div>`;
 }
 
 function planSummary(plan) {
@@ -397,13 +408,19 @@ async function loadProfiles(main, state) {
     const first = initial[0];
     initial.forEach((profile) => state.selectedSids.add(profile.sid));
     renderProfileList(list, inventory, state);
-    const select = (sid) => {
+    const select = (sid, review = false) => {
       state.sid = sid;
       updateBackupState(main, state);
       loadSelection(main, state, state.sid);
+      if (review) {
+        const section = main.querySelector('[data-section="selection"]');
+        section.open = true;
+        section.querySelector('summary').focus({ preventScroll: true });
+        section.scrollIntoView({ block: 'start' });
+      }
     };
     list.querySelectorAll('[data-review-sid]').forEach((button) => {
-      button.addEventListener('click', () => select(button.dataset.reviewSid));
+      button.addEventListener('click', () => select(button.dataset.reviewSid, true));
     });
     list.querySelectorAll('[data-include-sid]').forEach((box) => {
       box.addEventListener('change', () => {
@@ -434,7 +451,7 @@ export function render(main, ctx) {
       <span class="glow-ring" aria-hidden="true"></span>
       <div class="eyebrow">${icon('shield')}<span>${ctx.session?.demonstration ? 'Démonstration — données fictives' : 'Plans contrôlés avant exécution'}</span></div>
       <h1>Sauvegarder et restaurer</h1>
-      <p class="lead">Choisissez les profils à sauvegarder, vérifiez leurs sélections fichiers + registre et l’aperçu des politiques de conflit.
+      <p class="lead">Choisissez les profils à sauvegarder, puis dépliez leurs sélections fichiers + registre si vous souhaitez les modifier.
         La préparation longue commence après votre confirmation. Le bilan distingue réussite, résultat partiel et arrêt.</p>
     </section>
     <div data-tabs></div>

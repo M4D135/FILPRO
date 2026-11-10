@@ -51,6 +51,10 @@ seul après 2 minutes. Sous le même compte, rien de cela ne s'applique.
 Sauvegarder et restaurer
 Choisir les profils, examiner les groupes de fichiers et de registre, puis lire
 le plan. Choisir le support et, si nécessaire, un fichier clé hors du magasin.
+Les blocs « Sélection fichiers + registre » et « En cas de doublon à la restauration »
+sont repliés à l'ouverture. Cliquer sur leur en-tête pour les ouvrir ou les refermer.
+« Voir les logiciels » ouvre directement la sélection du profil choisi. Le résumé
+reste visible quand le bloc est replié, y compris les modifications non enregistrées.
 Confirmer seulement après la revue des exclusions et de l'espace disponible.
 Les liens et jonctions découverts dans AppData ne sont ni suivis ni proposés :
 leurs cibles ne sont pas incluses par ces liens. Leur présence ne bloque pas
@@ -59,7 +63,13 @@ traverse un lien reste refusé ; les derniers choix sont conservés jusqu'à
 résolution du problème. Une racine de profil ou AppData liée reste refusée.
 Le suivi annonce les mesures disponibles. « Arrêt demandé » attend la fin réelle
 du processus et du nettoyage. Une opération partielle conserve son reçu.
-Pour restaurer, choisir un magasin, les correspondances des comptes et les conflits.
+Pour restaurer, choisir un magasin, les correspondances des comptes et le traitement
+des fichiers ou réglages déjà présents sur le profil cible. C'est ce qu'on appelle
+un conflit : garder l'actuel, rétablir le sauvegardé, ou conserver les deux fichiers.
+Ce dernier choix conserve les valeurs actuelles du registre : deux valeurs ne
+peuvent pas occuper la même entrée. Dans Sauvegarder, le bloc correspondant n'est
+qu'un aperçu indicatif des logiciels détectés, sans effet sur la sauvegarde ; les
+décisions se prennent dans Restaurer après la lecture du magasin.
 La sauvegarde préalable doit être complète avant les premières écritures.
 La réparation conserve l'ancien profil ; une connexion volontaire et la restauration
 sont des étapes distinctes. Ne pas reconnecter le compte pendant l'opération.

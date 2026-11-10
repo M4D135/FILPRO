@@ -7,7 +7,7 @@
 .filpro-shell .page.analyser > .hero + .grid,
 .filpro-shell .page.sauvegarder > .hero + [data-tabs] { margin-top: var(--s6); }
 .filpro-shell .todo-page > section + section,
-.filpro-shell .sauvegarder .k-tabpanel > section + section { margin-top: var(--s5); }
+.filpro-shell .sauvegarder .k-tabpanel > :is(section, details) + :is(section, details) { margin-top: var(--s5); }
 .filpro-shell .analyser .card.nested + .card.nested { margin-top: var(--s4); }
 
 /* Garder les commandes lisibles dans une fenêtre basse ; le rail reste défilable. */

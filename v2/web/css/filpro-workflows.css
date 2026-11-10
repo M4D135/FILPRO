@@ -53,6 +53,19 @@
 .filpro-shell .sauvegarder pre.plan { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
 .filpro-shell .sauvegarder .list-row .sub { overflow-wrap: anywhere; }
 .filpro-shell .sauvegarder .actions-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.filpro-shell .backup-disclosure { scroll-margin-top: var(--s4); }
+.filpro-shell .backup-disclosure > summary { cursor: pointer; list-style: none; margin-bottom: 0; }
+.filpro-shell .backup-disclosure > summary::-webkit-details-marker { display: none; }
+.filpro-shell .backup-disclosure > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: var(--r); }
+.filpro-shell .backup-disclosure[open] > summary { margin-bottom: var(--s4); }
+.filpro-shell .backup-disclosure .disclosure-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.filpro-shell .backup-disclosure .disclosure-heading { display: block; font-size: var(--fs-subtitle); }
+.filpro-shell .backup-disclosure .disclosure-title > .muted { display: block; font-size: var(--fs-small); margin-top: var(--s1); }
+.filpro-shell .backup-disclosure .meta { max-width: 35%; overflow-wrap: anywhere; }
+.filpro-shell .backup-disclosure .disclosure-chevron { flex: none; }
+.filpro-shell .backup-disclosure[open] .disclosure-chevron { transform: rotate(90deg); }
+.filpro-shell .backup-disclosure .conflict-help { margin: var(--s3) 0; padding-left: var(--s5); }
+.filpro-shell .backup-disclosure .conflict-help li + li { margin-top: var(--s2); }
 @media (max-width: 1100px) { .workflow-columns { grid-template-columns: minmax(220px, .8fr) minmax(300px, 1.2fr); } .filpro-demo-control span { max-width: 140px; overflow: hidden; text-overflow: ellipsis; } }
 @media (max-width: 900px) {
   /* Avec le menu déplié, garder l'identité sur une ligne complète et les commandes juste en dessous. */

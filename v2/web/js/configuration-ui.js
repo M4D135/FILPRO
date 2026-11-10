@@ -7,9 +7,9 @@ import { primaryLabel, decisionLine } from './native-confirmation.js';
 export const SETTING_LABELS = {
   theme: 'Thème', motion: 'Animations', navigationCollapsed: 'Navigation repliée', autoSelectCurrentTask: 'Sélectionner la tâche en cours',
   notifyOnCompletion: 'Notification de fin', recommendedSelection: 'Réglages recommandés', migApp: 'Ancien réglage MigApp (désactivé)',
-  vss: 'Instantané VSS', continueOnError: 'Continuer après une erreur', encrypted: 'Chiffrement', conflictPolicy: 'Politique de conflits',
+  vss: 'Instantané VSS', continueOnError: 'Continuer après une erreur', encrypted: 'Chiffrement', conflictPolicy: 'Doublons à la restauration',
 };
-const VALUES = { true: 'Oui', false: 'Non', True: 'Oui', False: 'Non', system: 'Suivre Windows', light: 'Clair', dark: 'Sombre', contrast: 'Contraste élevé', full: 'Riches', reduced: 'Réduites', keepBoth: 'Coexistence', keepCurrent: 'Garder l’actuel', useSaved: 'Rétablir le sauvegardé' };
+const VALUES = { true: 'Oui', false: 'Non', True: 'Oui', False: 'Non', system: 'Suivre Windows', light: 'Clair', dark: 'Sombre', contrast: 'Contraste élevé', full: 'Riches', reduced: 'Réduites', keepBoth: 'Conserver les deux fichiers · registre actuel', keepCurrent: 'Garder l’actuel', useSaved: 'Rétablir le sauvegardé' };
 export function configurationChanged(state) {
   if (state?.settings) window.dispatchEvent(new CustomEvent('filpro:configuration', { detail: state }));
 }

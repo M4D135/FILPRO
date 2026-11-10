@@ -12,7 +12,7 @@ function layout(demo) {
     <div data-capability-notices></div><div data-feedback role="status"></div><section class="card reveal" data-config aria-busy="true"><div class="card-head"><span class="card-icon">${icon('settings')}</span><h2>Réglages de FILPRO</h2></div><div data-bootstrap></div>
     <form class="workflow-form" data-settings><label>Thème<select class="input" name="theme">${options([['system','Suivre Windows'],['light','Clair'],['dark','Sombre'],['contrast','Contraste élevé']])}</select></label>
     <label>Animations<select class="input" name="motion">${options([['system','Suivre Windows'],['full','Riches'],['reduced','Réduites']])}</select></label>
-    <label class="wide">Conflits de restauration<select class="input" name="conflictPolicy">${options([['keepBoth','Coexistence : préserver les deux versions'],['keepCurrent','Garder les valeurs actuelles'],['useSaved','Rétablir les valeurs sauvegardées']])}</select></label>
+    <label class="wide">Doublons à la restauration<select class="input" name="conflictPolicy">${options([['keepBoth','Conserver les deux fichiers · registre actuel'],['keepCurrent','Garder les valeurs actuelles'],['useSaved','Rétablir les valeurs sauvegardées']])}</select></label>
     ${booleanFields.map((key) => `<label class="check-row"><input class="k-checkbox" type="checkbox" name="${key}"><span>${esc(SETTING_LABELS[key])}</span></label>`).join('')}
     <div class="wide actions-row"><button class="btn primary" type="submit" data-save disabled>Enregistrer les réglages</button><span class="muted" data-dirty></span></div></form></section>
     <section class="card reveal"><div class="card-head"><span class="card-icon">${icon('sparkles')}</span><h2>Démonstration</h2></div>
