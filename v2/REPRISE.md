@@ -19,8 +19,13 @@ configuration disent la même chose. Les règles du moteur restent inchangées.
 Contrôles locaux : 25 tests web réussis ; parcours dans Chromium avec ouverture,
 repli, conservation des brouillons par profil, enregistrement et lecture des
 résumés, aux largeurs 1366 et 800 px. Ces vérifications d'interface ne constituent
-pas une nouvelle qualification Windows. La 2.0.16 reste la version publiée ;
-ce correctif n'est pas ajouté au ZIP déjà diffusé.
+pas une nouvelle qualification Windows. Le correctif `54233e2` passe aussi la CI
+Windows `42771259859` (57 suites, 465 contrôles, aucun ignoré, Evergreen observé).
+
+David demande ensuite une nouvelle livraison et précise que FILPRO reste portable :
+un ZIP à extraire, sans installateur. La version passe à 2.0.17 pour sa CI Windows,
+sa recette et son propre reçu de qualification. La 2.0.16 reste publiée tant que
+ces étapes ne sont pas terminées ; son ZIP et ses preuves restent inchangés.
 
 ## 9 novembre 2026 — 2.0.16 livrée, qualification Windows 11
 
