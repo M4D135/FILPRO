@@ -27,6 +27,9 @@ fournie avec ce pack » au démarrage alors que toutes ses lignes étaient « Id
   seconde mise à jour aux mêmes défauts, 2.0.19 s'ouvre sans aperçu, aussi après une relance, sans
   réécrire `configuration-v2.json` ; défauts changés à la main, l'aperçu revient. Pack PROD-LIGHT
   `edde0434…`, mêmes fichiers que le candidat recetté. Détail dans `docs/VALIDATION.md`.
+- Publiée sur le « Oui, publie » de David : [v2.0.19](https://github.com/M4D135/FILPRO/releases/tag/v2.0.19),
+  release `443236149`, tag sur `a1952adf`, ZIP et `SHA256SUMS` vérifiés par l'API et un nouveau
+  téléchargement. C'est désormais la dernière release ; v2.0.18 reste en place.
 
 ## 12 novembre 2026 — 2.0.18 : recette F218FIXA, pack et publication
 

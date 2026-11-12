@@ -49,7 +49,13 @@ la main (`system` → `dark`), la relance présente l'aperçu avec Thème « Rem
 
 Pack PROD-LIGHT construit depuis l'entrée du candidat : mêmes 287 entrées, manifeste
 compris, ZIP `edde043410550549727db07356e7f5e6f8dbcc9cdb4dc4ebe3dc9a1dc8afc7ac`,
-53 229 930 octets. Non publié : la publication attend l'accord de David.
+53 229 930 octets.
+
+Publiée le 12 novembre 2026 sur le « Oui, publie » de David :
+[v2.0.19](https://github.com/M4D135/FILPRO/releases/tag/v2.0.19), release `443236149`,
+tag sur `a1952adf`. Le ZIP et `SHA256SUMS` sont vérifiés de trois façons : empreinte
+donnée par l'API, nouveau téléchargement contrôlé par `shasum -c`, notes identiques au
+fichier source.
 
 ## Recette du 12 novembre 2026 — 2.0.18 PROD-LIGHT, source `6c8980f1`
 
