@@ -1,5 +1,25 @@
 # FILPRO V2 — état de livraison et historique
 
+## 12 novembre 2026 — 2.0.18 : recette F218FIXA, pack et publication
+
+Demandes de David : « Oui, prépare-la », puis « go publish etc ne l'attend pas va au
+bout ». La 2.0.18 (`6c8980f1d02ac71ab09021d7e8663215fc290887`) réunit la configuration
+par défaut gardée par les mises à jour (`bdefd18`) et l'écran Paramètres repris de
+Domenia 2 (`6c8980f`).
+
+- CI Windows `43196906324` : 57 suites, 469 contrôles réussis.
+- Recette VM `F218FIXA` validée (huit contrôles), reçu `69e92f67…` ; détail dans
+  `docs/VALIDATION.md`. Le transfert de `wad\config\deployment-defaults.json` par une
+  vraie mise à jour a été observé sur la VM (même SHA-256 avant et après).
+- Pack PROD-LIGHT `498b3200…`, mêmes 287 entrées que le candidat testé.
+- Pour la recette, l'écran Paramètres s'ouvre par section : cliquer d'abord la section
+  du rail (« Mises à jour Dossier, ZIP, version », « Démonstration Profils fictifs et
+  scénarios »), après l'avoir fait défiler si elle est hors de la vue. Le champ du
+  chemin s'appelle désormais « Chemin de la source ».
+- Les releases v2.0.13 à v2.0.16 et leurs tags ont été retirés de GitHub le 12 novembre
+  2026 ; les liens vers elles sont remplacés par leur nom dans ce fichier et dans
+  `docs/VALIDATION.md`.
+
 ## 12 novembre 2026 — écran Paramètres repris de Domenia 2
 
 Demande de David (12 novembre 2026) : « le menu configuration est super dans domenia,
@@ -171,7 +191,7 @@ arrière, reprise déterministe et idempotence. Les huit groupes sont validés ;
 reçu privé sur 278 fichiers et 124 preuves. Détail dans `docs/VALIDATION.md`.
 
 Publiée sur le « go tout terminer » de David :
-[v2.0.16](https://github.com/M4D135/FILPRO/releases/tag/v2.0.16), release `439729889`,
+`v2.0.16` (release et tag retirés de GitHub le 12 novembre 2026), release `439729889`,
 tag sur la source ci-dessus. ZIP PROD-LIGHT
 `888a6553e50fa9f6f434bd117430283b68be5382081c73c40287f57e64faf213` et `SHA256SUMS`
 vérifiés par l’API et un nouveau téléchargement. Les fichiers du ZIP sont
@@ -209,7 +229,7 @@ Préparée le 9 novembre 2026 sur `c87c677a` : CI Windows `42673322691` verte (5
 `4e846357…` identique au candidat recetté ; le détail est dans `docs/VALIDATION.md`.
 
 Publiée le 9 novembre 2026 sur l’accord de David (« Oui, publie ») :
-[v2.0.15](https://github.com/M4D135/FILPRO/releases/tag/v2.0.15) (identifiant
+`v2.0.15` (release et tag retirés de GitHub le 12 novembre 2026) (identifiant
 `439594413`, tag sur `c87c677a`), ZIP `4e846357…` et `SHA256SUMS`, vérifiés par l’API et
 un nouveau téléchargement. Reste ouvert : un lien ou une jonction sous AppData dont le nom
 est représentable rend toujours l’inventaire partiel.
@@ -248,7 +268,7 @@ compilation sans avertissement ; 25 tests web ; suites `SituationAdmissionTests`
 `NativeConfirmationTests`, `SessionAccessTests` et `ConfirmationBindingTests` sont les
 mêmes qu’avant, moins les deux tests retirés.
 
-Publiée le 9 novembre 2026 : [v2.0.14](https://github.com/M4D135/FILPRO/releases/tag/v2.0.14)
+Publiée le 9 novembre 2026 : `v2.0.14` (release et tag retirés de GitHub le 12 novembre 2026)
 (identifiant `439078646`, tag sur `9f8ca177`), ZIP `6cf2385b…` et `SHA256SUMS`, vérifiés
 par l’API et un nouveau téléchargement. CI Windows `42602008887` verte (57 suites, 459
 contrôles). Recette VM `F214FIXA` validée et reçu émis ; le détail est dans
@@ -261,7 +281,7 @@ Décision de David (9 novembre 2026) : ne garder que la dernière version. M4D13
 est recréé, public, à partir d’un seul commit, `e66757d1`. Son arbre reprend `8fe99e5f`
 avec 11 remplacements de `CNAMTS\Administrateur` par `LABO\Administrateur` : 10 dans
 `docs/VALIDATION.md` et 1 dans `docs/reprise/RECETTE-NATIVE-20261026.md`. La release
-[v2.0.13](https://github.com/M4D135/FILPRO/releases/tag/v2.0.13) est la seule :
+`v2.0.13` (release et tag retirés de GitHub le 12 novembre 2026) est la seule :
 identifiant `438824426`, tag sur `e66757d1`, mêmes fichiers (ZIP `ad430349…` et
 `SHA256SUMS`).
 
@@ -287,7 +307,7 @@ est dans `docs/VALIDATION.md`. Le validateur de recette exigeait encore la suite
 `UpdateSourcePreferenceTests` et `ExecutionBridgeTests`, et tous les groupes passent. Le
 reçu de qualification PROD-LIGHT est émis pour `36e0d035`.
 
-Release publique [v2.0.13](https://github.com/M4D135/FILPRO/releases/tag/v2.0.13),
+Release publique `v2.0.13` (release et tag retirés de GitHub le 12 novembre 2026),
 publiée sur décision de David (9 novembre 2026) d’abord sur `36e0d035` (identifiant
 `438821123`), puis à l’identique sur `e66757d1` (identifiant `438824426`) à la
 recréation du dépôt :

@@ -1,5 +1,61 @@
 # Validation FILPRO V2
 
+## Recette du 12 novembre 2026 — 2.0.18 PROD-LIGHT, source `6c8980f1`
+
+Le candidat provient de `6c8980f1d02ac71ab09021d7e8663215fc290887` : ZIP
+`c30d39ab7ca73f2df490bf46eab528b9a105838ece55084419c033b53535f492`, 286 fichiers,
+EXE `7a8e43563c0c6a41c53f7784402524570196160ab330424a7c1a86ec7264844b`.
+La base jetable 0.0.1 est compilée depuis `27fee58bc032d84a0568f83c96639a3d4393007d`
+(même code, version 0.0.1) ; elle reste privée (ZIP
+`6af484a00c269e3e08a12b97216ed9d988c0b7a38d5c0ba89c85782cf84b9e58`, EXE `6ccbd06a…`).
+CI Windows [`43196906324`](https://github.com/M4D135/FILPRO/actions/runs/43196906324)
+verte : 57 suites, 469 contrôles réussis, aucun ignoré, commit exact prouvé,
+page Evergreen observée.
+
+Le run `F218FIXA` utilise un disque de recouvrement neuf sur la base Windows 11 Pro
+(10.0.26100), sans carte réseau, en groupe de travail ; le coordinateur du banc a défini
+le domaine (XML `084bfb56`), créé le disque et démarré la VM. Prévol lié
+`b377a167…`. Écarts d'outillage sans effet sur le produit : la session de profil A a été
+fermée par le redémarrage suivant au lieu d'une déconnexion (guillemets de l'aide QGA,
+corrigée) ; le kit natif a été compilé avec le SDK .NET 10.0.401 du Mac, le chemin par
+défaut du générateur n'existant plus.
+
+- Natif : 17 étapes réussies, codes de sortie tous nuls.
+- Complément : plain, tamper, repair et rollback réussis ; prévols conformes.
+- Socle : Evergreen 140 prioritaire, Socle 156 en repli, absence des deux moteurs
+  signalée avec le lien du Socle, `fr.pak` altéré refusé ; valeur Evergreen rétablie.
+- Interface : accueil WebView et filiation Evergreen observés ; `desktop.ini` refusé
+  avec son nom.
+- Nouvel écran Paramètres dans l'application Windows réelle : en-tête et quatre tuiles,
+  rail des six sections (ouverture de Démonstration, de Mises à jour et de Configuration
+  à diffuser), carte des scénarios en démonstration (issue, compteur, liens), section
+  Mises à jour hors démonstration avant et après la mise à jour (« Version 2.0.18 —
+  Nouveau démarrage confirmé »). Aucun bandeau de compte ouvert ni d'inventaire partiel.
+- Démonstration : sauvegarde simulée de deux profils terminée ;
+  `filpro.demoStateIdentical` avant/après.
+- Mise à jour réelle 0.0.1 → 2.0.18 puis retour arrière : transaction
+  `3cb9dabfdfe34826a7f65160c08897ea`, trois confirmations Windows observées, états
+  Committed et RolledBack vérifiés, EXE candidat puis EXE de base relancés.
+- Reprise : état `RollingBack` injecté dans une copie dédiée, véritable worker 2.0.18
+  exécuté, `passed`. Test déterministe, pas une coupure électrique réelle.
+
+Les huit groupes passent le validateur sans assouplissement. Reçu privé
+`windows-qualification.json` : `passed`, PROD-LIGHT, qualification complète dans le
+périmètre Windows 11, 286 fichiers et 124 références de preuve. SHA-256 :
+`69e92f6774f1919a8dbb78ca1598ce73ff3e8fa8a5629982529cca90dc13dbe5`.
+
+Observation supplémentaire, après la collecte des preuves : sur la base 0.0.1 revenue,
+« Définir comme configuration par défaut » (confirmation Windows) écrit
+`wad\config\deployment-defaults.json` (431 octets, `ebb4f96a…`). Une seconde mise à jour
+vers 2.0.18 (transaction `a11e52a13f674da1904d7dcadeb3a64b`) laisse ce fichier identique
+dans la nouvelle version, octet pour octet. Au démarrage, FILPRO présente la
+« Configuration fournie avec ce pack » ; « Garder mes réglages » ferme l'aperçu et
+revient à l'accueil.
+
+Pack PROD-LIGHT construit depuis l'entrée du candidat : mêmes 287 entrées, manifeste
+compris, ZIP `498b320014368b9bd584c9ea52f2b694de17d98c96ac88ca243650705b790dbc`,
+53 229 738 octets.
+
 ## Recette du 10 novembre 2026 — 2.0.17 portable PROD-LIGHT, source `8fdadaa1`
 
 Le candidat provient de `8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1` : ZIP
@@ -110,7 +166,7 @@ Deux confirmations expirées sans effet ont été reprises avec une fenêtre fra
 Les tentatives précédentes restent archivées ; aucun essai natif ni aucune
 installation de mise à jour n’a été rejoué.
 
-Le pack publié [v2.0.16](https://github.com/M4D135/FILPRO/releases/tag/v2.0.16)
+Le pack publié `v2.0.16` (release et tag retirés de GitHub le 12 novembre 2026)
 (release `439729889`, tag sur `525d177ab808b6de49d349b77abe9496a3fe74e3`)
 a exactement le même contenu que le candidat, manifeste compris : ZIP
 `888a6553e50fa9f6f434bd117430283b68be5382081c73c40287f57e64faf213`,
