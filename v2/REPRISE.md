@@ -1,5 +1,47 @@
 # FILPRO V2 — état de livraison et historique
 
+## 12 novembre 2026 — configuration par défaut conservée par la mise à jour (`bdefd18`)
+
+Question de David : pourquoi ne pas faire la configuration par défaut comme pour GLPI,
+au lieu de régénérer un pack entier ? FILPRO écrivait déjà un seul fichier,
+`wad\config\deployment-defaults.json`, dans le dossier en place, sans toucher au
+manifeste des binaires. Mais la mise à jour installait exactement le contenu du ZIP
+officiel et seul le Socle suivait : le fichier disparaissait de la nouvelle version.
+Sur sa demande (« Oui, aligne », 12 novembre 2026), `bdefd18` aligne FILPRO sur
+GLPI Pilot :
+
+- la préparation recopie le fichier du dossier dans la nouvelle version quand le ZIP
+  n’en a pas, relu sous son empreinte et son schéma, puis revalide la préparation ;
+  le journal de transaction attend cette empreinte ;
+- un ZIP qui apporte une autre configuration par défaut est refusé à la préparation
+  (`update.defaults`) ; la même est acceptée ; sans fichier dans le dossier, celui du
+  ZIP est gardé comme avant ;
+- l’installation s’arrête avant tout remplacement si le fichier du dossier a changé
+  depuis la préparation, comme pour le Socle ;
+- le retour arrière remet l’ancien dossier, fichier compris.
+
+Le message du bouton et les guides ne demandent plus de régénérer le pack : le dossier
+configuré se diffuse tel quel, et seule une diffusion en ZIP impose de régénérer
+l’archive et `SHA256SUMS`.
+
+Limites :
+- la mise à jour est préparée par la version installée : le passage de la 2.0.17 à la
+  version suivante perd encore le fichier, à redéfinir une fois après ;
+- l’identité des défauts fournis combine manifeste et empreinte (décision du
+  25 octobre) : après chaque mise à jour, les comptes existants revoient une fois
+  l’aperçu garder/appliquer ;
+- un retour arrière après avoir redéfini les défauts dans la nouvelle version reste
+  refusé, comme avant.
+
+Contrôles : compilation sans avertissement sur le Mac ; `LightUpdateTests` (4 nouveaux
+tests), `UpdateTransactionTests`, `ConfigurationStoreTests`, `PackIntegrityTests`,
+`UpdateSourcePreferenceTests`, `SimulationWorldTests` et `ConfirmationSheetsTests`
+verts ; sans le correctif, deux des nouveaux tests échouent. Relecture du Spark : aucun
+défaut. CI Windows [`43185890099`](https://github.com/M4D135/FILPRO/actions/runs/43185890099)
+verte sur `bdefd189` : 57 suites, 469 contrôles réussis, aucun ignoré, page Evergreen
+observée ; les 4 nouveaux tests y passent, dont celui réservé à Windows. Pas de
+nouvelle version, pas de recette VM, rien de publié.
+
 ## 10 novembre 2026 — 2.0.17 portable livrée, sections repliables
 
 À la demande de David, les blocs « Sélection fichiers + registre » et « En cas
