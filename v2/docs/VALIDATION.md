@@ -114,7 +114,7 @@ compris, ZIP `498b320014368b9bd584c9ea52f2b694de17d98c96ac88ca243650705b790dbc`,
 53 229 738 octets.
 
 Publiée le 12 novembre 2026 sur le « go publish » de David :
-[v2.0.18](https://github.com/M4D135/FILPRO/releases/tag/v2.0.18), release `443009751`,
+`v2.0.18` (release et tag retirés de GitHub le 12 novembre 2026), release `443009751`,
 tag sur `6c8980f1`. Le ZIP et `SHA256SUMS` sont vérifiés de trois façons : empreinte
 donnée par l'API, nouveau téléchargement contrôlé par `shasum -c`, notes identiques au
 fichier source.
