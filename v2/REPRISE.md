@@ -16,8 +16,9 @@ fournie avec ce pack » au démarrage alors que toutes ses lignes étaient « Id
   une `Win32Exception` qui ferme FILPRO au démarrage, un enregistrement refusé comme périmé après une
   erreur passagère, et des copies de sauvegarde orphelines à chaque lecture. Elle est abandonnée.
 - Tests ajoutés à `ConfigurationStoreTests` : `DefautsIdentiquesAuxReglagesNeDemandentRienEtRestentVus`
-  et `MiseAJourAvecLesMemesDefautsNeReposeRien` (lecture sans écriture, octet pour octet). Compilation
-  sans avertissement sur le Mac ; les tests tournent dans la CI Windows.
+  et `MiseAJourAvecLesMemesDefautsNeReposeRien` (lecture sans écriture, octet pour octet). CI Windows
+  `43238028162` verte sur `e612281` : 57 suites, 471 contrôles réussis (les deux nouveaux compris),
+  commit exact prouvé.
 - La démonstration ne change pas : sa configuration d'exemple diffère des réglages.
 - Pas encore livré : à recetter en VM pour une 2.0.19, après toutes les modifications.
 
