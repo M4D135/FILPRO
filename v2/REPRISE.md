@@ -20,7 +20,8 @@ fournie avec ce pack » au démarrage alors que toutes ses lignes étaient « Id
   `43238028162` verte sur `e612281` : 57 suites, 471 contrôles réussis (les deux nouveaux compris),
   commit exact prouvé.
 - La démonstration ne change pas : sa configuration d'exemple diffère des réglages.
-- Pas encore livré : à recetter en VM pour une 2.0.19, après toutes les modifications.
+- Sur la demande de David (« Oui, prépare-la », 12 novembre 2026), la version passe à 2.0.19 pour la
+  CI Windows, la recette VM et le pack ; la publication attend son accord.
 
 ## 12 novembre 2026 — 2.0.18 : recette F218FIXA, pack et publication
 
