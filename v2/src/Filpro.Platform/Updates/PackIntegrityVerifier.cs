@@ -164,6 +164,22 @@ public static class PackIntegrityVerifier
         }
     }
 
+    /// <summary>Recopie dans la préparation la configuration par défaut de l'installation, relue sous son empreinte et son schéma.</summary>
+    internal static async Task CopyDeploymentDefaultsAsync(string source, string destination, string sha256, CancellationToken cancellationToken)
+    {
+        ConfigurationFileIO.NoLinks(source); ConfigurationFileIO.NoLinks(destination);
+        var bytes = ConfigurationFileIO.Read(Path.Combine(source, PackManifestCodec.DefaultsPath), ConfigurationCodec.MaximumBytes);
+        if (ConfigurationFileIO.Hash(bytes) != sha256)
+            throw new FilproOperationException("update.changed", "La configuration par défaut de l'installation a changé pendant la préparation. Aucune installation n'a été remplacée.");
+        _ = ConfigurationCodec.Decode(bytes);
+        var output = Path.Combine(destination, PackManifestCodec.DefaultsPath);
+        ConfigurationFileIO.NoLinks(output); ConfigurationFileIO.FileSystem.CreateDirectories(Path.GetDirectoryName(output)!);
+        using var targetLease = ConfigurationFileIO.FileSystem.HoldDirectory(Path.GetDirectoryName(output)!);
+        await using var writer = new FileStream(output, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous | FileOptions.WriteThrough);
+        await writer.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+        writer.Flush(true);
+    }
+
     private static async Task CopyFileAsync(string source, string destination, string relative, long maximum, string? expectedSha256,
         FilproOperationException mismatch, Action<long>? copied, CancellationToken cancellationToken)
     {

@@ -150,7 +150,7 @@ public sealed class LocalConfigurationService : IFilproConfigurationService, IDi
         }
         _previews.Remove(previewId);
         return new(false, await StateAsync(document, [], cancellationToken).ConfigureAwait(false), pending.SourcePath, backup,
-            $"Défauts partageables écrits dans le pack {pack.Manifest.Flavor}. Le manifeste des binaires reste intact ; le ZIP distribué doit être régénéré avec sa somme SHA-256.");
+            $"Défauts partageables écrits dans le pack {pack.Manifest.Flavor}. Le manifeste des binaires reste intact et les mises à jour de ce dossier conservent ces défauts. Pour diffuser ce dossier en ZIP, régénérer le ZIP et sa somme SHA-256.");
     }, cancellationToken);
 
     public Task<ConfigurationResult> DecideBootstrapAsync(string previewId, bool apply, bool confirmed, CancellationToken cancellationToken) =>

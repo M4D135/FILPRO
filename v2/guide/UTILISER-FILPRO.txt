@@ -92,8 +92,9 @@ l'aperçu permet de garder les siens ou d'appliquer ceux du pack après sauvegar
 Une configuration fournie invalide est ignorée et signalée. Les binaires restent
 vérifiés. L'export/import partage uniquement les préférences autorisées : aucun
 chemin, compte, sélection personnelle, jeton ou historique.
-« Définir comme configuration par défaut » concerne les deux éditions de production. Après
-modification, le diffuseur doit régénérer le ZIP et sa somme SHA-256.
+« Définir comme configuration par défaut » concerne les deux éditions de production. Le
+fichier est écrit dans le dossier de FILPRO, qui se diffuse tel quel ; une mise à jour
+le garde. Pour diffuser en ZIP, régénérer le ZIP et sa somme SHA-256.
 Les modèles de logiciels se partagent séparément par « Exporter le modèle » et
 « Importer un patch ». Le JSON et son fichier .sha256 doivent rester ensemble.
 L'aperçu conserve les entrées absentes et propose un choix explicite pour les
@@ -107,7 +108,8 @@ renseigner. « Mémoriser cette source » conserve le choix sur ce poste sans
 connexion. Aucun mot de passe SMB n'est enregistré. La configuration partageable
 n'inclut pas le dossier de diffusion.
 Un poste PROD-LIGHT reçoit les mises à jour PROD-LIGHT. Le moteur du Socle déjà
-extrait est recopié et vérifié dans la nouvelle version. Les packs PROD ne sont
+extrait est recopié et vérifié dans la nouvelle version, comme la configuration
+par défaut définie dans le dossier. Les packs PROD ne sont
 plus publiés : un poste PROD passe à PROD-LIGHT en extrayant le nouveau ZIP dans
 un nouveau dossier. Rechercher l’offre et contrôler version, taille et source. Préparer
 une copie locale vérifiée, puis confirmer l'installation. FILPRO ferme proprement

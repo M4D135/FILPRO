@@ -96,6 +96,20 @@ public sealed partial class LocalUpdateService : IFilproUpdateService, IDisposab
             if (carried.ManifestSha256 != prepared.ManifestSha256 || carried.DefaultsSha256 != prepared.DefaultsSha256 || carried.WebViewSocleVersion != socle)
                 throw new FilproOperationException("update.changed", "La préparation a changé pendant la copie du moteur WebView2 du Socle. Aucune installation n'a été remplacée.");
         }
+        if (current.DefaultsSha256 is { } defaults && prepared.DefaultsSha256 != defaults)
+        {
+            // Comme le Socle, la configuration par défaut définie dans ce dossier suit la nouvelle version : un pack officiel n'en fournit pas.
+            // Un pack qui en apporte une autre est refusé : aucune des deux ne remplace l'autre sans décision explicite.
+            if (prepared.DefaultsSha256 is not null)
+                throw new FilproOperationException("update.defaults", "Le pack fournit une configuration par défaut différente de celle de ce dossier. Aucune installation n'a été remplacée. "
+                    + "Pour garder celle du dossier, utiliser un pack sans configuration par défaut ; pour prendre celle du pack, retirer d'abord wad\\config\\deployment-defaults.json de ce dossier.");
+            Publish(_status with { Action = "Copie de la configuration par défaut de ce dossier dans la nouvelle version" });
+            await PackIntegrityVerifier.CopyDeploymentDefaultsAsync(_packRoot, stage, defaults, cancellationToken).ConfigureAwait(false);
+            var kept = await PackIntegrityVerifier.ValidateAsync(stage, current.Manifest.Flavor, progress, cancellationToken).ConfigureAwait(false);
+            if (kept.ManifestSha256 != prepared.ManifestSha256 || kept.DefaultsSha256 != defaults || kept.WebViewSocleVersion != current.WebViewSocleVersion)
+                throw new FilproOperationException("update.changed", "La préparation a changé pendant la copie de la configuration par défaut. Aucune installation n'a été remplacée.");
+            prepared = kept;
+        }
         // Les anciens workers PROD doivent toujours pouvoir relire leurs journaux à 14 champs.
         var light = current.Manifest.Flavor == PackManifestCodec.LightFlavor;
         var transaction = new UpdateTransaction(light ? 2 : 1, id, _packRoot, _dataRoot, current.Manifest.Version, current.ManifestSha256, current.DefaultsSha256,
@@ -131,11 +145,13 @@ public sealed partial class LocalUpdateService : IFilproUpdateService, IDisposab
         if (!rollback)
         {
             var stage = await UpdateDirectoryTransaction.VerifyAsync(transaction.StageRoot, transaction.TargetManifestSha256, transaction.TargetDefaultsSha256, cancellationToken, transaction.TargetVersion, transaction.ExpectedFlavor).ConfigureAwait(false);
-            // La préparation a recopié le Socle présent à ce moment-là ; un Socle ajouté, retiré ou changé depuis serait perdu au remplacement.
-            // Le journal passe en échec sans dossier précédent : une nouvelle préparation reste possible.
-            if (current.ManifestSha256 == transaction.PreviousManifestSha256 && stage.WebViewSocleVersion != current.WebViewSocleVersion)
+            // La préparation a recopié le Socle et la configuration par défaut présents à ce moment-là ; un changement depuis serait perdu au
+            // remplacement. Le journal passe en échec sans dossier précédent : une nouvelle préparation reste possible.
+            var socleChanged = stage.WebViewSocleVersion != current.WebViewSocleVersion;
+            if (current.ManifestSha256 == transaction.PreviousManifestSha256 && (socleChanged || current.DefaultsSha256 != transaction.PreviousDefaultsSha256))
             {
-                const string changed = "Le moteur WebView2 du Socle de l’installation a changé depuis la préparation. Préparer de nouveau la mise à jour.";
+                var changed = socleChanged ? "Le moteur WebView2 du Socle de l’installation a changé depuis la préparation. Préparer de nouveau la mise à jour."
+                    : "La configuration par défaut de l’installation a changé depuis la préparation. Préparer de nouveau la mise à jour.";
                 transaction = transaction with { Stage = UpdateStage.Failed, Error = changed }; transaction.Save();
                 SetStatus(transaction, changed);
                 throw new FilproOperationException("update.changed", changed);

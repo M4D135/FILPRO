@@ -176,6 +176,87 @@ internal static class LightUpdateTests
         Check.Equal(0, Directory.GetFiles(fixture.Data, "transaction.json", SearchOption.AllDirectories).Length, "aucune transaction préparée");
     }
 
+    [Test] public static async Task LaConfigurationParDefautDuDossierSuitLaMiseAJourEtLeRetourArriere()
+    {
+        foreach (var flavor in new[] { Light, Full })
+        {
+            using var fixture = new PackTestFixture();
+            var installed = fixture.CreatePack("installed", "2.0.12", "OLD-" + flavor, new SharedConfiguration(Theme: "dark", Encrypted: true), flavor);
+            var defaults = File.ReadAllBytes(Path.Combine(installed, PackManifestCodec.DefaultsPath));
+            var archive = Archive(fixture, flavor, "2.1.0", flavor);
+            var offered = await PackIntegrityVerifier.ValidateAsync(Path.Combine(fixture.Root, "target-" + flavor), flavor);
+            Check.Null(offered.DefaultsSha256, flavor + " : le pack proposé n'a pas de configuration par défaut");
+            using var service = new LocalUpdateService(installed, fixture.Data, () => true);
+            var offer = await service.InspectAsync(new(UpdateSourceKind.ManualZip, archive, Hash(archive)), default);
+            var prepared = await service.PrepareAsync(offer.Id, true, default);
+            var tx = UpdateTransaction.Read(fixture.Data, prepared.TransactionId!, installed, flavor);
+            Check.Equal(PackTestFixture.Hash(defaults), tx.TargetDefaultsSha256, flavor + " : configuration du dossier attendue dans la nouvelle version");
+            var stage = await PackIntegrityVerifier.ValidateAsync(tx.StageRoot, flavor);
+            Check.Equal((offered.ManifestSha256, tx.TargetDefaultsSha256), (stage.ManifestSha256, stage.DefaultsSha256), flavor + " : manifeste du pack inchangé, configuration recopiée");
+            var committed = await UpdateDirectoryTransaction.InstallAsync(tx, () => Task.FromResult(true), Lease, default);
+            Check.Equal(UpdateStage.Committed, committed.Stage, flavor + " : commit");
+            Check.Equal("2.1.0", (await PackIntegrityVerifier.ValidateAsync(installed, flavor)).Manifest.Version, flavor + " : nouvelle version installée");
+            Check.True(defaults.AsSpan().SequenceEqual(File.ReadAllBytes(Path.Combine(installed, PackManifestCodec.DefaultsPath))), flavor + " : mêmes octets dans la nouvelle version");
+            var restored = await UpdateDirectoryTransaction.RollbackAsync(UpdateTransaction.Read(fixture.Data, tx.Id, expectedFlavor: flavor), Lease, default);
+            Check.Equal(UpdateStage.RolledBack, restored.Stage, flavor + " : retour arrière");
+            var back = await PackIntegrityVerifier.ValidateAsync(installed, flavor);
+            Check.Equal(("2.0.12", tx.TargetDefaultsSha256), (back.Manifest.Version, back.DefaultsSha256), flavor + " : ancienne version avec sa configuration");
+        }
+    }
+
+    [Test] public static async Task UnPackAvecUneAutreConfigurationParDefautEstRefuseLaMemeEstAcceptee()
+    {
+        using var fixture = new PackTestFixture();
+        var installed = fixture.CreatePack("installed", "2.0.12", defaults: new SharedConfiguration(Theme: "dark"), flavor: Light);
+        var expected = PackTestFixture.Hash(File.ReadAllBytes(Path.Combine(installed, PackManifestCodec.DefaultsPath)));
+        var other = fixture.Zip(fixture.CreatePack("autre", "2.1.0", defaults: new SharedConfiguration(Theme: "light"), flavor: Light), "FILPRO-2.1.0-win-x64-PROD-LIGHT.zip");
+        using var service = new LocalUpdateService(installed, fixture.Data, () => true);
+        var offer = await service.InspectAsync(new(UpdateSourceKind.ManualZip, other, Hash(other)), default);
+        var refused = await Check.ThrowsAsync<FilproOperationException>(() => service.PrepareAsync(offer.Id, true, default), "configuration différente dans le pack");
+        Check.Equal("update.defaults", refused.Code, "refus nommé avant toute transaction");
+        Check.Equal(0, Directory.GetFiles(fixture.Data, "transaction.json", SearchOption.AllDirectories).Length, "aucune transaction préparée");
+        Check.Equal(expected, (await PackIntegrityVerifier.ValidateAsync(installed, Light)).DefaultsSha256, "configuration du dossier intacte");
+        var same = fixture.Zip(fixture.CreatePack("meme", "2.1.1", defaults: new SharedConfiguration(Theme: "dark"), flavor: Light), "FILPRO-2.1.1-win-x64-PROD-LIGHT.zip");
+        var again = await service.InspectAsync(new(UpdateSourceKind.ManualZip, same, Hash(same)), default);
+        var prepared = await service.PrepareAsync(again.Id, true, default);
+        Check.Equal(expected, UpdateTransaction.Read(fixture.Data, prepared.TransactionId!, installed, Light).TargetDefaultsSha256, "même configuration acceptée");
+    }
+
+    [Test] public static async Task SansConfigurationDansLeDossierCelleDuPackEstGardee()
+    {
+        using var fixture = new PackTestFixture();
+        var installed = fixture.CreatePack("installed", "2.0.12", flavor: Light);
+        var target = fixture.CreatePack("cible", "2.1.0", defaults: new SharedConfiguration(Theme: "light"), flavor: Light);
+        var supplied = PackTestFixture.Hash(File.ReadAllBytes(Path.Combine(target, PackManifestCodec.DefaultsPath)));
+        var archive = fixture.Zip(target, "FILPRO-2.1.0-win-x64-PROD-LIGHT.zip");
+        using var service = new LocalUpdateService(installed, fixture.Data, () => true);
+        var offer = await service.InspectAsync(new(UpdateSourceKind.ManualZip, archive, Hash(archive)), default);
+        var prepared = await service.PrepareAsync(offer.Id, true, default);
+        Check.Equal(supplied, UpdateTransaction.Read(fixture.Data, prepared.TransactionId!, installed, Light).TargetDefaultsSha256, "configuration fournie par le pack");
+    }
+
+    [Test] public static async Task UneConfigurationRedefinieApresLaPreparationEstRefuseeSansBloquerUneNouvellePreparation()
+    {
+        if (!OperatingSystem.IsWindows()) Check.Skip("La remise au moteur de remplacement exige Windows.");
+        using var fixture = new PackTestFixture();
+        var installed = fixture.CreatePack("installed", "2.0.12", defaults: new SharedConfiguration(Theme: "dark"), flavor: Light);
+        var archive = Archive(fixture, Light, "2.1.0", Light);
+        using var lease = WindowsUpdateWorker.AcquireInstallationLease(installed);
+        using var service = new LocalUpdateService(installed, fixture.Data, () => true);
+        var offer = await service.InspectAsync(new(UpdateSourceKind.ManualZip, archive, Hash(archive)), default);
+        var prepared = await service.PrepareAsync(offer.Id, true, default);
+        PackTestFixture.SetDefaults(installed, new SharedConfiguration(Theme: "light"));
+        var redefined = PackTestFixture.Hash(File.ReadAllBytes(Path.Combine(installed, PackManifestCodec.DefaultsPath)));
+        var refused = await Check.ThrowsAsync<FilproOperationException>(() => service.InstallAsync(prepared.TransactionId!, true, default), "configuration redéfinie après préparation");
+        Check.Equal("update.changed", refused.Code, "refus avant tout remplacement");
+        var tx = UpdateTransaction.Read(fixture.Data, prepared.TransactionId!, installed, Light);
+        Check.Equal(UpdateStage.Failed, tx.Stage, "journal clos en échec");
+        Check.False(Directory.Exists(tx.WorkerRoot) || Directory.Exists(tx.PreviousRoot), "aucun worker lancé ni installation déplacée");
+        var again = await service.InspectAsync(new(UpdateSourceKind.ManualZip, archive, Hash(archive)), default);
+        var second = await service.PrepareAsync(again.Id, true, default);
+        Check.Equal(redefined, UpdateTransaction.Read(fixture.Data, second.TransactionId!, installed, Light).TargetDefaultsSha256, "la nouvelle préparation recopie la configuration redéfinie");
+    }
+
     private static PackManifest Decode(PackManifest manifest) => PackManifestCodec.Decode(
         JsonSerializer.SerializeToUtf8Bytes(manifest, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
     private static string Archive(PackTestFixture fixture, string contentFlavor, string version, string nameFlavor) =>

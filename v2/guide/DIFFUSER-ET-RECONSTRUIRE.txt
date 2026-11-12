@@ -34,7 +34,11 @@ Configuration distribuable
 wad\config\deployment-defaults.json contient uniquement le schéma fermé FILPRO.
 Utiliser le bouton des Paramètres, ou un export validé, sans ajouter de commandes,
 chemins, secrets ou sélections personnelles. Cette option est distincte des hashes
-des binaires ; un changement impose de régénérer l'archive et SHA256SUMS.
+des binaires : le dossier configuré se diffuse tel quel, et une mise à jour garde
+ce fichier dans la nouvelle version. Seule une diffusion en ZIP impose de régénérer
+l'archive et SHA256SUMS après un changement. Un pack qui apporte une autre
+configuration par défaut est refusé à la préparation : utiliser un pack sans
+configuration, ou retirer d'abord celle du dossier pour prendre celle du pack.
 Les modèles logiciels disposent d'un patch distinct : dans Paramètres, exporter
 les choix communs dans FILPRO-modeles.json. Diffuser ce fichier et son compagnon
 FILPRO-modeles.json.sha256. Copier/renommer le JSON d'abord, puis l'empreinte en
