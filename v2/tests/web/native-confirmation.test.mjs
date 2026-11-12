@@ -103,7 +103,7 @@ test('Six dialogues mènent à « Continuer », quatre reformulations sont saut�
     'pages/recuperer.js': { primaryLabel: 2, decisionLine: 2 },
     'pages/analyser.js': { primaryLabel: 1, decisionLine: 1, confirmUnlessNative: 1 },
     'configuration-ui.js': { primaryLabel: 1, decisionLine: 1 },
-    'pages/parametres.js': { confirmUnlessNative: 2 },
+    'pages/parametres/mises-a-jour.js': { confirmUnlessNative: 2 },
     'pages/suivi.js': { confirmUnlessNative: 1 },
     'app.js': { bindConfirmationBanner: 1, bindPresenceBanner: 1 },
   };
@@ -170,7 +170,7 @@ test('Les bandeaux de l’hôte sont empilés dans un conteneur FILPRO, jamais s
 });
 
 test('Paramètres : sous un autre compte, la section Mises à jour est remplacée par l’explication', async () => {
-  const source = await readFile(new URL('../../web/js/pages/parametres.js', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../../web/js/pages/parametres/mises-a-jour.js', import.meta.url), 'utf8');
   assert.equal(source.split('codeUpdates(').length - 1, 2);
   assert.ok(source.includes('data-update-controls'));
   assert.ok(source.includes('data-update-unavailable'));

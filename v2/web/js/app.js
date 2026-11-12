@@ -41,16 +41,39 @@ function persistPrefs() {
 
 // ---------- Thème et motion ----------
 
+// Paramètres suit ces préférences sans les relire : la coque annonce chaque changement (barre supérieure, Ctrl B, Windows).
+function presentationChanged() {
+  window.dispatchEvent(new CustomEvent('filpro:presentation', { detail: { theme: prefs.theme, motion: prefs.motion, navCollapsed: prefs.navCollapsed } }));
+}
+
 function applyTheme() {
   root.dataset.theme = resolvedTheme(prefs.theme);
   root.dataset.themePref = prefs.theme;
   document.querySelectorAll('.theme-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.set === prefs.theme)));
+  presentationChanged();
 }
 
 function applyMotion() {
   root.dataset.motion = prefs.motion;
   if (motionReduced()) themeTransition?.skipTransition();
   navigation?.settleMotion();
+  presentationChanged();
+}
+
+function setMotion(id) {
+  if (!MOTIONS.some((m) => m.id === id) || prefs.motion === id) return;
+  prefs.motion = id;
+  persistPrefs();
+  applyMotion();
+  announce(MOTIONS.find((m) => m.id === id)?.label ?? 'Animations');
+}
+
+function setNavCollapsed(collapsed) {
+  if (prefs.navCollapsed === collapsed) return;
+  prefs.navCollapsed = collapsed;
+  persistPrefs();
+  navigation?.applyPreference();
+  presentationChanged();
 }
 
 function setTheme(id) {
@@ -184,6 +207,11 @@ function context(page) {
     session: sessionInfo(),
     settings: configuration?.settings ?? {},
     switchDemonstration,
+    // Apparence de Paramètres : appliquée et mémorisée tout de suite, comme depuis la barre supérieure.
+    presentation: {
+      get: () => ({ theme: prefs.theme, motion: prefs.motion, navCollapsed: prefs.navCollapsed }),
+      setTheme, setMotion, setNavCollapsed,
+    },
     go: (id, params) => router?.go(id, params),
     openPalette: () => openMenu(document.querySelector('.nav-item[data-id="parametres"]'), PAGES.map((entry) => ({ label: entry.label, run: () => router?.go(entry.id) })), { label: 'Aller à un écran' }),
   };
@@ -252,7 +280,7 @@ function wireNav() {
   navigation = installNavigation({
     shell, nav, toggle,
     readCollapsed: () => prefs.navCollapsed,
-    saveCollapsed: (collapsed) => { prefs.navCollapsed = collapsed; persistPrefs(); },
+    saveCollapsed: (collapsed) => { prefs.navCollapsed = collapsed; persistPrefs(); presentationChanged(); },
     onLayout: () => router?.updatePill(),
   });
   installTips(nav);

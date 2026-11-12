@@ -20,7 +20,7 @@ export async function reviewConfiguration(preview, { bootstrap = false } = {}) {
   const session = defaults ? sessionInfo() : null;
   const dialog = openDialog({ title: bootstrap ? 'Configuration fournie avec ce pack' : defaults ? 'Définir la configuration par défaut' : 'Importer cette configuration',
     subtitle: preview.demonstration ? 'Démonstration — aucun fichier réel modifié' : 'Réglages partageables uniquement', icon: 'settings', size: 'lg',
-    body: `<p>${esc(preview.notice)}</p><p class="mono">${esc(preview.sourceLabel)}</p><div class="workflow-table-wrap"><table class="workflow-table"><thead><tr><th>Réglage</th><th>Actuel</th><th>Proposé</th><th>Décision</th></tr></thead><tbody>${rows}</tbody></table></div><p class="muted">Une sauvegarde préalable et un contrôle de fraîcheur protègent les réglages existants. Aucun secret, profil ou historique n’est exporté.</p>${decisionLine(session)}`,
+    body: `<p>${esc(preview.notice)}</p><p class="mono">${esc(preview.sourceLabel)}</p><div class="workflow-table-wrap"><table class="workflow-table config-review"><thead><tr><th>Réglage</th><th>Actuel</th><th>Proposé</th><th>Décision</th></tr></thead><tbody>${rows}</tbody></table></div><p class="muted">Une sauvegarde préalable et un contrôle de fraîcheur protègent les réglages existants. Aucun secret, profil ou historique n’est exporté.</p>${decisionLine(session)}`,
     actions: [{ id: bootstrap ? 'keep' : 'cancel', label: bootstrap ? 'Garder mes réglages' : 'Annuler', safe: true }, { id: 'apply', label: primaryLabel(session, defaults ? 'Définir ces valeurs par défaut' : 'Appliquer la configuration'), primary: true }],
   });
   return dialog.result;

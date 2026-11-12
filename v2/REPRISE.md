@@ -1,5 +1,63 @@
 # FILPRO V2 — état de livraison et historique
 
+## 12 novembre 2026 — écran Paramètres repris de Domenia 2
+
+Demande de David (12 novembre 2026) : « le menu configuration est super dans domenia,
+je veux le même pour filpro ». L’écran Paramètres reprend celui de Domenia 2, dans la
+2.0.18 avant sa recette VM :
+
+- en-tête avec l’état de l’application (puces, quatre tuiles : apparence, sauvegardes,
+  logiciels communs, mises à jour) et « Rechercher un réglage » (touche /) qui ouvre la
+  section et désigne le réglage ;
+- rail de sections avec pastille glissante et badges, une section à la fois, adresse
+  `#/parametres?section=…` : Apparence, Sauvegarde et restauration, Logiciels communs,
+  Configuration à diffuser, Mises à jour, Démonstration ; sous 1000 px, le rail passe
+  en grille au-dessus du contenu ;
+- Apparence : cartes de thème avec aperçus, animations en segments avec démonstration,
+  menu replié et raccourcis ; appliqués et enregistrés tout de suite par la coque, comme
+  depuis la barre supérieure (`ctx.presentation`) ;
+- Sauvegarde et restauration : interrupteurs des options cochées d’office, cartes radio
+  des doublons ; ces réglages forment un brouillon gardé d’une section à l’autre, avec
+  barre d’enregistrement collante et garde de sortie ; l’enregistrement relit la
+  configuration et ne refuse que si un réglage hors présentation a changé ailleurs ;
+- Logiciels communs, Configuration à diffuser, Mises à jour, Démonstration : mêmes
+  appels du pont, confirmations et textes qu’avant ; « Définir comme configuration par
+  défaut », l’export et l’import restent indisponibles tant qu’un brouillon attend.
+
+Code : `web/js/pages/parametres.js` (orchestrateur) et un module par section dans
+`web/js/pages/parametres/`, feuille `web/css/pages/parametres.css`. Les deux
+`confirmUnlessNative(` et `codeUpdates(` de la mise à jour sont dans
+`parametres/mises-a-jour.js` ; le test web les y cherche. Corrigé en passant : l’ancien
+nettoyage de la page lisait une variable `tokenInput` inexistante ; dans l’aperçu d’une
+configuration, la colonne « Décision » coupait « Identique » au milieu du mot.
+
+Vérifications : 25 tests web verts ; parcours dans le navigateur intégré en
+démonstration (1440 × 900 et 1000 × 760, thèmes clair, sombre et contraste élevé) :
+chaque section, brouillon enregistré, défaut du dossier défini, offre, préparation,
+installation et retour arrière fictifs, scénario, recherche. Un double clic sur une
+section annulait son affichage : corrigé avant commit. Pour la recette, l’accès aux
+boutons de mise à jour passe d’abord par la section « Mises à jour » du rail.
+
+Relectures avant commit. Le Spark (section Mises à jour) a fait rétablir
+« Actualiser », placé désormais à côté de la recherche, avec la même confirmation si un
+brouillon attend. Une revue à quatre angles (parité, cycle de vie, accessibilité, CSS),
+avec contre-vérification de chaque défaut, en a confirmé 15 distincts, tous corrigés :
+- une lecture ratée à l’actualisation masquée par l’ancienne valeur, et une alerte
+  périmée laissée affichée ;
+- les boutons Installer et Retour arrière visibles sous un autre compte ;
+- la saisie de la source gardée après une relecture faite depuis une autre section ;
+- les avertissements de configuration non signalés sur le rail ;
+- deux entrées de recherche sans cible ;
+- le focus de la recherche posé sur un radio non coché ou un bouton masqué ;
+- une liste de recherche fermée qui agissait encore ;
+- la zone d’état réannoncée à chaque action ;
+- les tons des tuiles et badges jamais peints ;
+- les puces rejouées à chaque changement ;
+- la liste de recherche rognée par l’en-tête ;
+- des boutons sans écart ;
+- la barre d’enregistrement décalée ;
+- le focus du chemin vide perdu.
+
 ## 12 novembre 2026 — configuration par défaut conservée par la mise à jour (`bdefd18`)
 
 Question de David : pourquoi ne pas faire la configuration par défaut comme pour GLPI,

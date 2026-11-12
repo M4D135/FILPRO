@@ -84,24 +84,29 @@ Un catalogue partiel reste explicitement partiel. Ne pas confondre intégrité
 du magasin, exhaustivité du catalogue et authenticité de sa provenance.
 
 Configuration
-Les commandes de démonstration et le réglage des animations sont dans Paramètres.
-La barre supérieure conserve les thèmes. Le mode démonstration reste signalé
+Paramètres montre une section à la fois : Apparence (thème, animations, menu
+replié), Sauvegarde et restauration (options cochées d'office, doublons, suivi),
+Logiciels communs, Configuration à diffuser, Mises à jour et Démonstration.
+« Rechercher un réglage » (touche /) ouvre la bonne section et désigne le réglage.
+Thème, animations et menu s'appliquent tout de suite, comme depuis la barre
+supérieure. Les options de sauvegarde forment un brouillon gardé d'une section à
+l'autre jusqu'à « Enregistrer les réglages ». Le mode démonstration reste signalé
 pendant toute son utilisation ; aucune étiquette de mode n'encombre l'usage normal.
 Les défauts distribués s'appliquent au premier lancement. Si des réglages existent,
 l'aperçu permet de garder les siens ou d'appliquer ceux du pack après sauvegarde.
 Une configuration fournie invalide est ignorée et signalée. Les binaires restent
 vérifiés. L'export/import partage uniquement les préférences autorisées : aucun
 chemin, compte, sélection personnelle, jeton ou historique.
-« Définir comme configuration par défaut » concerne les deux éditions de production. Le
-fichier est écrit dans le dossier de FILPRO, qui se diffuse tel quel ; une mise à jour
-le garde. Pour diffuser en ZIP, régénérer le ZIP et sa somme SHA-256.
+« Définir comme configuration par défaut » (Paramètres › Configuration à diffuser)
+concerne les deux éditions de production. Le fichier est écrit dans le dossier de
+FILPRO, qui se diffuse tel quel ; une mise à jour le garde. Pour diffuser en ZIP, régénérer le ZIP et sa somme SHA-256.
 Les modèles de logiciels se partagent séparément par « Exporter le modèle » et
 « Importer un patch ». Le JSON et son fichier .sha256 doivent rester ensemble.
 L'aperçu conserve les entrées absentes et propose un choix explicite pour les
 conflits. L'application du patch ne déclenche aucune opération sur les profils.
 
 Mise à jour
-Dans Paramètres, choisir un dossier local/UNC ou un ZIP manuel. FILPRO ne cherche
+Dans Paramètres › Mises à jour, choisir un dossier local/UNC ou un ZIP manuel. FILPRO ne cherche
 aucune mise à jour sur Internet : déposer le ZIP et son fichier SHA256SUMS dans le
 dossier de diffusion. Un ancien choix « GitHub officiel » devient un dossier à
 renseigner. « Mémoriser cette source » conserve le choix sur ce poste sans
@@ -116,15 +121,15 @@ une copie locale vérifiée, puis confirmer l'installation. FILPRO ferme proprem
 ses travaux ; l'assistant attend les autres instances sans les tuer.
 La nouvelle version doit confirmer son démarrage. Sinon le retour arrière tente
 de remettre l'ancienne copie. Le bilan et « Revenir à la version précédente » sont
-dans Paramètres. Après interruption, conserver toutes les copies et les journaux,
+dans Paramètres › Mises à jour. Après interruption, conserver toutes les copies et les journaux,
 puis reprendre l'action proposée. Le retour arrière des binaires ne restaure pas
 les profils ni les données métier.
 
 Présentation de cinq minutes
-1. Dans Paramètres, ouvrir la démonstration ; vérifier le bandeau « données fictives ».
+1. Dans Paramètres › Démonstration, ouvrir la démonstration ; vérifier le bandeau « données fictives ».
 2. Parcourir Accueil et Analyser ; sélectionner un profil fictif et ses logiciels.
 3. Préparer une sauvegarde fictive, suivre sa progression, puis consulter son bilan.
-4. Dans Paramètres, choisir une issue partielle ou un échec pour l'opération suivante.
+4. Dans Paramètres › Démonstration, choisir une issue partielle ou un échec pour l'opération suivante.
    Essayer aussi l'annulation depuis Suivi et la récupération d'un fichier fictif.
 5. Simuler une mise à jour et son retour arrière. Réinitialiser la démonstration,
    puis la quitter : les préférences et données réelles doivent rester préservées.

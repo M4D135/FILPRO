@@ -43,6 +43,8 @@
 .workflow-table th, .workflow-table td { padding: var(--s3); text-align: left; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
 .workflow-table th { color: var(--text-muted); font-size: var(--fs-small); font-weight: 600; }
 .workflow-table-wrap { overflow-x: auto; }
+/* Aperçu de configuration : la décision (« Identique », « Remplacé ») tient sur une ligne, jamais coupée au milieu du mot. */
+.workflow-table.config-review th:last-child, .workflow-table.config-review td:last-child { white-space: nowrap; overflow-wrap: normal; }
 .workflow-table .block { display: block; }
 .filpro-shell .analyser > [data-repair-card] { margin-top: var(--s5); }
 /* Les textes de politiques et SID ne doivent pas imposer leur largeur intrinsèque à toute la grille d'onglets. */
