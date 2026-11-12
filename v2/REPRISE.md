@@ -39,8 +39,10 @@ tests), `UpdateTransactionTests`, `ConfigurationStoreTests`, `PackIntegrityTests
 verts ; sans le correctif, deux des nouveaux tests échouent. Relecture du Spark : aucun
 défaut. CI Windows [`43185890099`](https://github.com/M4D135/FILPRO/actions/runs/43185890099)
 verte sur `bdefd189` : 57 suites, 469 contrôles réussis, aucun ignoré, page Evergreen
-observée ; les 4 nouveaux tests y passent, dont celui réservé à Windows. Pas de
-nouvelle version, pas de recette VM, rien de publié.
+observée ; les 4 nouveaux tests y passent, dont celui réservé à Windows.
+
+Sur la demande de David (« Oui, prépare-la », 12 novembre 2026), la version passe à
+2.0.18 pour la CI Windows, la recette VM et le pack ; la publication attend son accord.
 
 ## 10 novembre 2026 — 2.0.17 portable livrée, sections repliables
 

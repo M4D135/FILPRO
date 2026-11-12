@@ -17,11 +17,11 @@ FILPRO possède un seul lanceur ; les droits réels Windows contrôlent les opé
 
 Exemple de partage administré
   \\serveur\diffusion\FILPRO\
-      FILPRO-2.0.16-win-x64-PROD-LIGHT.zip
+      FILPRO-2.0.18-win-x64-PROD-LIGHT.zip
       SHA256SUMS
 
 Le nom exact du fichier de sommes est SHA256SUMS, sans extension. Exemple de ligne :
-  <64 caractères hexadécimaux SHA-256>  FILPRO-2.0.16-win-x64-PROD-LIGHT.zip
+  <64 caractères hexadécimaux SHA-256>  FILPRO-2.0.18-win-x64-PROD-LIGHT.zip
 Cet exemple n'est pas une empreinte utilisable. create_pack.py produit la vraie somme.
 Réserver l'écriture aux diffuseurs. Copier le ZIP sous un nom temporaire, attendre
 la fin du transfert, renommer, puis publier SHA256SUMS en dernier par remplacement
