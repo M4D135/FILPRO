@@ -1,5 +1,56 @@
 # Validation FILPRO V2
 
+## Recette du 12 novembre 2026 — 2.0.19 PROD-LIGHT, source `a1952adf`
+
+2.0.19 corrige l'aperçu « Configuration fournie avec ce pack » affiché au démarrage alors
+que toutes ses lignes étaient « Identique » (constat de la recette F218FIXA, `e612281`).
+Le candidat provient de `a1952adf642b3904061bea42159cf0f8685d78b6` : ZIP
+`ffab50f9cf8cadf212245e5f244daf4c42fd5b4f12b5dd562a925b54caa5b0cf`, 286 fichiers,
+EXE `26099b6d4c26c45d2461f8bd61b6dfa70c0cd63fa7a8fc5fa13c9e6b4ca59279`.
+La base jetable 0.0.1 est compilée depuis `3bb914eb7406a417f8e45c7e8e3e63e64632708e`
+(même code, version 0.0.1) ; elle reste privée (ZIP
+`1ce8dcaa2435f2434afe4c2822948d707e3124120bada5064b15d47e43dd6a8e`, EXE `f00d34b0…`).
+CI Windows [`43241835247`](https://github.com/M4D135/FILPRO/actions/runs/43241835247)
+verte : 57 suites, 471 contrôles réussis, aucun ignoré, commit exact prouvé,
+page Evergreen observée.
+
+Le run `F219FIXA` utilise un disque de recouvrement neuf sur la base Windows 11 Pro
+(10.0.26100), sans carte réseau, en groupe de travail ; le coordinateur du banc a défini
+le domaine (XML `084bfb56`), créé le disque et démarré la VM. Prévol lié `416dfa19…`.
+
+- Natif : 17 étapes réussies, codes de sortie tous nuls.
+- Complément : plain, tamper, repair et rollback réussis ; prévols conformes.
+- Socle : Evergreen 140 prioritaire, Socle 156 en repli, absence des deux moteurs
+  signalée avec le lien du Socle, `fr.pak` altéré refusé ; valeur Evergreen rétablie.
+- Interface : accueil WebView sans bandeau ni aperçu, filiation Evergreen observée ;
+  Paramètres affiche « Version 2.0.19 » ; `desktop.ini` refusé avec son nom.
+- Démonstration : son aperçu de configuration reste affiché (trois lignes « Remplacé ») ;
+  sauvegarde simulée de deux profils terminée ; `filpro.demoStateIdentical` avant/après.
+- Mise à jour réelle 0.0.1 → 2.0.19 puis retour arrière : transaction
+  `57ba83b2214c4ab8a4d5274be99cad6c`, trois confirmations Windows observées, états
+  Committed et RolledBack vérifiés, EXE candidat puis EXE de base relancés.
+- Reprise : état `RollingBack` injecté dans une copie dédiée, véritable worker 2.0.19
+  exécuté, `passed`. Test déterministe, pas une coupure électrique réelle.
+
+Les huit groupes passent le validateur sans assouplissement. Reçu privé
+`windows-qualification.json` : `passed`, PROD-LIGHT, qualification complète dans le
+périmètre Windows 11, 286 fichiers et 124 références de preuve. SHA-256 :
+`ab3c55b1aa9e3f0a517359bac7a9c4b3680d0c93485034f64042e3c81c471e86`.
+
+Vérification du correctif, après la collecte des preuves : sur la base 0.0.1 revenue,
+« Définir comme configuration par défaut » (confirmation Windows) écrit
+`wad\config\deployment-defaults.json` (431 octets, `ebb4f96a…`). Une seconde mise à jour
+vers 2.0.19 (transaction `ac3149206efd4abca210fd474ec4d153`) laisse ce fichier identique.
+FILPRO 2.0.19 s'ouvre sur l'accueil sans aperçu, de nouveau après une relance ;
+`configuration-v2.json` garde l'empreinte relevée avant la première mise à jour
+(`41401917…`), la lecture n'a rien écrit. Témoin négatif : le thème de ces défauts changé à
+la main (`system` → `dark`), la relance présente l'aperçu avec Thème « Remplacé » ;
+« Garder mes réglages » ramène à l'accueil.
+
+Pack PROD-LIGHT construit depuis l'entrée du candidat : mêmes 287 entrées, manifeste
+compris, ZIP `edde043410550549727db07356e7f5e6f8dbcc9cdb4dc4ebe3dc9a1dc8afc7ac`,
+53 229 930 octets. Non publié : la publication attend l'accord de David.
+
 ## Recette du 12 novembre 2026 — 2.0.18 PROD-LIGHT, source `6c8980f1`
 
 Le candidat provient de `6c8980f1d02ac71ab09021d7e8663215fc290887` : ZIP

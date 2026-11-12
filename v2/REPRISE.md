@@ -22,6 +22,11 @@ fournie avec ce pack » au démarrage alors que toutes ses lignes étaient « Id
 - La démonstration ne change pas : sa configuration d'exemple diffère des réglages.
 - Sur la demande de David (« Oui, prépare-la », 12 novembre 2026), la version passe à 2.0.19 pour la
   CI Windows, la recette VM et le pack ; la publication attend son accord.
+- Version 2.0.19 (`a1952ad`) : CI Windows `43241835247` verte (57 suites, 471 contrôles). Recette
+  F219FIXA validée, reçu `ab3c55b1…`. Sur la VM, après « Définir comme configuration par défaut » et une
+  seconde mise à jour aux mêmes défauts, 2.0.19 s'ouvre sans aperçu, aussi après une relance, sans
+  réécrire `configuration-v2.json` ; défauts changés à la main, l'aperçu revient. Pack PROD-LIGHT
+  `edde0434…`, mêmes fichiers que le candidat recetté. Détail dans `docs/VALIDATION.md`.
 
 ## 12 novembre 2026 — 2.0.18 : recette F218FIXA, pack et publication
 
