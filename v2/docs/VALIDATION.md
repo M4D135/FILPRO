@@ -56,6 +56,12 @@ Pack PROD-LIGHT construit depuis l'entrée du candidat : mêmes 287 entrées, ma
 compris, ZIP `498b320014368b9bd584c9ea52f2b694de17d98c96ac88ca243650705b790dbc`,
 53 229 738 octets.
 
+Publiée le 12 novembre 2026 sur le « go publish » de David :
+[v2.0.18](https://github.com/M4D135/FILPRO/releases/tag/v2.0.18), release `443009751`,
+tag sur `6c8980f1`. Le ZIP et `SHA256SUMS` sont vérifiés de trois façons : empreinte
+donnée par l'API, nouveau téléchargement contrôlé par `shasum -c`, notes identiques au
+fichier source.
+
 ## Recette du 10 novembre 2026 — 2.0.17 portable PROD-LIGHT, source `8fdadaa1`
 
 Le candidat provient de `8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1` : ZIP

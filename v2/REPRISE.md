@@ -12,6 +12,9 @@ Domenia 2 (`6c8980f`).
   `docs/VALIDATION.md`. Le transfert de `wad\config\deployment-defaults.json` par une
   vraie mise à jour a été observé sur la VM (même SHA-256 avant et après).
 - Pack PROD-LIGHT `498b3200…`, mêmes 287 entrées que le candidat testé.
+- Publiée : [v2.0.18](https://github.com/M4D135/FILPRO/releases/tag/v2.0.18), release
+  `443009751`, tag sur `6c8980f1`, ZIP et `SHA256SUMS` vérifiés par l'API et un nouveau
+  téléchargement. C'est désormais la dernière release ; v2.0.17 reste en place.
 - Pour la recette, l'écran Paramètres s'ouvre par section : cliquer d'abord la section
   du rail (« Mises à jour Dossier, ZIP, version », « Démonstration Profils fictifs et
   scénarios »), après l'avoir fait défiler si elle est hors de la vue. Le champ du
