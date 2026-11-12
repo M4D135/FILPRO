@@ -16,6 +16,9 @@ public sealed class LocalConfigurationService : IFilproConfigurationService, IDi
     private readonly string _backupRoot;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly Dictionary<string, (Pending Pending, DateTimeOffset Expires)> _previews = new(StringComparer.Ordinal);
+    // Défauts du pack vus sans rien à décider (ils ne changeraient aucun réglage). La lecture n'écrit jamais : ils sont joints
+    // aux décisions à la prochaine écriture voulue (enregistrement, import, choix), pour ne pas être proposés ensuite.
+    private readonly HashSet<string> _seen = new(StringComparer.Ordinal);
     private PackValidationResult? _startupPack;
     public bool Demonstration => false;
 
@@ -168,7 +171,7 @@ public sealed class LocalConfigurationService : IFilproConfigurationService, IDi
             var pack = await PackIntegrityVerifier.ValidateAsync(_packRoot, _startupPack!.Manifest.Flavor, cancellationToken: cancellationToken).ConfigureAwait(false);
             if (pack.ManifestSha256 != pending.ManifestHash || pack.DefaultsSha256 != pending.SourceHash) throw ConfigurationFileIO.Stale();
         }
-        var decisions = kind == "bootstrap" ? document.Decisions.Append(pending.View.PackIdentity!).Distinct(StringComparer.Ordinal).TakeLast(128).ToArray() : document.Decisions;
+        var decisions = kind == "bootstrap" ? Remember(document.Decisions, pending.View.PackIdentity!) : document.Decisions;
         var (saved, backup) = Write(document with { Settings = apply ? after.Settings : document.Settings, Decisions = decisions });
         _previews.Remove(id);
         return new(false, await StateAsync(saved, [], cancellationToken).ConfigureAwait(false), _statePath, backup,
@@ -192,10 +195,18 @@ public sealed class LocalConfigurationService : IFilproConfigurationService, IDi
     private async Task<ConfigurationState> StateAsync(Document document, List<string> warnings, CancellationToken cancellationToken)
     {
         var supplied = await SuppliedAsync(warnings, cancellationToken).ConfigureAwait(false); ConfigurationPreview? preview = null;
-        if (supplied is not null && !document.Decisions.Contains(supplied.Value.Identity, StringComparer.Ordinal))
-            preview = AddPreview("bootstrap", "Défauts du pack " + _startupPack!.Manifest.Version, document,
-                ConfigurationCodec.Decode(supplied.Value.Bytes, document.Settings), Path.Combine(_packRoot, PackManifestCodec.DefaultsPath),
-                ConfigurationFileIO.Hash(supplied.Value.Bytes), _startupPack.ManifestSha256, supplied.Value.Identity, false);
+        if (supplied is not null && !document.Decisions.Contains(supplied.Value.Identity, StringComparer.Ordinal)
+            && !_seen.Contains(supplied.Value.Identity))
+        {
+            var after = ConfigurationCodec.Decode(supplied.Value.Bytes, document.Settings);
+            if (after.Settings == document.Settings)
+                // Rien ne changerait : aucune question, comme « Garder mes réglages », mais sans écrire pendant une lecture.
+                _seen.Add(supplied.Value.Identity);
+            else
+                preview = AddPreview("bootstrap", "Défauts du pack " + _startupPack!.Manifest.Version, document,
+                    after, Path.Combine(_packRoot, PackManifestCodec.DefaultsPath),
+                    ConfigurationFileIO.Hash(supplied.Value.Bytes), _startupPack.ManifestSha256, supplied.Value.Identity, false);
+        }
         return new(false, document.Revision, document.Settings, preview, warnings.Distinct(StringComparer.Ordinal).ToArray());
     }
 
@@ -235,10 +246,13 @@ public sealed class LocalConfigurationService : IFilproConfigurationService, IDi
     }
     private Pending GetPreview(string id, string kind) => _previews.TryGetValue(id, out var value) && value.Expires >= DateTimeOffset.UtcNow && value.Pending.View.Kind == kind
         ? value.Pending : throw new FilproOperationException("configuration.preview", "Aperçu absent ou expiré. Refaire l'aperçu.");
+    private static string[] Remember(IEnumerable<string> decisions, params IEnumerable<string> identities) =>
+        decisions.Concat(identities).Distinct(StringComparer.Ordinal).TakeLast(128).ToArray();
     private (Document Document, string? Backup) Write(Document document)
     {
-        var bytes = EncodeState(document.Settings, document.Decisions);
+        var bytes = EncodeState(document.Settings, _seen.Count == 0 ? document.Decisions : Remember(document.Decisions, _seen));
         var backup = ConfigurationFileIO.AtomicWrite(_statePath, bytes, _backupRoot, document.Revision);
+        _seen.Clear();
         return (DecodeState(bytes), backup);
     }
     private static byte[] EncodeState(SharedConfiguration settings, IReadOnlyList<string> decisions)

@@ -23,6 +23,45 @@ internal static class ConfigurationStoreTests
         PackTestFixture.SetDefaults(pack, new SharedConfiguration(Theme: "light"));
         Check.NotNull((await service.ReadAsync(default)).Bootstrap, "même version mais défauts différents = nouveau choix");
     }
+    [Test] public static async Task DefautsIdentiquesAuxReglagesNeDemandentRienEtRestentVus()
+    {
+        using var fixture = new PackTestFixture(); var pack = fixture.CreatePack("pack");
+        var path = Path.Combine(fixture.Data, "configuration-v2.json");
+        using (var service = new LocalConfigurationService(pack, fixture.Data))
+        {
+            var state = await service.ReadAsync(default);
+            _ = await service.SaveAsync(state.Settings with { Theme = "dark" }, state.Revision, default);
+            PackTestFixture.SetDefaults(pack, new SharedConfiguration(Theme: "dark")); var before = File.ReadAllBytes(path);
+            var seen = await service.ReadAsync(default); Check.Null(seen.Bootstrap, "aucun aperçu quand rien ne changerait");
+            Check.Equal(seen.Revision, (await service.ReadAsync(default)).Revision, "révision stable entre deux lectures");
+            Check.True(before.AsSpan().SequenceEqual(File.ReadAllBytes(path)), "la lecture n'écrit rien");
+            _ = await service.SaveAsync(seen.Settings with { Theme = "light" }, seen.Revision, default);
+            Check.Null((await service.ReadAsync(default)).Bootstrap, "défauts déjà vus : pas reproposés après un changement de réglage");
+        }
+        using (var restarted = new LocalConfigurationService(pack, fixture.Data))
+            Check.Null((await restarted.ReadAsync(default)).Bootstrap, "défauts vus mémorisés par l'enregistrement suivant");
+        PackTestFixture.SetDefaults(pack, new SharedConfiguration(Theme: "contrast"));
+        using var changed = new LocalConfigurationService(pack, fixture.Data);
+        Check.NotNull((await changed.ReadAsync(default)).Bootstrap, "défauts différents : aperçu proposé");
+    }
+    [Test] public static async Task MiseAJourAvecLesMemesDefautsNeReposeRien()
+    {
+        using var fixture = new PackTestFixture(); var old = fixture.CreatePack("ancien", version: "0.0.1");
+        using (var service = new LocalConfigurationService(old, fixture.Data))
+        {
+            var state = await service.ReadAsync(default);
+            _ = await service.SaveAsync(state.Settings with { Theme = "contrast", Vss = true }, state.Revision, default);
+            var preview = await service.PreviewDefaultsAsync(default); var written = await service.ApplyDefaultsAsync(preview.Id, true, default);
+            Check.Null(written.State.Bootstrap, "défauts définis depuis les réglages actuels : rien à examiner");
+        }
+        var updated = fixture.CreatePack("nouveau", version: "2.0.18", marker: "NOUVELLE-VERSION-FICTIVE",
+            defaults: new SharedConfiguration(Theme: "contrast", Vss: true));
+        var path = Path.Combine(fixture.Data, "configuration-v2.json"); var before = File.ReadAllBytes(path);
+        using var next = new LocalConfigurationService(updated, fixture.Data); var after = await next.ReadAsync(default);
+        Check.Null(after.Bootstrap, "nouvelle version aux mêmes défauts : aucun aperçu");
+        Check.True(before.AsSpan().SequenceEqual(File.ReadAllBytes(path)), "premier démarrage de la nouvelle version : rien d'écrit");
+        Check.Equal("contrast", after.Settings.Theme, "réglages inchangés"); Check.True(after.Settings.Vss, "réglages inchangés");
+    }
     [Test] public static async Task LeThemeSeLitSansCreerNiProposerQuoiQueCeSoit()
     {
         using var fixture = new PackTestFixture(); var pack = fixture.CreatePack("pack");

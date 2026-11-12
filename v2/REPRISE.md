@@ -1,5 +1,26 @@
 # FILPRO V2 — état de livraison et historique
 
+## 12 novembre 2026 — pas d'aperçu de configuration quand rien ne change (pour 2.0.19)
+
+Demande de David : « Oui, corrige-le ». La recette F218FIXA avait montré l'aperçu « Configuration
+fournie avec ce pack » au démarrage alors que toutes ses lignes étaient « Identique ».
+
+- `LocalConfigurationService` : quand les défauts du pack, appliqués aux réglages actuels, ne changent
+  aucun réglage, il n'y a ni aperçu ni badge « Configuration fournie à examiner ». Ces défauts comptent
+  comme vus, comme avec « Garder mes réglages ». La lecture n'écrit jamais : la marque rejoint les
+  décisions à la prochaine écriture voulue (enregistrement, import ou choix).
+- Conséquence assumée : si rien n'est enregistré pendant la session, ce pack peut proposer ses défauts
+  plus tard, mais seulement s'ils diffèrent alors des réglages (par exemple après des réglages changés
+  avec un autre pack).
+- Une première version écrivait la marque pendant la lecture. La relecture y a trouvé trois risques :
+  une `Win32Exception` qui ferme FILPRO au démarrage, un enregistrement refusé comme périmé après une
+  erreur passagère, et des copies de sauvegarde orphelines à chaque lecture. Elle est abandonnée.
+- Tests ajoutés à `ConfigurationStoreTests` : `DefautsIdentiquesAuxReglagesNeDemandentRienEtRestentVus`
+  et `MiseAJourAvecLesMemesDefautsNeReposeRien` (lecture sans écriture, octet pour octet). Compilation
+  sans avertissement sur le Mac ; les tests tournent dans la CI Windows.
+- La démonstration ne change pas : sa configuration d'exemple diffère des réglages.
+- Pas encore livré : à recetter en VM pour une 2.0.19, après toutes les modifications.
+
 ## 12 novembre 2026 — 2.0.18 : recette F218FIXA, pack et publication
 
 Demandes de David : « Oui, prépare-la », puis « go publish etc ne l'attend pas va au
