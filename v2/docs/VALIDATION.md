@@ -114,7 +114,7 @@ le périmètre Windows 11 : 278 fichiers et 124 références de preuve. SHA-256 
 `f248ba0435abf30aa2bc30b8bba775c03e15d14e20530076749639d83e9c67e6`.
 Les preuves brutes, journaux privés et captures supplémentaires restent au banc.
 
-Le ZIP portable publié [v2.0.17](https://github.com/M4D135/FILPRO/releases/tag/v2.0.17)
+Le ZIP portable publié `v2.0.17` (release et tag retirés de GitHub le 12 novembre 2026)
 (release `440148999`, tag sur `8fdadaa14d347c4fc6a0d27a67debbc75eafd5d1`)
 a exactement les mêmes 279 entrées que le candidat, manifeste compris :
 `9112d269e53dfda8c6ba4b57f55bfcb897032ea31352426ded0b8cf85ae3b901`,

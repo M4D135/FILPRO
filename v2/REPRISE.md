@@ -14,7 +14,8 @@ Domenia 2 (`6c8980f`).
 - Pack PROD-LIGHT `498b3200…`, mêmes 287 entrées que le candidat testé.
 - Publiée : [v2.0.18](https://github.com/M4D135/FILPRO/releases/tag/v2.0.18), release
   `443009751`, tag sur `6c8980f1`, ZIP et `SHA256SUMS` vérifiés par l'API et un nouveau
-  téléchargement. C'est désormais la dernière release ; v2.0.17 reste en place.
+  téléchargement. C'est la seule release : sur accord de David, v2.0.17 et
+  son tag ont été retirés de GitHub le même jour ; `8fdadaa` reste dans `master`.
 - Pour la recette, l'écran Paramètres s'ouvre par section : cliquer d'abord la section
   du rail (« Mises à jour Dossier, ZIP, version », « Démonstration Profils fictifs et
   scénarios »), après l'avoir fait défiler si elle est hors de la vue. Le champ du
@@ -160,7 +161,7 @@ observations supplémentaires dans l'application Windows vérifient les blocs
 repliables, leurs résumés et la conservation des choix non enregistrés.
 Reçu privé sur 278 fichiers et 124 références ; détail dans `docs/VALIDATION.md`.
 
-Livraison : [v2.0.17](https://github.com/M4D135/FILPRO/releases/tag/v2.0.17),
+Livraison : `v2.0.17` (release et tag retirés de GitHub le 12 novembre 2026),
 release `440148999`, tag sur la source ci-dessus. ZIP portable PROD-LIGHT
 `9112d269e53dfda8c6ba4b57f55bfcb897032ea31352426ded0b8cf85ae3b901`,
 53 198 757 octets. Les 279 entrées sont identiques au candidat qualifié, manifeste
